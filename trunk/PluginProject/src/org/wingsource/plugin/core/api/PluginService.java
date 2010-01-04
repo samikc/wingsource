@@ -21,12 +21,6 @@ package org.wingsource.plugin.core.api;
  * @author samikc
  *
  */
-public interface PluginRequest {
+public interface PluginService {
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
-	 */
-	public Pluglet getParameter(String name);
 }
