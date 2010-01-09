@@ -34,11 +34,11 @@ package org.wingsource.plugin.sexp;
 package org.wingsource.plugin.sexp;
 }
 
-sexpr		: list* EOF;
-list		: '(' items ')';
-items 		: operator (WSPACE operand)*;
-operand		: atom | list;
-operator	: ALPHANUMERIC;
-atom		: ALPHANUMERIC;
-WSPACE		: (' ' | '\t' | '\n' | '\r' | '\u0000C')+ ;
+sexpr			: list* EOF;
+list			: '(' items ')' | items;
+items 			: operator (WS operand)*;
+operand			: atom | list;
+operator		: ALPHANUMERIC;
+atom			: ALPHANUMERIC;
+WS		    	: (' ' | '\t' | '\n' | '\r')+ ;
 ALPHANUMERIC 	: ('a'..'z'|'A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9')*;
