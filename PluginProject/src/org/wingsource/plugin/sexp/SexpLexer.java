@@ -1,6 +1,7 @@
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g 2010-01-09 15:30:31
+
 package org.wingsource.plugin.sexp;
 
-// $ANTLR 3.2 Sep 23, 2009 12:02:23 \\samikc\\grammar\\Sexp.g 2010-01-09 12:07:39
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -8,206 +9,86 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class SexpLexer extends Lexer {
-    public static final int ALPHANUMERIC=7;
-    public static final int T__10=10;
-    public static final int ITEMS=6;
-    public static final int WSPACE=8;
-    public static final int ATOM=5;
-    public static final int LIST=4;
+    public static final int WS=4;
+    public static final int ALPHANUMERIC=5;
+    public static final int T6=6;
+    public static final int T7=7;
+    public static final int Tokens=8;
     public static final int EOF=-1;
-    public static final int T__9=9;
-
-    // delegates
-    // delegators
-
     public SexpLexer() {;} 
     public SexpLexer(CharStream input) {
-        this(input, new RecognizerSharedState());
+        super(input);
     }
-    public SexpLexer(CharStream input, RecognizerSharedState state) {
-        super(input,state);
+    public String getGrammarFileName() { return "D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g"; }
 
-    }
-    public String getGrammarFileName() { return "C:\\Users\\samikc\\grammar\\Sexp.g"; }
-
-    // $ANTLR start "LIST"
-    public final void mLIST() throws RecognitionException {
+    // $ANTLR start T6
+    public final void mT6() throws RecognitionException {
         try {
-            int _type = LIST;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:3:6: ( 'LIST' )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:3:8: 'LIST'
-            {
-            match("LIST"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "LIST"
-
-    // $ANTLR start "ATOM"
-    public final void mATOM() throws RecognitionException {
-        try {
-            int _type = ATOM;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:4:6: ( 'ATOM' )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:4:8: 'ATOM'
-            {
-            match("ATOM"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "ATOM"
-
-    // $ANTLR start "ITEMS"
-    public final void mITEMS() throws RecognitionException {
-        try {
-            int _type = ITEMS;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:5:7: ( 'ITEMS' )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:5:9: 'ITEMS'
-            {
-            match("ITEMS"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "ITEMS"
-
-    // $ANTLR start "T__9"
-    public final void mT__9() throws RecognitionException {
-        try {
-            int _type = T__9;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:6:6: ( '(' )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:6:8: '('
+            int _type = T6;
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:6:4: ( '(' )
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:6:6: '('
             {
             match('('); 
 
             }
 
-            state.type = _type;
-            state.channel = _channel;
+            this.type = _type;
         }
         finally {
         }
     }
-    // $ANTLR end "T__9"
+    // $ANTLR end T6
 
-    // $ANTLR start "T__10"
-    public final void mT__10() throws RecognitionException {
+    // $ANTLR start T7
+    public final void mT7() throws RecognitionException {
         try {
-            int _type = T__10;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:7:7: ( ')' )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:7:9: ')'
+            int _type = T7;
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:7:4: ( ')' )
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:7:6: ')'
             {
             match(')'); 
 
             }
 
-            state.type = _type;
-            state.channel = _channel;
+            this.type = _type;
         }
         finally {
         }
     }
-    // $ANTLR end "T__10"
+    // $ANTLR end T7
 
-    // $ANTLR start "WSPACE"
-    public final void mWSPACE() throws RecognitionException {
+    // $ANTLR start WS
+    public final void mWS() throws RecognitionException {
         try {
-            int _type = WSPACE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:29:8: ( ( ' ' | '\\t' | '\\n' | '\\r' | '\\u0000C' )+ )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:29:10: ( ' ' | '\\t' | '\\n' | '\\r' | '\\u0000C' )+
+            int _type = WS;
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:10: ( ( ' ' | '\\t' | '\\n' | '\\r' )+ )
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
             {
-            // C:\\Users\\samikc\\grammar\\Sexp.g:29:10: ( ' ' | '\\t' | '\\n' | '\\r' | '\\u0000C' )+
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
             int cnt1=0;
             loop1:
             do {
-                int alt1=6;
-                switch ( input.LA(1) ) {
-                case ' ':
-                    {
-                    alt1=1;
-                    }
-                    break;
-                case '\t':
-                    {
-                    alt1=2;
-                    }
-                    break;
-                case '\n':
-                    {
-                    alt1=3;
-                    }
-                    break;
-                case '\r':
-                    {
-                    alt1=4;
-                    }
-                    break;
-                case '\u0000':
-                    {
-                    alt1=5;
-                    }
-                    break;
+                int alt1=2;
+                int LA1_0 = input.LA(1);
 
+                if ( ((LA1_0>='\t' && LA1_0<='\n')||LA1_0=='\r'||LA1_0==' ') ) {
+                    alt1=1;
                 }
+
 
                 switch (alt1) {
             	case 1 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:29:11: ' '
+            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:
             	    {
-            	    match(' '); 
+            	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
+            	        input.consume();
 
             	    }
-            	    break;
-            	case 2 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:29:17: '\\t'
-            	    {
-            	    match('\t'); 
-
+            	    else {
+            	        MismatchedSetException mse =
+            	            new MismatchedSetException(null,input);
+            	        recover(mse);    throw mse;
             	    }
-            	    break;
-            	case 3 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:29:24: '\\n'
-            	    {
-            	    match('\n'); 
-
-            	    }
-            	    break;
-            	case 4 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:29:31: '\\r'
-            	    {
-            	    match('\r'); 
-
-            	    }
-            	    break;
-            	case 5 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:29:38: '\\u0000C'
-            	    {
-            	    match("\u0000C"); 
 
 
             	    }
@@ -225,45 +106,54 @@ public class SexpLexer extends Lexer {
 
             }
 
-            state.type = _type;
-            state.channel = _channel;
+            this.type = _type;
         }
         finally {
         }
     }
-    // $ANTLR end "WSPACE"
+    // $ANTLR end WS
 
-    // $ANTLR start "ALPHANUMERIC"
+    // $ANTLR start ALPHANUMERIC
     public final void mALPHANUMERIC() throws RecognitionException {
         try {
             int _type = ALPHANUMERIC;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // C:\\Users\\samikc\\grammar\\Sexp.g:32:2: ( ( ( 'a' .. 'z' | 'A' .. 'Z' ) )* ( '0' .. '9' )* )
-            // C:\\Users\\samikc\\grammar\\Sexp.g:32:4: ( ( 'a' .. 'z' | 'A' .. 'Z' ) )* ( '0' .. '9' )*
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:15: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* )
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:17: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             {
-            // C:\\Users\\samikc\\grammar\\Sexp.g:32:4: ( ( 'a' .. 'z' | 'A' .. 'Z' ) )*
+            if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse =
+                    new MismatchedSetException(null,input);
+                recover(mse);    throw mse;
+            }
+
+            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:36: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             loop2:
             do {
                 int alt2=2;
                 int LA2_0 = input.LA(1);
 
-                if ( ((LA2_0>='A' && LA2_0<='Z')||(LA2_0>='a' && LA2_0<='z')) ) {
+                if ( ((LA2_0>='0' && LA2_0<='9')||(LA2_0>='A' && LA2_0<='Z')||(LA2_0>='a' && LA2_0<='z')) ) {
                     alt2=1;
                 }
 
 
                 switch (alt2) {
             	case 1 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:32:5: ( 'a' .. 'z' | 'A' .. 'Z' )
+            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:
             	    {
-            	    if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
+            	    if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
             	        input.consume();
 
             	    }
             	    else {
-            	        MismatchedSetException mse = new MismatchedSetException(null,input);
-            	        recover(mse);
-            	        throw mse;}
+            	        MismatchedSetException mse =
+            	            new MismatchedSetException(null,input);
+            	        recover(mse);    throw mse;
+            	    }
 
 
             	    }
@@ -274,91 +164,125 @@ public class SexpLexer extends Lexer {
                 }
             } while (true);
 
-            // C:\\Users\\samikc\\grammar\\Sexp.g:32:27: ( '0' .. '9' )*
-            loop3:
-            do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
-
-                if ( ((LA3_0>='0' && LA3_0<='9')) ) {
-                    alt3=1;
-                }
-
-
-                switch (alt3) {
-            	case 1 :
-            	    // C:\\Users\\samikc\\grammar\\Sexp.g:32:28: '0' .. '9'
-            	    {
-            	    matchRange('0','9'); 
-
-            	    }
-            	    break;
-
-            	default :
-            	    break loop3;
-                }
-            } while (true);
-
 
             }
 
-            state.type = _type;
-            state.channel = _channel;
+            this.type = _type;
         }
         finally {
         }
     }
-    // $ANTLR end "ALPHANUMERIC"
+    // $ANTLR end ALPHANUMERIC
 
     public void mTokens() throws RecognitionException {
-        // C:\\Users\\samikc\\grammar\\Sexp.g:1:8: ( LIST | ATOM | ITEMS | T__9 | T__10 | WSPACE | ALPHANUMERIC )
-        int alt4=7;
-        alt4 = dfa4.predict(input);
-        switch (alt4) {
+        // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:8: ( T6 | T7 | WS | ALPHANUMERIC )
+        int alt3=4;
+        switch ( input.LA(1) ) {
+        case '(':
+            {
+            alt3=1;
+            }
+            break;
+        case ')':
+            {
+            alt3=2;
+            }
+            break;
+        case '\t':
+        case '\n':
+        case '\r':
+        case ' ':
+            {
+            alt3=3;
+            }
+            break;
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+        case 'G':
+        case 'H':
+        case 'I':
+        case 'J':
+        case 'K':
+        case 'L':
+        case 'M':
+        case 'N':
+        case 'O':
+        case 'P':
+        case 'Q':
+        case 'R':
+        case 'S':
+        case 'T':
+        case 'U':
+        case 'V':
+        case 'W':
+        case 'X':
+        case 'Y':
+        case 'Z':
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 'f':
+        case 'g':
+        case 'h':
+        case 'i':
+        case 'j':
+        case 'k':
+        case 'l':
+        case 'm':
+        case 'n':
+        case 'o':
+        case 'p':
+        case 'q':
+        case 'r':
+        case 's':
+        case 't':
+        case 'u':
+        case 'v':
+        case 'w':
+        case 'x':
+        case 'y':
+        case 'z':
+            {
+            alt3=4;
+            }
+            break;
+        default:
+            NoViableAltException nvae =
+                new NoViableAltException("1:1: Tokens : ( T6 | T7 | WS | ALPHANUMERIC );", 3, 0, input);
+
+            throw nvae;
+        }
+
+        switch (alt3) {
             case 1 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:10: LIST
+                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:10: T6
                 {
-                mLIST(); 
+                mT6(); 
 
                 }
                 break;
             case 2 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:15: ATOM
+                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:13: T7
                 {
-                mATOM(); 
+                mT7(); 
 
                 }
                 break;
             case 3 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:20: ITEMS
+                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:16: WS
                 {
-                mITEMS(); 
+                mWS(); 
 
                 }
                 break;
             case 4 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:26: T__9
-                {
-                mT__9(); 
-
-                }
-                break;
-            case 5 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:31: T__10
-                {
-                mT__10(); 
-
-                }
-                break;
-            case 6 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:37: WSPACE
-                {
-                mWSPACE(); 
-
-                }
-                break;
-            case 7 :
-                // C:\\Users\\samikc\\grammar\\Sexp.g:1:44: ALPHANUMERIC
+                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:19: ALPHANUMERIC
                 {
                 mALPHANUMERIC(); 
 
@@ -370,79 +294,6 @@ public class SexpLexer extends Lexer {
     }
 
 
-    protected DFA4 dfa4 = new DFA4(this);
-    static final String DFA4_eotS =
-        "\4\7\4\uffff\6\7\1\21\1\22\1\7\2\uffff\1\24\1\uffff";
-    static final String DFA4_eofS =
-        "\25\uffff";
-    static final String DFA4_minS =
-        "\1\0\1\111\2\124\4\uffff\1\123\1\117\1\105\1\124\2\115\2\60\1\123"+
-        "\2\uffff\1\60\1\uffff";
-    static final String DFA4_maxS =
-        "\1\114\1\111\2\124\4\uffff\1\123\1\117\1\105\1\124\2\115\2\172"+
-        "\1\123\2\uffff\1\172\1\uffff";
-    static final String DFA4_acceptS =
-        "\4\uffff\1\4\1\5\1\6\1\7\11\uffff\1\1\1\2\1\uffff\1\3";
-    static final String DFA4_specialS =
-        "\25\uffff}>";
-    static final String[] DFA4_transitionS = {
-            "\1\6\10\uffff\2\6\2\uffff\1\6\22\uffff\1\6\7\uffff\1\4\1\5"+
-            "\27\uffff\1\2\7\uffff\1\3\2\uffff\1\1",
-            "\1\10",
-            "\1\11",
-            "\1\12",
-            "",
-            "",
-            "",
-            "",
-            "\1\13",
-            "\1\14",
-            "\1\15",
-            "\1\16",
-            "\1\17",
-            "\1\20",
-            "\12\7\7\uffff\32\7\6\uffff\32\7",
-            "\12\7\7\uffff\32\7\6\uffff\32\7",
-            "\1\23",
-            "",
-            "",
-            "\12\7\7\uffff\32\7\6\uffff\32\7",
-            ""
-    };
-
-    static final short[] DFA4_eot = DFA.unpackEncodedString(DFA4_eotS);
-    static final short[] DFA4_eof = DFA.unpackEncodedString(DFA4_eofS);
-    static final char[] DFA4_min = DFA.unpackEncodedStringToUnsignedChars(DFA4_minS);
-    static final char[] DFA4_max = DFA.unpackEncodedStringToUnsignedChars(DFA4_maxS);
-    static final short[] DFA4_accept = DFA.unpackEncodedString(DFA4_acceptS);
-    static final short[] DFA4_special = DFA.unpackEncodedString(DFA4_specialS);
-    static final short[][] DFA4_transition;
-
-    static {
-        int numStates = DFA4_transitionS.length;
-        DFA4_transition = new short[numStates][];
-        for (int i=0; i<numStates; i++) {
-            DFA4_transition[i] = DFA.unpackEncodedString(DFA4_transitionS[i]);
-        }
-    }
-
-    class DFA4 extends DFA {
-
-        public DFA4(BaseRecognizer recognizer) {
-            this.recognizer = recognizer;
-            this.decisionNumber = 4;
-            this.eot = DFA4_eot;
-            this.eof = DFA4_eof;
-            this.min = DFA4_min;
-            this.max = DFA4_max;
-            this.accept = DFA4_accept;
-            this.special = DFA4_special;
-            this.transition = DFA4_transition;
-        }
-        public String getDescription() {
-            return "1:1: Tokens : ( LIST | ATOM | ITEMS | T__9 | T__10 | WSPACE | ALPHANUMERIC );";
-        }
-    }
  
 
 }
