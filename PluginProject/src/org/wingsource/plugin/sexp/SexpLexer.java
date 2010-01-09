@@ -4,9 +4,6 @@ package org.wingsource.plugin.sexp;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 public class SexpLexer extends Lexer {
     public static final int WS=4;
