@@ -44,7 +44,8 @@ public class Operation implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 2476513140728522208L;
-	private static final String TOKEN_OPERATION = "OPERATION";
+	private static final String TOKEN_OPERATOR = "OPERATOR";
+	private static final String TOKEN_OPERAND = "OPERAND";
 	
 	private String operator;
 	private List<Operand<?>> operands;
@@ -69,19 +70,40 @@ public class Operation implements Serializable {
 		SexpParser parser = new SexpParser(tokens);
 		SexpParser.sexpr_return result = parser.sexpr();
 		CommonTree tree = (CommonTree) result.getTree();
-		Operation op = new Operation();
-		logger.info(tree.getText() + " count:" + tree.getChildCount());
-		int numberOfChildren = tree.getChildCount();
-		for(int i = 0; i < numberOfChildren; i++) {
-			Tree child = tree.getChild(i);
-		}
-		if(tree!=null && tree.getText().equalsIgnoreCase(TOKEN_OPERATION)) { 
-			logger.info(""+tree.getChildCount());
-		}
-		logger.info("done");
+		Tree opTree = tree!= null && (tree.getChildCount() > 0) ? tree.getChild(0) : null;
+		Operation op = toOperation(opTree);
 		return op;
 	}
 	
+	/**
+	 * @param opTree
+	 * @return
+	 */
+	private static Operation toOperation(Tree opTree) {
+		Operation op = new Operation();
+		
+		if(opTree != null) {
+			int n = opTree.getChildCount();
+			for(int j = 0; j < n; j++) {
+				Tree o = opTree.getChild(j);
+				String type = o.getText();
+				Tree valueNode =  o.getChild(0);
+				boolean isOperation = valueNode.getChildCount() > 0;
+				if(isOperation) {
+					op.operand(new Operand<Operation>(toOperation(valueNode)));
+				}
+				else if(type.equalsIgnoreCase(TOKEN_OPERATOR)) {
+					op.operator(valueNode.getText());
+				}
+				else if(type.equalsIgnoreCase(TOKEN_OPERAND)) {
+					op.operand(new Operand<String>(valueNode.getText()));
+				}
+			}
+		}
+		
+		return op;
+	}
+
 	public Operation(String operator, Operand<?>... operands) {
 		this.operator(operator);
 		this.operand(operands);
@@ -142,18 +164,32 @@ public class Operation implements Serializable {
 		}
 	}
 	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<operation>\n");
+		sb.append("<Operator name=\"").append(this.operator).append("\">\n");
+		List<Operand<?>> opList = this.operands();
+		for(Operand<?> op : opList) {
+			switch(op.type()) {
+				case ATOM : sb.append("<value>").append(op.value()).append("</value>\n");
+							break;
+				case OPERATION : sb.append(op.value());
+							break;
+							
+				default: break;
+			}
+		}
+		sb.append("</operator>\n");
+		sb.append("</operation>\n");
+		
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
 		try {
 			
-			Operation opn = Operation.toOperation("add g1 g2 g3");
-			Operation o = new Operation();
-			Operand<Operation> op = new Operand<Operation>(o);
-			
-			opn.operand(op, new Operand<String>("Vinod"));
-			
-			for(Operand<?> operand: opn.operands()) {
-				System.out.println(operand.type());
-			}
+			Operation opn = Operation.toOperation("page (layout ilayout) (skin spring) g1 g2 g3 g4 g5");
+			System.out.println(opn);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
