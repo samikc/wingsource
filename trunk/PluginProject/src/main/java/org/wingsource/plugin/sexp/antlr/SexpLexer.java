@@ -1,29 +1,34 @@
-// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g 2010-01-09 15:30:31
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-10 14:08:27
 
 package org.wingsource.plugin.sexp.antlr;
 
 
 import org.antlr.runtime.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
 
 public class SexpLexer extends Lexer {
-    public static final int WS=4;
-    public static final int ALPHANUMERIC=5;
-    public static final int T6=6;
-    public static final int T7=7;
-    public static final int Tokens=8;
+    public static final int WS=6;
+    public static final int ALPHANUMERIC=7;
+    public static final int OPERAND=5;
+    public static final int T8=8;
+    public static final int T9=9;
+    public static final int OPERATION=4;
+    public static final int Tokens=10;
     public static final int EOF=-1;
     public SexpLexer() {;} 
     public SexpLexer(CharStream input) {
         super(input);
     }
-    public String getGrammarFileName() { return "D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g"; }
+    public String getGrammarFileName() { return "D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g"; }
 
-    // $ANTLR start T6
-    public final void mT6() throws RecognitionException {
+    // $ANTLR start T8
+    public final void mT8() throws RecognitionException {
         try {
-            int _type = T6;
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:6:4: ( '(' )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:6:6: '('
+            int _type = T8;
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:6:4: ( '(' )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:6:6: '('
             {
             match('('); 
 
@@ -34,14 +39,14 @@ public class SexpLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end T6
+    // $ANTLR end T8
 
-    // $ANTLR start T7
-    public final void mT7() throws RecognitionException {
+    // $ANTLR start T9
+    public final void mT9() throws RecognitionException {
         try {
-            int _type = T7;
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:7:4: ( ')' )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:7:6: ')'
+            int _type = T9;
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:7:4: ( ')' )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:7:6: ')'
             {
             match(')'); 
 
@@ -52,16 +57,16 @@ public class SexpLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end T7
+    // $ANTLR end T9
 
     // $ANTLR start WS
     public final void mWS() throws RecognitionException {
         try {
             int _type = WS;
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:10: ( ( ' ' | '\\t' | '\\n' | '\\r' )+ )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:10: ( ( ' ' | '\\t' | '\\n' | '\\r' )+ )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
             {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:43:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:12: ( ' ' | '\\t' | '\\n' | '\\r' )+
             int cnt1=0;
             loop1:
             do {
@@ -75,7 +80,7 @@ public class SexpLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             	    {
             	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
             	        input.consume();
@@ -114,8 +119,8 @@ public class SexpLexer extends Lexer {
     public final void mALPHANUMERIC() throws RecognitionException {
         try {
             int _type = ALPHANUMERIC;
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:15: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:17: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:50:15: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:50:17: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -127,7 +132,7 @@ public class SexpLexer extends Lexer {
                 recover(mse);    throw mse;
             }
 
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:44:36: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:50:36: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             loop2:
             do {
                 int alt2=2;
@@ -140,7 +145,7 @@ public class SexpLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             	    {
             	    if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
             	        input.consume();
@@ -172,7 +177,7 @@ public class SexpLexer extends Lexer {
     // $ANTLR end ALPHANUMERIC
 
     public void mTokens() throws RecognitionException {
-        // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:8: ( T6 | T7 | WS | ALPHANUMERIC )
+        // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:8: ( T8 | T9 | WS | ALPHANUMERIC )
         int alt3=4;
         switch ( input.LA(1) ) {
         case '(':
@@ -251,35 +256,35 @@ public class SexpLexer extends Lexer {
             break;
         default:
             NoViableAltException nvae =
-                new NoViableAltException("1:1: Tokens : ( T6 | T7 | WS | ALPHANUMERIC );", 3, 0, input);
+                new NoViableAltException("1:1: Tokens : ( T8 | T9 | WS | ALPHANUMERIC );", 3, 0, input);
 
             throw nvae;
         }
 
         switch (alt3) {
             case 1 :
-                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:10: T6
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:10: T8
                 {
-                mT6(); 
+                mT8(); 
 
                 }
                 break;
             case 2 :
-                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:13: T7
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:13: T9
                 {
-                mT7(); 
+                mT9(); 
 
                 }
                 break;
             case 3 :
-                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:16: WS
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:16: WS
                 {
                 mWS(); 
 
                 }
                 break;
             case 4 :
-                // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:1:19: ALPHANUMERIC
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:19: ALPHANUMERIC
                 {
                 mALPHANUMERIC(); 
 

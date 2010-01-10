@@ -23,11 +23,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.Tree;
 import org.wingsource.plugin.sexp.antlr.SexpLexer;
 import org.wingsource.plugin.sexp.antlr.SexpParser;
 
@@ -36,6 +38,7 @@ import org.wingsource.plugin.sexp.antlr.SexpParser;
  *
  */
 public class Operation implements Serializable {
+	private static final Logger logger=Logger.getLogger(Operation.class.getName());
 	
 	/**
 	 * 
@@ -60,25 +63,22 @@ public class Operation implements Serializable {
 	 * @throws RecognitionException
 	 */
 	public static Operation toOperation(String sexpr) throws IOException, RecognitionException {
-		System.out.println(1);		
 		ANTLRInputStream input = new ANTLRInputStream(new ByteArrayInputStream(sexpr.getBytes()));
-		System.out.println(2);
 		SexpLexer lexer = new SexpLexer(input);
-		System.out.println(3);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		System.out.println(4);
 		SexpParser parser = new SexpParser(tokens);
-		System.out.println(5);
 		SexpParser.sexpr_return result = parser.sexpr();
-		System.out.println(6);
 		CommonTree tree = (CommonTree) result.getTree();
-		System.out.println(7);
 		Operation op = new Operation();
-		System.out.println(tree.getText() + " count:" + tree.getChildCount());
-		if(tree!=null && tree.getText().equalsIgnoreCase(TOKEN_OPERATION)) { 
-			System.out.println(tree.getChildCount());
+		logger.info(tree.getText() + " count:" + tree.getChildCount());
+		int numberOfChildren = tree.getChildCount();
+		for(int i = 0; i < numberOfChildren; i++) {
+			Tree child = tree.getChild(i);
 		}
-		System.out.println("done");
+		if(tree!=null && tree.getText().equalsIgnoreCase(TOKEN_OPERATION)) { 
+			logger.info(""+tree.getChildCount());
+		}
+		logger.info("done");
 		return op;
 	}
 	
