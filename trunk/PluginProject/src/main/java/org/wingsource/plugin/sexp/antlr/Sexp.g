@@ -26,19 +26,26 @@ options {
     ASTLabelType=CommonTree;
 }
 
+tokens {
+OPERATION;
+OPERAND;
+}
+
 @header {
-package org.wingsource.plugin.sexp;
+package org.wingsource.plugin.sexp.antlr;
 }
 
 @lexer::header {
-package org.wingsource.plugin.sexp;
+package org.wingsource.plugin.sexp.antlr;
 }
 
-sexpr			: list* EOF;
-list			: '(' items ')' | items;
-items 			: operator (WS operand)*;
-operand			: atom | list;
+sexpr			: (expression| operation)* EOF;
+expression 		: '(' operation ')';
+operation 		: operator (WS operand)* -> ^(OPERATION operator operand*);
+operand			: atom -> ^(OPERAND atom)
+			 | expression -> ^(OPERAND expression);
 operator		: ALPHANUMERIC;
 atom			: ALPHANUMERIC;
-WS		    	: (' ' | '\t' | '\n' | '\r')+ ;
+WS		    	: (' ' | '\t' | '\n' | '\r')+;
 ALPHANUMERIC 	: ('a'..'z'|'A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9')*;
+
