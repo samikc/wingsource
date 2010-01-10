@@ -1,9 +1,13 @@
-// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g 2010-01-09 15:30:31
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-10 14:08:27
 
 package org.wingsource.plugin.sexp.antlr;
 
 
 import org.antlr.runtime.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import org.antlr.runtime.tree.*;
 
@@ -26,11 +30,13 @@ import org.antlr.runtime.tree.*;
  */
 public class SexpParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "WS", "ALPHANUMERIC", "'('", "')'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "OPERATION", "OPERAND", "WS", "ALPHANUMERIC", "'('", "')'"
     };
-    public static final int WS=4;
+    public static final int WS=6;
+    public static final int ALPHANUMERIC=7;
+    public static final int OPERAND=5;
+    public static final int OPERATION=4;
     public static final int EOF=-1;
-    public static final int ALPHANUMERIC=5;
 
         public SexpParser(TokenStream input) {
             super(input);
@@ -46,7 +52,7 @@ public class SexpParser extends Parser {
     }
 
     public String[] getTokenNames() { return tokenNames; }
-    public String getGrammarFileName() { return "D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g"; }
+    public String getGrammarFileName() { return "D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g"; }
 
 
     public static class sexpr_return extends ParserRuleReturnScope {
@@ -55,45 +61,61 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start sexpr
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:37:1: sexpr : ( list )* EOF ;
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:1: sexpr : ( expression | operation )* EOF ;
     public final sexpr_return sexpr() throws RecognitionException {
         sexpr_return retval = new sexpr_return();
         retval.start = input.LT(1);
 
         CommonTree root_0 = null;
 
-        Token EOF2=null;
-        list_return list1 = null;
+        Token EOF3=null;
+        expression_return expression1 = null;
+
+        operation_return operation2 = null;
 
 
-        CommonTree EOF2_tree=null;
+        CommonTree EOF3_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:37:9: ( ( list )* EOF )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:37:11: ( list )* EOF
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:9: ( ( expression | operation )* EOF )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:11: ( expression | operation )* EOF
             {
             root_0 = (CommonTree)adaptor.nil();
 
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:37:11: ( list )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:11: ( expression | operation )*
             loop1:
             do {
-                int alt1=2;
+                int alt1=3;
                 int LA1_0 = input.LA(1);
 
-                if ( ((LA1_0>=ALPHANUMERIC && LA1_0<=6)) ) {
+                if ( (LA1_0==8) ) {
                     alt1=1;
+                }
+                else if ( (LA1_0==ALPHANUMERIC) ) {
+                    alt1=2;
                 }
 
 
                 switch (alt1) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:37:11: list
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:12: expression
             	    {
-            	    pushFollow(FOLLOW_list_in_sexpr55);
-            	    list1=list();
+            	    pushFollow(FOLLOW_expression_in_sexpr67);
+            	    expression1=expression();
             	    _fsp--;
 
-            	    adaptor.addChild(root_0, list1.getTree());
+            	    adaptor.addChild(root_0, expression1.getTree());
+
+            	    }
+            	    break;
+            	case 2 :
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:42:24: operation
+            	    {
+            	    pushFollow(FOLLOW_operation_in_sexpr70);
+            	    operation2=operation();
+            	    _fsp--;
+
+            	    adaptor.addChild(root_0, operation2.getTree());
 
             	    }
             	    break;
@@ -103,10 +125,10 @@ public class SexpParser extends Parser {
                 }
             } while (true);
 
-            EOF2=(Token)input.LT(1);
-            match(input,EOF,FOLLOW_EOF_in_sexpr58); 
-            EOF2_tree = (CommonTree)adaptor.create(EOF2);
-            adaptor.addChild(root_0, EOF2_tree);
+            EOF3=(Token)input.LT(1);
+            match(input,EOF,FOLLOW_EOF_in_sexpr74); 
+            EOF3_tree = (CommonTree)adaptor.create(EOF3);
+            adaptor.addChild(root_0, EOF3_tree);
 
 
             }
@@ -127,85 +149,51 @@ public class SexpParser extends Parser {
     }
     // $ANTLR end sexpr
 
-    public static class list_return extends ParserRuleReturnScope {
+    public static class expression_return extends ParserRuleReturnScope {
         CommonTree tree;
         public Object getTree() { return tree; }
     };
 
-    // $ANTLR start list
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:38:1: list : ( '(' items ')' | items );
-    public final list_return list() throws RecognitionException {
-        list_return retval = new list_return();
+    // $ANTLR start expression
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:43:1: expression : '(' operation ')' ;
+    public final expression_return expression() throws RecognitionException {
+        expression_return retval = new expression_return();
         retval.start = input.LT(1);
 
         CommonTree root_0 = null;
 
-        Token char_literal3=null;
-        Token char_literal5=null;
-        items_return items4 = null;
-
-        items_return items6 = null;
+        Token char_literal4=null;
+        Token char_literal6=null;
+        operation_return operation5 = null;
 
 
-        CommonTree char_literal3_tree=null;
-        CommonTree char_literal5_tree=null;
+        CommonTree char_literal4_tree=null;
+        CommonTree char_literal6_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:38:8: ( '(' items ')' | items )
-            int alt2=2;
-            int LA2_0 = input.LA(1);
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:43:14: ( '(' operation ')' )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:43:16: '(' operation ')'
+            {
+            root_0 = (CommonTree)adaptor.nil();
 
-            if ( (LA2_0==6) ) {
-                alt2=1;
-            }
-            else if ( (LA2_0==ALPHANUMERIC) ) {
-                alt2=2;
-            }
-            else {
-                NoViableAltException nvae =
-                    new NoViableAltException("38:1: list : ( '(' items ')' | items );", 2, 0, input);
+            char_literal4=(Token)input.LT(1);
+            match(input,8,FOLLOW_8_in_expression83); 
+            char_literal4_tree = (CommonTree)adaptor.create(char_literal4);
+            adaptor.addChild(root_0, char_literal4_tree);
 
-                throw nvae;
-            }
-            switch (alt2) {
-                case 1 :
-                    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:38:10: '(' items ')'
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
+            pushFollow(FOLLOW_operation_in_expression85);
+            operation5=operation();
+            _fsp--;
 
-                    char_literal3=(Token)input.LT(1);
-                    match(input,6,FOLLOW_6_in_list67); 
-                    char_literal3_tree = (CommonTree)adaptor.create(char_literal3);
-                    adaptor.addChild(root_0, char_literal3_tree);
+            adaptor.addChild(root_0, operation5.getTree());
+            char_literal6=(Token)input.LT(1);
+            match(input,9,FOLLOW_9_in_expression87); 
+            char_literal6_tree = (CommonTree)adaptor.create(char_literal6);
+            adaptor.addChild(root_0, char_literal6_tree);
 
-                    pushFollow(FOLLOW_items_in_list69);
-                    items4=items();
-                    _fsp--;
-
-                    adaptor.addChild(root_0, items4.getTree());
-                    char_literal5=(Token)input.LT(1);
-                    match(input,7,FOLLOW_7_in_list71); 
-                    char_literal5_tree = (CommonTree)adaptor.create(char_literal5);
-                    adaptor.addChild(root_0, char_literal5_tree);
-
-
-                    }
-                    break;
-                case 2 :
-                    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:38:26: items
-                    {
-                    root_0 = (CommonTree)adaptor.nil();
-
-                    pushFollow(FOLLOW_items_in_list75);
-                    items6=items();
-                    _fsp--;
-
-                    adaptor.addChild(root_0, items6.getTree());
-
-                    }
-                    break;
 
             }
+
             retval.stop = input.LT(-1);
 
                 retval.tree = (CommonTree)adaptor.rulePostProcessing(root_0);
@@ -220,17 +208,17 @@ public class SexpParser extends Parser {
         }
         return retval;
     }
-    // $ANTLR end list
+    // $ANTLR end expression
 
-    public static class items_return extends ParserRuleReturnScope {
+    public static class operation_return extends ParserRuleReturnScope {
         CommonTree tree;
         public Object getTree() { return tree; }
     };
 
-    // $ANTLR start items
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:39:1: items : operator ( WS operand )* ;
-    public final items_return items() throws RecognitionException {
-        items_return retval = new items_return();
+    // $ANTLR start operation
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:1: operation : operator ( WS operand )* -> ^( OPERATION operator ( operand )* ) ;
+    public final operation_return operation() throws RecognitionException {
+        operation_return retval = new operation_return();
         retval.start = input.LT(1);
 
         CommonTree root_0 = null;
@@ -242,51 +230,82 @@ public class SexpParser extends Parser {
 
 
         CommonTree WS8_tree=null;
-
+        RewriteRuleTokenStream stream_WS=new RewriteRuleTokenStream(adaptor,"token WS");
+        RewriteRuleSubtreeStream stream_operand=new RewriteRuleSubtreeStream(adaptor,"rule operand");
+        RewriteRuleSubtreeStream stream_operator=new RewriteRuleSubtreeStream(adaptor,"rule operator");
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:39:10: ( operator ( WS operand )* )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:39:12: operator ( WS operand )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:13: ( operator ( WS operand )* -> ^( OPERATION operator ( operand )* ) )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:15: operator ( WS operand )*
             {
-            root_0 = (CommonTree)adaptor.nil();
-
-            pushFollow(FOLLOW_operator_in_items85);
+            pushFollow(FOLLOW_operator_in_operation96);
             operator7=operator();
             _fsp--;
 
-            adaptor.addChild(root_0, operator7.getTree());
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:39:21: ( WS operand )*
-            loop3:
+            stream_operator.add(operator7.getTree());
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:24: ( WS operand )*
+            loop2:
             do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
+                int alt2=2;
+                int LA2_0 = input.LA(1);
 
-                if ( (LA3_0==WS) ) {
-                    alt3=1;
+                if ( (LA2_0==WS) ) {
+                    alt2=1;
                 }
 
 
-                switch (alt3) {
+                switch (alt2) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:39:22: WS operand
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:25: WS operand
             	    {
             	    WS8=(Token)input.LT(1);
-            	    match(input,WS,FOLLOW_WS_in_items88); 
-            	    WS8_tree = (CommonTree)adaptor.create(WS8);
-            	    adaptor.addChild(root_0, WS8_tree);
+            	    match(input,WS,FOLLOW_WS_in_operation99); 
+            	    stream_WS.add(WS8);
 
-            	    pushFollow(FOLLOW_operand_in_items90);
+            	    pushFollow(FOLLOW_operand_in_operation101);
             	    operand9=operand();
             	    _fsp--;
 
-            	    adaptor.addChild(root_0, operand9.getTree());
+            	    stream_operand.add(operand9.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop3;
+            	    break loop2;
                 }
             } while (true);
+
+
+            // AST REWRITE
+            // elements: operand, operator
+            // token labels: 
+            // rule labels: retval
+            // token list labels: 
+            // rule list labels: 
+            retval.tree = root_0;
+            RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
+
+            root_0 = (CommonTree)adaptor.nil();
+            // 44:38: -> ^( OPERATION operator ( operand )* )
+            {
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:41: ^( OPERATION operator ( operand )* )
+                {
+                CommonTree root_1 = (CommonTree)adaptor.nil();
+                root_1 = (CommonTree)adaptor.becomeRoot(adaptor.create(OPERATION, "OPERATION"), root_1);
+
+                adaptor.addChild(root_1, stream_operator.next());
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:44:62: ( operand )*
+                while ( stream_operand.hasNext() ) {
+                    adaptor.addChild(root_1, stream_operand.next());
+
+                }
+                stream_operand.reset();
+
+                adaptor.addChild(root_0, root_1);
+                }
+
+            }
+
 
 
             }
@@ -305,7 +324,7 @@ public class SexpParser extends Parser {
         }
         return retval;
     }
-    // $ANTLR end items
+    // $ANTLR end operation
 
     public static class operand_return extends ParserRuleReturnScope {
         CommonTree tree;
@@ -313,7 +332,7 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start operand
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:40:1: operand : ( atom | list );
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:45:1: operand : ( atom -> ^( OPERAND atom ) | expression -> ^( OPERAND expression ) );
     public final operand_return operand() throws RecognitionException {
         operand_return retval = new operand_return();
         retval.start = input.LT(1);
@@ -322,51 +341,100 @@ public class SexpParser extends Parser {
 
         atom_return atom10 = null;
 
-        list_return list11 = null;
+        expression_return expression11 = null;
 
 
-
+        RewriteRuleSubtreeStream stream_expression=new RewriteRuleSubtreeStream(adaptor,"rule expression");
+        RewriteRuleSubtreeStream stream_atom=new RewriteRuleSubtreeStream(adaptor,"rule atom");
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:40:11: ( atom | list )
-            int alt4=2;
-            int LA4_0 = input.LA(1);
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:45:11: ( atom -> ^( OPERAND atom ) | expression -> ^( OPERAND expression ) )
+            int alt3=2;
+            int LA3_0 = input.LA(1);
 
-            if ( (LA4_0==ALPHANUMERIC) ) {
-                alt4=1;
+            if ( (LA3_0==ALPHANUMERIC) ) {
+                alt3=1;
             }
-            else if ( (LA4_0==6) ) {
-                alt4=2;
+            else if ( (LA3_0==8) ) {
+                alt3=2;
             }
             else {
                 NoViableAltException nvae =
-                    new NoViableAltException("40:1: operand : ( atom | list );", 4, 0, input);
+                    new NoViableAltException("45:1: operand : ( atom -> ^( OPERAND atom ) | expression -> ^( OPERAND expression ) );", 3, 0, input);
 
                 throw nvae;
             }
-            switch (alt4) {
+            switch (alt3) {
                 case 1 :
-                    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:40:13: atom
+                    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:45:13: atom
                     {
-                    root_0 = (CommonTree)adaptor.nil();
-
-                    pushFollow(FOLLOW_atom_in_operand101);
+                    pushFollow(FOLLOW_atom_in_operand123);
                     atom10=atom();
                     _fsp--;
 
-                    adaptor.addChild(root_0, atom10.getTree());
+                    stream_atom.add(atom10.getTree());
+
+                    // AST REWRITE
+                    // elements: atom
+                    // token labels: 
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
+
+                    root_0 = (CommonTree)adaptor.nil();
+                    // 45:18: -> ^( OPERAND atom )
+                    {
+                        // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:45:21: ^( OPERAND atom )
+                        {
+                        CommonTree root_1 = (CommonTree)adaptor.nil();
+                        root_1 = (CommonTree)adaptor.becomeRoot(adaptor.create(OPERAND, "OPERAND"), root_1);
+
+                        adaptor.addChild(root_1, stream_atom.next());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+
 
                     }
                     break;
                 case 2 :
-                    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:40:20: list
+                    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:46:7: expression
                     {
-                    root_0 = (CommonTree)adaptor.nil();
-
-                    pushFollow(FOLLOW_list_in_operand105);
-                    list11=list();
+                    pushFollow(FOLLOW_expression_in_operand139);
+                    expression11=expression();
                     _fsp--;
 
-                    adaptor.addChild(root_0, list11.getTree());
+                    stream_expression.add(expression11.getTree());
+
+                    // AST REWRITE
+                    // elements: expression
+                    // token labels: 
+                    // rule labels: retval
+                    // token list labels: 
+                    // rule list labels: 
+                    retval.tree = root_0;
+                    RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"token retval",retval!=null?retval.tree:null);
+
+                    root_0 = (CommonTree)adaptor.nil();
+                    // 46:18: -> ^( OPERAND expression )
+                    {
+                        // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:46:21: ^( OPERAND expression )
+                        {
+                        CommonTree root_1 = (CommonTree)adaptor.nil();
+                        root_1 = (CommonTree)adaptor.becomeRoot(adaptor.create(OPERAND, "OPERAND"), root_1);
+
+                        adaptor.addChild(root_1, stream_expression.next());
+
+                        adaptor.addChild(root_0, root_1);
+                        }
+
+                    }
+
+
 
                     }
                     break;
@@ -394,7 +462,7 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start operator
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:41:1: operator : ALPHANUMERIC ;
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:47:1: operator : ALPHANUMERIC ;
     public final operator_return operator() throws RecognitionException {
         operator_return retval = new operator_return();
         retval.start = input.LT(1);
@@ -406,13 +474,13 @@ public class SexpParser extends Parser {
         CommonTree ALPHANUMERIC12_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:41:11: ( ALPHANUMERIC )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:41:13: ALPHANUMERIC
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:47:11: ( ALPHANUMERIC )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:47:13: ALPHANUMERIC
             {
             root_0 = (CommonTree)adaptor.nil();
 
             ALPHANUMERIC12=(Token)input.LT(1);
-            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_operator113); 
+            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_operator155); 
             ALPHANUMERIC12_tree = (CommonTree)adaptor.create(ALPHANUMERIC12);
             adaptor.addChild(root_0, ALPHANUMERIC12_tree);
 
@@ -441,7 +509,7 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start atom
-    // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:42:1: atom : ALPHANUMERIC ;
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:1: atom : ALPHANUMERIC ;
     public final atom_return atom() throws RecognitionException {
         atom_return retval = new atom_return();
         retval.start = input.LT(1);
@@ -453,13 +521,13 @@ public class SexpParser extends Parser {
         CommonTree ALPHANUMERIC13_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:42:8: ( ALPHANUMERIC )
-            // D:\\dev\\PluginProject\\src\\org\\wingsource\\plugin\\sexp\\Sexp.g:42:10: ALPHANUMERIC
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:8: ( ALPHANUMERIC )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:10: ALPHANUMERIC
             {
             root_0 = (CommonTree)adaptor.nil();
 
             ALPHANUMERIC13=(Token)input.LT(1);
-            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_atom122); 
+            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_atom164); 
             ALPHANUMERIC13_tree = (CommonTree)adaptor.create(ALPHANUMERIC13);
             adaptor.addChild(root_0, ALPHANUMERIC13_tree);
 
@@ -485,18 +553,18 @@ public class SexpParser extends Parser {
 
  
 
-    public static final BitSet FOLLOW_list_in_sexpr55 = new BitSet(new long[]{0x0000000000000060L});
-    public static final BitSet FOLLOW_EOF_in_sexpr58 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_6_in_list67 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_items_in_list69 = new BitSet(new long[]{0x0000000000000080L});
-    public static final BitSet FOLLOW_7_in_list71 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_items_in_list75 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_operator_in_items85 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_WS_in_items88 = new BitSet(new long[]{0x0000000000000060L});
-    public static final BitSet FOLLOW_operand_in_items90 = new BitSet(new long[]{0x0000000000000012L});
-    public static final BitSet FOLLOW_atom_in_operand101 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_list_in_operand105 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ALPHANUMERIC_in_operator113 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ALPHANUMERIC_in_atom122 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_sexpr67 = new BitSet(new long[]{0x0000000000000180L});
+    public static final BitSet FOLLOW_operation_in_sexpr70 = new BitSet(new long[]{0x0000000000000180L});
+    public static final BitSet FOLLOW_EOF_in_sexpr74 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_8_in_expression83 = new BitSet(new long[]{0x0000000000000080L});
+    public static final BitSet FOLLOW_operation_in_expression85 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_9_in_expression87 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_operator_in_operation96 = new BitSet(new long[]{0x0000000000000042L});
+    public static final BitSet FOLLOW_WS_in_operation99 = new BitSet(new long[]{0x0000000000000180L});
+    public static final BitSet FOLLOW_operand_in_operation101 = new BitSet(new long[]{0x0000000000000042L});
+    public static final BitSet FOLLOW_atom_in_operand123 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_expression_in_operand139 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ALPHANUMERIC_in_operator155 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_ALPHANUMERIC_in_atom164 = new BitSet(new long[]{0x0000000000000002L});
 
 }
