@@ -28,6 +28,7 @@ options {
 
 tokens {
 OPERATION;
+OPERATOR;
 OPERAND;
 }
 
@@ -40,8 +41,8 @@ package org.wingsource.plugin.sexp.antlr;
 }
 
 sexpr			: (expression| operation)* EOF;
-expression 		: '(' operation ')';
-operation 		: operator (WS operand)* -> ^(OPERATION operator operand*);
+expression 		: '('! operation ')'!;
+operation 		: operator (WS operand)* -> ^(OPERATION ^(OPERATOR operator) operand*);
 operand			: atom -> ^(OPERAND atom)
 			 | expression -> ^(OPERAND expression);
 operator		: ALPHANUMERIC;
