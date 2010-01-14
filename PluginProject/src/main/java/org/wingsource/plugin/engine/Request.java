@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.wingsource.plugin.PluginRequest;
-import org.wingsource.plugin.Pluglet;
 
 /**
  * @author samikc
@@ -33,10 +32,12 @@ public class Request implements PluginRequest {
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.PluginRequest#getParameter(java.lang.String)
 	 */
+	/*
 	public Pluglet getParameter(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	*/
 	public List<String> getOperandList() {
 		return operandList;
 	}
