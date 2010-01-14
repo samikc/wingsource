@@ -30,7 +30,7 @@ public interface PluginRequest {
 	 * @param name
 	 * @return
 	 */
-	public Pluglet getParameter(String name);
+	//public Pluglet getParameter(String name);
 	
 	public List<String> getOperandList();
 	
