@@ -15,24 +15,30 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin;
+package org.wingsource.plugin.example;
 
-import java.util.List;
+import org.wingsource.plugin.PluginService;
+import org.wingsource.plugin.TypeResolverService;
 
 /**
  * @author samikc
  *
  */
-public interface PluginRequest {
+public class DummyTypeResolver implements TypeResolverService{
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
 	 */
-	public Pluglet getParameter(String name);
-	
-	public List<String> getOperandList();
-	
-	public void setOperandList(List<String> list);
+	public PluginService resolve(String operation) {
+		// TODO Auto-generated method stub
+		if (operation.equalsIgnoreCase("plus")) {
+			return new PlusPlugin();
+		}
+		if (operation.equalsIgnoreCase("minus")) {
+			return new MinusPlugin();
+		}
+
+		return null;
+	}
+
 }

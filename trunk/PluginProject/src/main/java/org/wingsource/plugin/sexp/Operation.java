@@ -30,6 +30,7 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
+import org.wingsource.plugin.sexp.Operand.Type;
 import org.wingsource.plugin.sexp.antlr.SexpLexer;
 import org.wingsource.plugin.sexp.antlr.SexpParser;
 
@@ -163,8 +164,28 @@ public class Operation implements Serializable {
 			this.operands.clear();
 		}
 	}
-	
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		sb.append(this.operator);
+		List<Operand<?>> opList = this.operands();
+		for(Operand<?> op : opList) {
+			switch(op.type()) {
+				case ATOM : sb.append(" ").append(op.value()).append("");
+							break;
+				case OPERATION : sb.append(op.value());
+							break;
+							
+				default: break;
+			}
+		}
+		sb.append("");
+		sb.append(")");
+		
+		return sb.toString();
+		
+	}
+	public String toXml() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<operation>\n");
 		sb.append("<Operator name=\"").append(this.operator).append("\">\n");
@@ -188,8 +209,14 @@ public class Operation implements Serializable {
 	public static void main(String[] args) {
 		try {
 			
-			Operation opn = Operation.toOperation("page (layout ilayout) (skin spring) g1 g2 g3 g4 g5");
-			System.out.println(opn);
+			Operation opn = Operation.toOperation("page (layout (getl ilayout)) (skin spring) g1 g2 g3 g4 g5");
+			for (Operand o : opn.operands()) {
+				if (o.type() == Type.OPERATION) { 
+					System.out.println(o.value());
+				}
+			}
+			System.out.println("==================================================================================");
+			System.out.println(opn.toXml());
 		}
 		catch(Exception e) {
 			e.printStackTrace();

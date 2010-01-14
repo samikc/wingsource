@@ -33,7 +33,7 @@ public interface PluginService {
 	 * @param prequest
 	 * @param presponse
 	 */
-	void Service(PluginRequest prequest,PluginResponse presponse);
+	void service(PluginRequest prequest,PluginResponse presponse);
 	
 	/***
 	 * Called at the end of the service and before the object is relased for a garbage 

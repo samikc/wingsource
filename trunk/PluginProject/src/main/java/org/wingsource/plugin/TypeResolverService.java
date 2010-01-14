@@ -23,5 +23,5 @@ package org.wingsource.plugin;
  */
 public interface TypeResolverService {
 
-	public PluginService resolve(String expresion);
+	public PluginService resolve(String operation);
 }
