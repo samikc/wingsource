@@ -39,6 +39,8 @@ public class MainTest extends TestCase {
 		AppContextService context = null;
 		try {
 			pe.run("(plus two (minus six three) three (minus six three))", context, System.out);
+			Integer i = (Integer) pe.run("(plus two (minus six three) three (minus six three))", context).getResponse();
+			assertTrue(i== 11);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
