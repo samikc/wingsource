@@ -19,6 +19,8 @@ package org.wingsource.plugin.example;
 
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.antlr.runtime.RecognitionException;
 import org.wingsource.plugin.AppContextService;
 import org.wingsource.plugin.engine.PluginEngine;
@@ -27,12 +29,12 @@ import org.wingsource.plugin.engine.PluginEngine;
  * @author samikc
  *
  */
-public class MainTest {
+public class MainTest extends TestCase {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public void testMain() {
 		PluginEngine pe = new PluginEngine(new DummyTypeResolver());
 		AppContextService context = null;
 		try {
