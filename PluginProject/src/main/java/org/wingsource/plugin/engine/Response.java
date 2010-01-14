@@ -15,24 +15,27 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin;
+package org.wingsource.plugin.engine;
 
-import java.util.List;
+import org.wingsource.plugin.PluginResponse;
 
 /**
  * @author samikc
  *
  */
-public interface PluginRequest {
+public class Response implements PluginResponse {
+	private Object obj;
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
-	 */
-	public Pluglet getParameter(String name);
+	public Object getResponse() {
+		return obj;
+	}
 	
-	public List<String> getOperandList();
-	
-	public void setOperandList(List<String> list);
+	public void setResponse(Object o) {
+		this.obj = o;
+	}
+
+	public Response(Object obj) {
+		super();
+		this.obj = obj;
+	}
 }

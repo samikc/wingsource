@@ -15,24 +15,35 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin;
+package org.wingsource.plugin.example;
 
-import java.util.List;
+import java.io.IOException;
+
+import org.antlr.runtime.RecognitionException;
+import org.wingsource.plugin.AppContextService;
+import org.wingsource.plugin.engine.PluginEngine;
 
 /**
  * @author samikc
  *
  */
-public interface PluginRequest {
+public class Main {
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
+	/**
+	 * @param args
 	 */
-	public Pluglet getParameter(String name);
-	
-	public List<String> getOperandList();
-	
-	public void setOperandList(List<String> list);
+	public static void main(String[] args) {
+		PluginEngine pe = new PluginEngine(new DummyTypeResolver());
+		AppContextService context = null;
+		try {
+			pe.run("(plus two (minus six three) three (minus six three))", context, System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RecognitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

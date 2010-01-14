@@ -15,24 +15,33 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin;
+package org.wingsource.plugin.engine;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.wingsource.plugin.PluginRequest;
+import org.wingsource.plugin.Pluglet;
 
 /**
  * @author samikc
  *
  */
-public interface PluginRequest {
+public class Request implements PluginRequest {
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
+	List<String> operandList = new ArrayList<String>();
+	/* (non-Javadoc)
+	 * @see org.wingsource.plugin.PluginRequest#getParameter(java.lang.String)
 	 */
-	public Pluglet getParameter(String name);
-	
-	public List<String> getOperandList();
-	
-	public void setOperandList(List<String> list);
+	public Pluglet getParameter(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public List<String> getOperandList() {
+		return operandList;
+	}
+	public void setOperandList(List<String> operandList) {
+		this.operandList = operandList;
+	}
+
 }

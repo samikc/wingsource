@@ -23,4 +23,7 @@ package org.wingsource.plugin;
  */
 public interface PluginResponse {
 
+	Object getResponse();
+	
+	void setResponse(Object o);
 }

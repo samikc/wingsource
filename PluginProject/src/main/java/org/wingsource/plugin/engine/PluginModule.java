@@ -15,24 +15,23 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin;
+package org.wingsource.plugin.engine;
 
-import java.util.List;
+import com.google.inject.Binder;
+import com.google.inject.Module;
 
 /**
  * @author samikc
  *
  */
-public interface PluginRequest {
+public class PluginModule implements Module {
 
-	/***
-	 * This method is used to retrieve the parameter that are provided as  
-	 * @param name
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.google.inject.Module#configure(com.google.inject.Binder)
 	 */
-	public Pluglet getParameter(String name);
-	
-	public List<String> getOperandList();
-	
-	public void setOperandList(List<String> list);
+	public void configure(Binder arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
