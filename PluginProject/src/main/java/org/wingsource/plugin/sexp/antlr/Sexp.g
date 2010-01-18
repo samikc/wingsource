@@ -50,13 +50,9 @@ atom			: ALPHANUMERIC | STRING | FLOAT;
 WS		    	: (' ' | '\t' | '\n' | '\r')+;
 ALPHANUMERIC 		: ('a'..'z'|'A'..'Z'|'0'..'9')*;
 SPECIAL_CHARACTERS	: '^' | '&' | '*' | '-' | '+' | '=' | '/' | '!' | '@' | '#' | '$' | '%';
-
-
-
 //String definition
 STRING			: '"' (ESC | ~('\\'|'"'))* '"' ;
 protected ESC		: '\\' ('t' | '"' | INT)* ;
-
 //Number definition
 FLOAT: INT '.' INT ;
 INT    			: ('0'..'9')+ ;
