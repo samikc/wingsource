@@ -38,8 +38,9 @@ public class MainTest extends TestCase {
 		PluginEngine pe = new PluginEngine(new DummyTypeResolver());
 		AppContextService context = null;
 		try {
-			pe.run("(plus two (minus six three) three (minus six three))", context, System.out);
-			Integer i = (Integer) pe.run("(plus two (minus six three) three (minus six three))", context).getResponse();
+			pe.run("(+ 2 (- 6 3) 3 (- 6 3))", context, System.out);
+			Integer i = (Integer) pe.run("(+ 2 (- 6 3) 3 (- 6 3))", context).getResponse();
+			System.out.println("Answer: " + i);
 			assertTrue(i== 11);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -49,5 +50,4 @@ public class MainTest extends TestCase {
 			e.printStackTrace();
 		}
 	}
-
 }
