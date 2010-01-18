@@ -1,9 +1,13 @@
-// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-10 15:29:45
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-18 21:39:49
 
 package org.wingsource.plugin.sexp.antlr;
 
 
 import org.antlr.runtime.*;
+import java.util.Stack;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import org.antlr.runtime.tree.*;
 
@@ -26,14 +30,19 @@ import org.antlr.runtime.tree.*;
  */
 public class SexpParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "OPERATION", "OPERATOR", "OPERAND", "WS", "ALPHANUMERIC", "'('", "')'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "OPERATION", "OPERATOR", "OPERAND", "WS", "ALPHANUMERIC", "SPECIAL_CHARACTERS", "STRING", "FLOAT", "ESC", "INT", "'('", "')'"
     };
+    public static final int SPECIAL_CHARACTERS=9;
     public static final int WS=7;
+    public static final int ESC=12;
     public static final int OPERATOR=5;
     public static final int ALPHANUMERIC=8;
     public static final int OPERAND=6;
+    public static final int INT=13;
+    public static final int FLOAT=11;
     public static final int OPERATION=4;
     public static final int EOF=-1;
+    public static final int STRING=10;
 
         public SexpParser(TokenStream input) {
             super(input);
@@ -85,10 +94,10 @@ public class SexpParser extends Parser {
                 int alt1=3;
                 int LA1_0 = input.LA(1);
 
-                if ( (LA1_0==9) ) {
+                if ( (LA1_0==14) ) {
                     alt1=1;
                 }
-                else if ( (LA1_0==ALPHANUMERIC) ) {
+                else if ( ((LA1_0>=ALPHANUMERIC && LA1_0<=SPECIAL_CHARACTERS)) ) {
                     alt1=2;
                 }
 
@@ -174,14 +183,14 @@ public class SexpParser extends Parser {
             root_0 = (CommonTree)adaptor.nil();
 
             char_literal4=(Token)input.LT(1);
-            match(input,9,FOLLOW_9_in_expression86); 
+            match(input,14,FOLLOW_14_in_expression86); 
             pushFollow(FOLLOW_operation_in_expression89);
             operation5=operation();
             _fsp--;
 
             adaptor.addChild(root_0, operation5.getTree());
             char_literal6=(Token)input.LT(1);
-            match(input,10,FOLLOW_10_in_expression91); 
+            match(input,15,FOLLOW_15_in_expression91); 
 
             }
 
@@ -268,7 +277,7 @@ public class SexpParser extends Parser {
 
 
             // AST REWRITE
-            // elements: operator, operand
+            // elements: operand, operator
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -350,10 +359,10 @@ public class SexpParser extends Parser {
             int alt3=2;
             int LA3_0 = input.LA(1);
 
-            if ( (LA3_0==ALPHANUMERIC) ) {
+            if ( (LA3_0==ALPHANUMERIC||(LA3_0>=STRING && LA3_0<=FLOAT)) ) {
                 alt3=1;
             }
-            else if ( (LA3_0==9) ) {
+            else if ( (LA3_0==14) ) {
                 alt3=2;
             }
             else {
@@ -461,27 +470,34 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start operator
-    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:1: operator : ALPHANUMERIC ;
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:1: operator : ( ALPHANUMERIC | SPECIAL_CHARACTERS );
     public final operator_return operator() throws RecognitionException {
         operator_return retval = new operator_return();
         retval.start = input.LT(1);
 
         CommonTree root_0 = null;
 
-        Token ALPHANUMERIC12=null;
+        Token set12=null;
 
-        CommonTree ALPHANUMERIC12_tree=null;
+        CommonTree set12_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:11: ( ALPHANUMERIC )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:13: ALPHANUMERIC
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:48:11: ( ALPHANUMERIC | SPECIAL_CHARACTERS )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             {
             root_0 = (CommonTree)adaptor.nil();
 
-            ALPHANUMERIC12=(Token)input.LT(1);
-            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_operator164); 
-            ALPHANUMERIC12_tree = (CommonTree)adaptor.create(ALPHANUMERIC12);
-            adaptor.addChild(root_0, ALPHANUMERIC12_tree);
+            set12=(Token)input.LT(1);
+            if ( (input.LA(1)>=ALPHANUMERIC && input.LA(1)<=SPECIAL_CHARACTERS) ) {
+                input.consume();
+                adaptor.addChild(root_0, adaptor.create(set12));
+                errorRecovery=false;
+            }
+            else {
+                MismatchedSetException mse =
+                    new MismatchedSetException(null,input);
+                recoverFromMismatchedSet(input,mse,FOLLOW_set_in_operator0);    throw mse;
+            }
 
 
             }
@@ -508,27 +524,34 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start atom
-    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:1: atom : ALPHANUMERIC ;
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:1: atom : ( ALPHANUMERIC | STRING | FLOAT );
     public final atom_return atom() throws RecognitionException {
         atom_return retval = new atom_return();
         retval.start = input.LT(1);
 
         CommonTree root_0 = null;
 
-        Token ALPHANUMERIC13=null;
+        Token set13=null;
 
-        CommonTree ALPHANUMERIC13_tree=null;
+        CommonTree set13_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:8: ( ALPHANUMERIC )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:10: ALPHANUMERIC
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:8: ( ALPHANUMERIC | STRING | FLOAT )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             {
             root_0 = (CommonTree)adaptor.nil();
 
-            ALPHANUMERIC13=(Token)input.LT(1);
-            match(input,ALPHANUMERIC,FOLLOW_ALPHANUMERIC_in_atom173); 
-            ALPHANUMERIC13_tree = (CommonTree)adaptor.create(ALPHANUMERIC13);
-            adaptor.addChild(root_0, ALPHANUMERIC13_tree);
+            set13=(Token)input.LT(1);
+            if ( input.LA(1)==ALPHANUMERIC||(input.LA(1)>=STRING && input.LA(1)<=FLOAT) ) {
+                input.consume();
+                adaptor.addChild(root_0, adaptor.create(set13));
+                errorRecovery=false;
+            }
+            else {
+                MismatchedSetException mse =
+                    new MismatchedSetException(null,input);
+                recoverFromMismatchedSet(input,mse,FOLLOW_set_in_atom0);    throw mse;
+            }
 
 
             }
@@ -552,18 +575,18 @@ public class SexpParser extends Parser {
 
  
 
-    public static final BitSet FOLLOW_expression_in_sexpr70 = new BitSet(new long[]{0x0000000000000300L});
-    public static final BitSet FOLLOW_operation_in_sexpr73 = new BitSet(new long[]{0x0000000000000300L});
+    public static final BitSet FOLLOW_expression_in_sexpr70 = new BitSet(new long[]{0x0000000000004300L});
+    public static final BitSet FOLLOW_operation_in_sexpr73 = new BitSet(new long[]{0x0000000000004300L});
     public static final BitSet FOLLOW_EOF_in_sexpr77 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_9_in_expression86 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_operation_in_expression89 = new BitSet(new long[]{0x0000000000000400L});
-    public static final BitSet FOLLOW_10_in_expression91 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_expression86 = new BitSet(new long[]{0x0000000000000300L});
+    public static final BitSet FOLLOW_operation_in_expression89 = new BitSet(new long[]{0x0000000000008000L});
+    public static final BitSet FOLLOW_15_in_expression91 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_operator_in_operation101 = new BitSet(new long[]{0x0000000000000082L});
-    public static final BitSet FOLLOW_WS_in_operation104 = new BitSet(new long[]{0x0000000000000300L});
+    public static final BitSet FOLLOW_WS_in_operation104 = new BitSet(new long[]{0x0000000000004D00L});
     public static final BitSet FOLLOW_operand_in_operation106 = new BitSet(new long[]{0x0000000000000082L});
     public static final BitSet FOLLOW_atom_in_operand132 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_expression_in_operand148 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ALPHANUMERIC_in_operator164 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_ALPHANUMERIC_in_atom173 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_operator0 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_set_in_atom0 = new BitSet(new long[]{0x0000000000000002L});
 
 }
