@@ -53,11 +53,7 @@ public class PlusPlugin implements PluginService {
 		List<String> list = prequest.getOperandList();
 		Integer res = 0;
 		for (String str : list) {
-			Integer i = 0;
-			if (str.equalsIgnoreCase("two"))
-				i = Integer.parseInt("2");
-			if (str.equalsIgnoreCase("three"))
-				i = Integer.parseInt("3");
+			Integer i = Integer.parseInt(str);
 			res += i;
 		}
 		presponse.setResponse(res);

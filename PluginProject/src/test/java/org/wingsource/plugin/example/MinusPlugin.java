@@ -54,25 +54,16 @@ public class MinusPlugin implements PluginService{
 		Integer res = 0;
 		int counter = 0; 
 		for (String str : list) {
-			Integer i = 0;
+			Integer i = Integer.parseInt(str);
 			if (counter == 0) {
-				if (str.equalsIgnoreCase("six"))
-					i = Integer.parseInt("6");
 				res = i;
 			}else {
-				if (str.equalsIgnoreCase("two"))
-					i = Integer.parseInt("2");
-				if (str.equalsIgnoreCase("three"))
-					i = Integer.parseInt("3");
 				res -= i;
 			}
 			counter++;
 		}
-		if (res == 3) {
-			presponse.setResponse("three");
-		} else {
-			presponse.setResponse(res);
-		}
+
+		presponse.setResponse(res);
 	}
 
 }

@@ -31,10 +31,10 @@ public class DummyTypeResolver implements TypeResolverService{
 	 */
 	public PluginService resolve(String operation) {
 		// TODO Auto-generated method stub
-		if (operation.equalsIgnoreCase("plus")) {
+		if (operation.equalsIgnoreCase("+")) {
 			return new PlusPlugin();
 		}
-		if (operation.equalsIgnoreCase("minus")) {
+		if (operation.equalsIgnoreCase("-")) {
 			return new MinusPlugin();
 		}
 
