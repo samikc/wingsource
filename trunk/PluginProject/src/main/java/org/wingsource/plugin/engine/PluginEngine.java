@@ -19,10 +19,16 @@ package org.wingsource.plugin.engine;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
+import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
+import org.wingsource.plugin.Pluglet;
 import org.wingsource.plugin.TypeResolverService;
+import org.wingsource.plugin.sexp.Operand;
+import org.wingsource.plugin.sexp.Operation;
 
 /**
  * @author samikc
@@ -46,5 +52,32 @@ public class PluginEngine {
 	
 	public PluginResponse run(String expression) throws IOException, RecognitionException {
 		return pMgr.execute(expression, trs);
+	}
+
+	private class PluginServiceManager {
+	
+		public PluginResponse execute(String expression,TypeResolverService trs) throws IOException, RecognitionException {
+			Operation operation = Operation.toOperation(expression);
+			Pluglet pServ = trs.resolve(operation.operator());
+			List<String> operandList = new ArrayList<String>();
+			for (Operand op : operation.operands()) {
+				switch(op.type()) {
+				case ATOM:
+					operandList.add(op.value().toString());
+					break;
+				case OPERATION:
+					PluginResponse pRes = execute(op.value().toString(), trs);
+					operandList.add(pRes.getResponse().toString());
+					break;
+				}
+			}
+			PluginRequest prequest = new Request();
+			prequest.setOperandList(operandList);
+			PluginResponse presponse = new Response(null);
+			pServ.init();
+			pServ.service(prequest, presponse);
+			pServ.destroy();
+			return presponse;
+		}
 	}
 }
