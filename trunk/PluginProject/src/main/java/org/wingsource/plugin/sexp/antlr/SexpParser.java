@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-18 21:39:49
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-20 22:50:35
 
 package org.wingsource.plugin.sexp.antlr;
 
@@ -30,15 +30,15 @@ import org.antlr.runtime.tree.*;
  */
 public class SexpParser extends Parser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "OPERATION", "OPERATOR", "OPERAND", "WS", "ALPHANUMERIC", "SPECIAL_CHARACTERS", "STRING", "FLOAT", "ESC", "INT", "'('", "')'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "OPERATION", "OPERATOR", "OPERAND", "WS", "ALPHANUMERIC", "SPECIAL_CHARACTERS", "STRING", "FLOAT", "INT", "ESC", "'('", "')'"
     };
     public static final int SPECIAL_CHARACTERS=9;
     public static final int WS=7;
-    public static final int ESC=12;
+    public static final int ESC=13;
     public static final int OPERATOR=5;
     public static final int ALPHANUMERIC=8;
     public static final int OPERAND=6;
-    public static final int INT=13;
+    public static final int INT=12;
     public static final int FLOAT=11;
     public static final int OPERATION=4;
     public static final int EOF=-1;
@@ -277,7 +277,7 @@ public class SexpParser extends Parser {
 
 
             // AST REWRITE
-            // elements: operand, operator
+            // elements: operator, operand
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -359,7 +359,7 @@ public class SexpParser extends Parser {
             int alt3=2;
             int LA3_0 = input.LA(1);
 
-            if ( (LA3_0==ALPHANUMERIC||(LA3_0>=STRING && LA3_0<=FLOAT)) ) {
+            if ( (LA3_0==ALPHANUMERIC||(LA3_0>=STRING && LA3_0<=INT)) ) {
                 alt3=1;
             }
             else if ( (LA3_0==14) ) {
@@ -524,7 +524,7 @@ public class SexpParser extends Parser {
     };
 
     // $ANTLR start atom
-    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:1: atom : ( ALPHANUMERIC | STRING | FLOAT );
+    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:1: atom : ( ALPHANUMERIC | STRING | FLOAT | INT );
     public final atom_return atom() throws RecognitionException {
         atom_return retval = new atom_return();
         retval.start = input.LT(1);
@@ -536,13 +536,13 @@ public class SexpParser extends Parser {
         CommonTree set13_tree=null;
 
         try {
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:8: ( ALPHANUMERIC | STRING | FLOAT )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:49:8: ( ALPHANUMERIC | STRING | FLOAT | INT )
             // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             {
             root_0 = (CommonTree)adaptor.nil();
 
             set13=(Token)input.LT(1);
-            if ( input.LA(1)==ALPHANUMERIC||(input.LA(1)>=STRING && input.LA(1)<=FLOAT) ) {
+            if ( input.LA(1)==ALPHANUMERIC||(input.LA(1)>=STRING && input.LA(1)<=INT) ) {
                 input.consume();
                 adaptor.addChild(root_0, adaptor.create(set13));
                 errorRecovery=false;
@@ -582,7 +582,7 @@ public class SexpParser extends Parser {
     public static final BitSet FOLLOW_operation_in_expression89 = new BitSet(new long[]{0x0000000000008000L});
     public static final BitSet FOLLOW_15_in_expression91 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_operator_in_operation101 = new BitSet(new long[]{0x0000000000000082L});
-    public static final BitSet FOLLOW_WS_in_operation104 = new BitSet(new long[]{0x0000000000004D00L});
+    public static final BitSet FOLLOW_WS_in_operation104 = new BitSet(new long[]{0x0000000000005D00L});
     public static final BitSet FOLLOW_operand_in_operation106 = new BitSet(new long[]{0x0000000000000082L});
     public static final BitSet FOLLOW_atom_in_operand132 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_expression_in_operand148 = new BitSet(new long[]{0x0000000000000002L});

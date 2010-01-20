@@ -46,15 +46,14 @@ operation 		: operator (WS operand)* -> ^(OPERATION ^(OPERATOR operator) operand
 operand			: atom -> ^(OPERAND atom)
 			 | expression -> ^(OPERAND expression);
 operator		: ALPHANUMERIC | SPECIAL_CHARACTERS;
-atom			: ALPHANUMERIC | STRING | FLOAT;
+atom			: ALPHANUMERIC | STRING | FLOAT| INT;
 WS		    	: (' ' | '\t' | '\n' | '\r')+;
-ALPHANUMERIC 		: ('a'..'z'|'A'..'Z'|'0'..'9')*;
+ALPHANUMERIC 		: ('a'..'z'|'A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9')*;
 SPECIAL_CHARACTERS	: '^' | '&' | '*' | '-' | '+' | '=' | '/' | '!' | '@' | '#' | '$' | '%';
 //String definition
 STRING			: '"' (ESC | ~('\\'|'"'))* '"' ;
-protected ESC		: '\\' ('t' | '"' | INT)* ;
+protected ESC		: '\\' ('t' | '"' | '0'..'9')* ;
 //Number definition
-FLOAT: INT '.' INT ;
-INT    			: ('0'..'9')+ ;
-
+INT			: ('-' | '+')? ('0'..'9')+;
+FLOAT			: ('-' | '+')? ('0'..'9')* '.' ('0'..'9')+ ;
 

@@ -1,4 +1,4 @@
-// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-18 21:39:49
+// $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-20 22:50:35
 
 package org.wingsource.plugin.sexp.antlr;
 
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 public class SexpLexer extends Lexer {
     public static final int SPECIAL_CHARACTERS=9;
     public static final int WS=7;
-    public static final int ESC=12;
+    public static final int ESC=13;
     public static final int OPERATOR=5;
     public static final int ALPHANUMERIC=8;
     public static final int OPERAND=6;
     public static final int FLOAT=11;
-    public static final int INT=13;
+    public static final int INT=12;
     public static final int T14=14;
     public static final int T15=15;
     public static final int OPERATION=4;
@@ -125,10 +125,20 @@ public class SexpLexer extends Lexer {
     public final void mALPHANUMERIC() throws RecognitionException {
         try {
             int _type = ALPHANUMERIC;
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:16: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:18: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:16: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:18: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             {
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:18: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse =
+                    new MismatchedSetException(null,input);
+                recover(mse);    throw mse;
+            }
+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:51:37: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             loop2:
             do {
                 int alt2=2;
@@ -203,11 +213,11 @@ public class SexpLexer extends Lexer {
     public final void mSTRING() throws RecognitionException {
         try {
             int _type = STRING;
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:10: ( '\"' ( ESC | ~ ( '\\\\' | '\"' ) )* '\"' )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:12: '\"' ( ESC | ~ ( '\\\\' | '\"' ) )* '\"'
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:54:10: ( '\"' ( ESC | ~ ( '\\\\' | '\"' ) )* '\"' )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:54:12: '\"' ( ESC | ~ ( '\\\\' | '\"' ) )* '\"'
             {
             match('\"'); 
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:16: ( ESC | ~ ( '\\\\' | '\"' ) )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:54:16: ( ESC | ~ ( '\\\\' | '\"' ) )*
             loop3:
             do {
                 int alt3=3;
@@ -223,14 +233,14 @@ public class SexpLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:17: ESC
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:54:17: ESC
             	    {
             	    mESC(); 
 
             	    }
             	    break;
             	case 2 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:23: ~ ( '\\\\' | '\"' )
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:54:23: ~ ( '\\\\' | '\"' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFE') ) {
             	        input.consume();
@@ -266,61 +276,35 @@ public class SexpLexer extends Lexer {
     public final void mESC() throws RecognitionException {
         try {
             int _type = ESC;
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:16: ( '\\\\' ( 't' | '\"' | INT )* )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:18: '\\\\' ( 't' | '\"' | INT )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:55:16: ( '\\\\' ( 't' | '\"' | '0' .. '9' )* )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:55:18: '\\\\' ( 't' | '\"' | '0' .. '9' )*
             {
             match('\\'); 
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:23: ( 't' | '\"' | INT )*
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:55:23: ( 't' | '\"' | '0' .. '9' )*
             loop4:
             do {
-                int alt4=4;
-                switch ( input.LA(1) ) {
-                case 't':
-                    {
-                    alt4=1;
-                    }
-                    break;
-                case '\"':
-                    {
-                    alt4=2;
-                    }
-                    break;
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    {
-                    alt4=3;
-                    }
-                    break;
+                int alt4=2;
+                int LA4_0 = input.LA(1);
 
+                if ( (LA4_0=='\"'||(LA4_0>='0' && LA4_0<='9')||LA4_0=='t') ) {
+                    alt4=1;
                 }
+
 
                 switch (alt4) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:24: 't'
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
             	    {
-            	    match('t'); 
+            	    if ( input.LA(1)=='\"'||(input.LA(1)>='0' && input.LA(1)<='9')||input.LA(1)=='t' ) {
+            	        input.consume();
 
             	    }
-            	    break;
-            	case 2 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:30: '\"'
-            	    {
-            	    match('\"'); 
-
+            	    else {
+            	        MismatchedSetException mse =
+            	            new MismatchedSetException(null,input);
+            	        recover(mse);    throw mse;
             	    }
-            	    break;
-            	case 3 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:36: INT
-            	    {
-            	    mINT(); 
+
 
             	    }
             	    break;
@@ -340,48 +324,55 @@ public class SexpLexer extends Lexer {
     }
     // $ANTLR end ESC
 
-    // $ANTLR start FLOAT
-    public final void mFLOAT() throws RecognitionException {
-        try {
-            int _type = FLOAT;
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:61:6: ( INT '.' INT )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:61:8: INT '.' INT
-            {
-            mINT(); 
-            match('.'); 
-            mINT(); 
-
-            }
-
-            this.type = _type;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end FLOAT
-
     // $ANTLR start INT
     public final void mINT() throws RecognitionException {
         try {
             int _type = INT;
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:62:11: ( ( '0' .. '9' )+ )
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:62:13: ( '0' .. '9' )+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:7: ( ( '-' | '+' )? ( '0' .. '9' )+ )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:9: ( '-' | '+' )? ( '0' .. '9' )+
             {
-            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:62:13: ( '0' .. '9' )+
-            int cnt5=0;
-            loop5:
-            do {
-                int alt5=2;
-                int LA5_0 = input.LA(1);
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:9: ( '-' | '+' )?
+            int alt5=2;
+            int LA5_0 = input.LA(1);
 
-                if ( ((LA5_0>='0' && LA5_0<='9')) ) {
-                    alt5=1;
+            if ( (LA5_0=='+'||LA5_0=='-') ) {
+                alt5=1;
+            }
+            switch (alt5) {
+                case 1 :
+                    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
+                    {
+                    if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
+                        input.consume();
+
+                    }
+                    else {
+                        MismatchedSetException mse =
+                            new MismatchedSetException(null,input);
+                        recover(mse);    throw mse;
+                    }
+
+
+                    }
+                    break;
+
+            }
+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:22: ( '0' .. '9' )+
+            int cnt6=0;
+            loop6:
+            do {
+                int alt6=2;
+                int LA6_0 = input.LA(1);
+
+                if ( ((LA6_0>='0' && LA6_0<='9')) ) {
+                    alt6=1;
                 }
 
 
-                switch (alt5) {
+                switch (alt6) {
             	case 1 :
-            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:62:14: '0' .. '9'
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:57:23: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -389,12 +380,12 @@ public class SexpLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt5 >= 1 ) break loop5;
+            	    if ( cnt6 >= 1 ) break loop6;
                         EarlyExitException eee =
-                            new EarlyExitException(5, input);
+                            new EarlyExitException(6, input);
                         throw eee;
                 }
-                cnt5++;
+                cnt6++;
             } while (true);
 
 
@@ -407,11 +398,111 @@ public class SexpLexer extends Lexer {
     }
     // $ANTLR end INT
 
+    // $ANTLR start FLOAT
+    public final void mFLOAT() throws RecognitionException {
+        try {
+            int _type = FLOAT;
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:9: ( ( '-' | '+' )? ( '0' .. '9' )* '.' ( '0' .. '9' )+ )
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:11: ( '-' | '+' )? ( '0' .. '9' )* '.' ( '0' .. '9' )+
+            {
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:11: ( '-' | '+' )?
+            int alt7=2;
+            int LA7_0 = input.LA(1);
+
+            if ( (LA7_0=='+'||LA7_0=='-') ) {
+                alt7=1;
+            }
+            switch (alt7) {
+                case 1 :
+                    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:
+                    {
+                    if ( input.LA(1)=='+'||input.LA(1)=='-' ) {
+                        input.consume();
+
+                    }
+                    else {
+                        MismatchedSetException mse =
+                            new MismatchedSetException(null,input);
+                        recover(mse);    throw mse;
+                    }
+
+
+                    }
+                    break;
+
+            }
+
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:24: ( '0' .. '9' )*
+            loop8:
+            do {
+                int alt8=2;
+                int LA8_0 = input.LA(1);
+
+                if ( ((LA8_0>='0' && LA8_0<='9')) ) {
+                    alt8=1;
+                }
+
+
+                switch (alt8) {
+            	case 1 :
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:25: '0' .. '9'
+            	    {
+            	    matchRange('0','9'); 
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop8;
+                }
+            } while (true);
+
+            match('.'); 
+            // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:40: ( '0' .. '9' )+
+            int cnt9=0;
+            loop9:
+            do {
+                int alt9=2;
+                int LA9_0 = input.LA(1);
+
+                if ( ((LA9_0>='0' && LA9_0<='9')) ) {
+                    alt9=1;
+                }
+
+
+                switch (alt9) {
+            	case 1 :
+            	    // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:58:41: '0' .. '9'
+            	    {
+            	    matchRange('0','9'); 
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt9 >= 1 ) break loop9;
+                        EarlyExitException eee =
+                            new EarlyExitException(9, input);
+                        throw eee;
+                }
+                cnt9++;
+            } while (true);
+
+
+            }
+
+            this.type = _type;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end FLOAT
+
     public void mTokens() throws RecognitionException {
-        // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:8: ( T14 | T15 | WS | ALPHANUMERIC | SPECIAL_CHARACTERS | STRING | ESC | FLOAT | INT )
-        int alt6=9;
-        alt6 = dfa6.predict(input);
-        switch (alt6) {
+        // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:8: ( T14 | T15 | WS | ALPHANUMERIC | SPECIAL_CHARACTERS | STRING | ESC | INT | FLOAT )
+        int alt10=9;
+        alt10 = dfa10.predict(input);
+        switch (alt10) {
             case 1 :
                 // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:10: T14
                 {
@@ -462,84 +553,86 @@ public class SexpLexer extends Lexer {
                 }
                 break;
             case 8 :
-                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:64: FLOAT
-                {
-                mFLOAT(); 
-
-                }
-                break;
-            case 9 :
-                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:70: INT
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:64: INT
                 {
                 mINT(); 
 
                 }
                 break;
+            case 9 :
+                // D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g:1:68: FLOAT
+                {
+                mFLOAT(); 
+
+                }
+                break;
 
         }
 
     }
 
 
-    protected DFA6 dfa6 = new DFA6(this);
-    static final String DFA6_eotS =
-        "\1\5\3\uffff\1\5\5\uffff";
-    static final String DFA6_eofS =
-        "\12\uffff";
-    static final String DFA6_minS =
-        "\1\11\3\uffff\1\56\5\uffff";
-    static final String DFA6_maxS =
-        "\1\136\3\uffff\1\71\5\uffff";
-    static final String DFA6_acceptS =
-        "\1\uffff\1\1\1\2\1\3\1\uffff\1\4\1\5\1\6\1\7\1\10";
-    static final String DFA6_specialS =
-        "\12\uffff}>";
-    static final String[] DFA6_transitionS = {
-            "\2\3\2\uffff\1\3\22\uffff\1\3\1\6\1\7\4\6\1\uffff\1\1\1\2\2"+
-            "\6\1\uffff\1\6\1\uffff\1\6\12\4\3\uffff\1\6\2\uffff\1\6\33\uffff"+
-            "\1\10\1\uffff\1\6",
+    protected DFA10 dfa10 = new DFA10(this);
+    static final String DFA10_eotS =
+        "\5\uffff\1\10\3\uffff\1\13\2\uffff";
+    static final String DFA10_eofS =
+        "\14\uffff";
+    static final String DFA10_minS =
+        "\1\11\4\uffff\1\56\3\uffff\1\56\2\uffff";
+    static final String DFA10_maxS =
+        "\1\172\4\uffff\1\71\3\uffff\1\71\2\uffff";
+    static final String DFA10_acceptS =
+        "\1\uffff\1\1\1\2\1\3\1\4\1\uffff\1\6\1\7\1\5\1\uffff\1\11\1\10";
+    static final String DFA10_specialS =
+        "\14\uffff}>";
+    static final String[] DFA10_transitionS = {
+            "\2\3\2\uffff\1\3\22\uffff\1\3\1\10\1\6\4\10\1\uffff\1\1\1\2"+
+            "\1\10\1\5\1\uffff\1\5\1\12\1\10\12\11\3\uffff\1\10\2\uffff\1"+
+            "\10\32\4\1\uffff\1\7\1\uffff\1\10\2\uffff\32\4",
             "",
             "",
             "",
-            "\1\11\1\uffff\12\4",
+            "",
+            "\1\12\1\uffff\12\11",
             "",
             "",
             "",
+            "\1\12\1\uffff\12\11",
             "",
             ""
     };
 
-    static final short[] DFA6_eot = DFA.unpackEncodedString(DFA6_eotS);
-    static final short[] DFA6_eof = DFA.unpackEncodedString(DFA6_eofS);
-    static final char[] DFA6_min = DFA.unpackEncodedStringToUnsignedChars(DFA6_minS);
-    static final char[] DFA6_max = DFA.unpackEncodedStringToUnsignedChars(DFA6_maxS);
-    static final short[] DFA6_accept = DFA.unpackEncodedString(DFA6_acceptS);
-    static final short[] DFA6_special = DFA.unpackEncodedString(DFA6_specialS);
-    static final short[][] DFA6_transition;
+    static final short[] DFA10_eot = DFA.unpackEncodedString(DFA10_eotS);
+    static final short[] DFA10_eof = DFA.unpackEncodedString(DFA10_eofS);
+    static final char[] DFA10_min = DFA.unpackEncodedStringToUnsignedChars(DFA10_minS);
+    static final char[] DFA10_max = DFA.unpackEncodedStringToUnsignedChars(DFA10_maxS);
+    static final short[] DFA10_accept = DFA.unpackEncodedString(DFA10_acceptS);
+    static final short[] DFA10_special = DFA.unpackEncodedString(DFA10_specialS);
+    static final short[][] DFA10_transition;
 
     static {
-        int numStates = DFA6_transitionS.length;
-        DFA6_transition = new short[numStates][];
+        int numStates = DFA10_transitionS.length;
+        DFA10_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA6_transition[i] = DFA.unpackEncodedString(DFA6_transitionS[i]);
+            DFA10_transition[i] = DFA.unpackEncodedString(DFA10_transitionS[i]);
         }
     }
 
-    class DFA6 extends DFA {
+    class DFA10 extends DFA {
 
-        public DFA6(BaseRecognizer recognizer) {
+        public DFA10(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 6;
-            this.eot = DFA6_eot;
-            this.eof = DFA6_eof;
-            this.min = DFA6_min;
-            this.max = DFA6_max;
-            this.accept = DFA6_accept;
-            this.special = DFA6_special;
-            this.transition = DFA6_transition;
+            this.decisionNumber = 10;
+            this.eot = DFA10_eot;
+            this.eof = DFA10_eof;
+            this.min = DFA10_min;
+            this.max = DFA10_max;
+            this.accept = DFA10_accept;
+            this.special = DFA10_special;
+            this.transition = DFA10_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T14 | T15 | WS | ALPHANUMERIC | SPECIAL_CHARACTERS | STRING | ESC | FLOAT | INT );";
+            return "1:1: Tokens : ( T14 | T15 | WS | ALPHANUMERIC | SPECIAL_CHARACTERS | STRING | ESC | INT | FLOAT );";
         }
     }
  

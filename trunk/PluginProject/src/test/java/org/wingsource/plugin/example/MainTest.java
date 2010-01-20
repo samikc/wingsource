@@ -22,7 +22,6 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.antlr.runtime.RecognitionException;
-import org.wingsource.plugin.AppContextService;
 import org.wingsource.plugin.engine.PluginEngine;
 
 /**
@@ -36,12 +35,11 @@ public class MainTest extends TestCase {
 	 */
 	public void testMain() {
 		PluginEngine pe = new PluginEngine(new DummyTypeResolver());
-		AppContextService context = null;
 		try {
-			pe.run("(+ 2 (- 6 3) 3 (- 6 3))", context, System.out);
-			Integer i = (Integer) pe.run("(+ 2 (- 6 3) 3 (- 6 3))", context).getResponse();
+			//pe.run("(+ 2 (- 6 3) 3 (- -6 3))", context, System.out);
+			Integer i = (Integer) pe.run("(+ 2 (- 005 -3) 3 (- -6 3))").getResponse();
 			System.out.println("Answer: " + i);
-			assertTrue(i== 11);
+			assertTrue(i== 4);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
