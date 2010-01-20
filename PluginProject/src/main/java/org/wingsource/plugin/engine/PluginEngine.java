@@ -63,11 +63,11 @@ public class PluginEngine {
 			for (Operand op : operation.operands()) {
 				switch(op.type()) {
 				case ATOM:
-					operandList.add(op.value().toString());
+					operandList.add(op.value());
 					break;
 				case OPERATION:
 					PluginResponse pRes = execute(op.value().toString(), trs);
-					operandList.add(pRes.getResponse().toString());
+					operandList.add(pRes.getResponse());
 					break;
 				}
 			}
