@@ -32,7 +32,7 @@ public interface PluginRequest {
 	 */
 	//public Pluglet getParameter(String name);
 	
-	public List<String> getOperandList();
+	public List<Object> getOperandList();
 	
-	public void setOperandList(List<String> list);
+	public void setOperandList(List<Object> list);
 }

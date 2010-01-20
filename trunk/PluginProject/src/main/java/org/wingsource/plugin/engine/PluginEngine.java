@@ -59,7 +59,7 @@ public class PluginEngine {
 		public PluginResponse execute(String expression,TypeResolverService trs) throws IOException, RecognitionException {
 			Operation operation = Operation.toOperation(expression);
 			Pluglet pServ = trs.resolve(operation.operator());
-			List<String> operandList = new ArrayList<String>();
+			List<Object> operandList = new ArrayList<Object>();
 			for (Operand op : operation.operands()) {
 				switch(op.type()) {
 				case ATOM:
