@@ -28,7 +28,7 @@ import org.wingsource.plugin.PluginRequest;
  */
 public class Request implements PluginRequest {
 
-	List<String> operandList = new ArrayList<String>();
+	List<Object> operandList = new ArrayList<Object>();
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.PluginRequest#getParameter(java.lang.String)
 	 */
@@ -38,10 +38,10 @@ public class Request implements PluginRequest {
 		return null;
 	}
 	*/
-	public List<String> getOperandList() {
+	public List<Object> getOperandList() {
 		return operandList;
 	}
-	public void setOperandList(List<String> operandList) {
+	public void setOperandList(List<Object> operandList) {
 		this.operandList = operandList;
 	}
 

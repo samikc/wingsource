@@ -50,11 +50,11 @@ public class MinusPlugin implements Pluglet{
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
 		System.out.println("MinusPlugin");
-		List<String> list = prequest.getOperandList();
+		List<Object> list = prequest.getOperandList();
 		Integer res = 0;
 		int counter = 0; 
-		for (String str : list) {
-			Integer i = Integer.parseInt(str);
+		for (Object str : list) {
+			Integer i = Integer.parseInt(str.toString());
 			if (counter == 0) {
 				res = i;
 			}else {

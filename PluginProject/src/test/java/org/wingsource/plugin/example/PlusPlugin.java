@@ -50,10 +50,10 @@ public class PlusPlugin implements Pluglet {
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
 		System.out.println("PlusPlugin");
-		List<String> list = prequest.getOperandList();
+		List<Object> list = prequest.getOperandList();
 		Integer res = 0;
-		for (String str : list) {
-			Integer i = Integer.parseInt(str);
+		for (Object str : list) {
+			Integer i = Integer.parseInt(str.toString());
 			res += i;
 		}
 		presponse.setResponse(res);
