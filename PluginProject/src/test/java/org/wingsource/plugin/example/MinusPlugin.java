@@ -21,13 +21,13 @@ import java.util.List;
 
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
-import org.wingsource.plugin.PluginService;
+import org.wingsource.plugin.Pluglet;
 
 /**
  * @author samikc
  *
  */
-public class MinusPlugin implements PluginService{
+public class MinusPlugin implements Pluglet{
 
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.PluginService#destroy()

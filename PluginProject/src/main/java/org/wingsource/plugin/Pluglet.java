@@ -15,17 +15,30 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.engine.appcontext;
+package org.wingsource.plugin;
 
 /**
  * @author samikc
  *
  */
-public enum AppContextType {
+public interface Pluglet {
+	
+	/***
+	 * Called just after the PluginService object is created.
+	 */
+	void init();
+	
+	/***
+	 * Called to actually serve the process for a {@link Pluglet}.
+	 * @param prequest
+	 * @param presponse
+	 */
+	void service(PluginRequest prequest,PluginResponse presponse);
+	
+	/***
+	 * Called at the end of the service and before the object is relased for a garbage 
+	 * collection.
+	 */
+	void destroy();
 
-	SINGLETON("Singleton"),THREAD("Thread");
-	private String type;
-	private AppContextType(String t) {
-		this.type = t;
-	}
 }

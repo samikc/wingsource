@@ -17,7 +17,7 @@
  */
 package org.wingsource.plugin.example;
 
-import org.wingsource.plugin.PluginService;
+import org.wingsource.plugin.Pluglet;
 import org.wingsource.plugin.TypeResolverService;
 
 /**
@@ -29,7 +29,7 @@ public class DummyTypeResolver implements TypeResolverService{
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
 	 */
-	public PluginService resolve(String operation) {
+	public Pluglet resolve(String operation) {
 		// TODO Auto-generated method stub
 		if (operation.equalsIgnoreCase("+")) {
 			return new PlusPlugin();

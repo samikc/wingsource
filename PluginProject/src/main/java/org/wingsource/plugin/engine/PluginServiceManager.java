@@ -22,10 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.antlr.runtime.RecognitionException;
-import org.wingsource.plugin.AppContextService;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
-import org.wingsource.plugin.PluginService;
+import org.wingsource.plugin.Pluglet;
 import org.wingsource.plugin.TypeResolverService;
 import org.wingsource.plugin.sexp.Operand;
 import org.wingsource.plugin.sexp.Operation;
@@ -36,9 +35,9 @@ import org.wingsource.plugin.sexp.Operation;
  */
 public class PluginServiceManager {
 
-	public PluginResponse execute(String expression,AppContextService context,TypeResolverService trs) throws IOException, RecognitionException {
+	public PluginResponse execute(String expression,TypeResolverService trs) throws IOException, RecognitionException {
 		Operation operation = Operation.toOperation(expression);
-		PluginService pServ = trs.resolve(operation.operator());
+		Pluglet pServ = trs.resolve(operation.operator());
 		List<String> operandList = new ArrayList<String>();
 		for (Operand op : operation.operands()) {
 			switch(op.type()) {
@@ -46,7 +45,7 @@ public class PluginServiceManager {
 				operandList.add(op.value().toString());
 				break;
 			case OPERATION:
-				PluginResponse pRes = execute(op.value().toString(), context, trs);
+				PluginResponse pRes = execute(op.value().toString(), trs);
 				operandList.add(pRes.getResponse().toString());
 				break;
 			}

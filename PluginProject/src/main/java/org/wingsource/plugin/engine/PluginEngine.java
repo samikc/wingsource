@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.antlr.runtime.RecognitionException;
-import org.wingsource.plugin.AppContextService;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.TypeResolverService;
 
@@ -38,14 +37,14 @@ public class PluginEngine {
 		pMgr = new PluginServiceManager();
 	}
 
-	public void run(String expression,AppContextService context,OutputStream os) throws IOException, RecognitionException {
-		PluginResponse pRes = this.run(expression, context);
+	public void run(String expression, OutputStream os) throws IOException, RecognitionException {
+		PluginResponse pRes = this.run(expression);
 		Object obj = pRes.getResponse();
 		String out = obj.toString();
 		os.write(out.getBytes());
 	}
 	
-	public PluginResponse run(String expression,AppContextService context) throws IOException, RecognitionException {
-		return pMgr.execute(expression, context, trs);
+	public PluginResponse run(String expression) throws IOException, RecognitionException {
+		return pMgr.execute(expression, trs);
 	}
 }
