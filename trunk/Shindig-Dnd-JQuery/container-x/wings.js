@@ -35,12 +35,12 @@ wings.renderGadgets = function() {
 
   gadgets.container.layoutManager.setGadgetChromeIds(_gadgetChromeIds);
 
-  for(var i = 0; i < _gadgets.length; i++) {
-	  gadgets.container.renderGadget(_gadgets[i]);
-  }
+  $(_gadgets).each(function(i) {
+	  gadgets.container.renderGadget(this);
+  });
 };
 
-$('document').ready(function() {
+$(document).ready(function() {
 	wings.renderGadgets();
 	wings.dnd.init();
 });

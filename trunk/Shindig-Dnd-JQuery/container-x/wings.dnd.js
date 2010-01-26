@@ -21,58 +21,50 @@ var wings = wings || {};
 
 wings.dnd = wings.dnd || {};
 
-wings.dnd.columnSelector = '.column';
-wings.dnd.gadgetSelector = '.gadgets-gadget-chrome';
-wings.dnd.handleSelector = '.gadgets-gadget-title-bar';
-wings.dnd.contentSelector = '.gadgets-gadget-content';
-wings.dnd.gadgetPlaceHolder = 'gadget-placeholder'; //sortable's placeholder attribute expects class name without '.' prefix.
-wings.dnd.overlay	= 'gadgets-dnd-overlay'; //do not prefix clas name with dot
+wings.dnd.COLUMN_SELECTOR = '.column';
+wings.dnd.GADGET_SELECTOR = '.gadgets-gadget-chrome';
+wings.dnd.HANDLE_SELECTOR = '.gadgets-gadget-title-bar';
+wings.dnd.CONTENT_SELECTOR = '.gadgets-gadget-content';
+wings.dnd.GADGET_PLACEHOLDER = 'gadget-placeholder'; //sortable's placeholder attribute expects class name without '.' prefix.
+wings.dnd.OVERLAY	= 'gadgets-dnd-overlay'; //do not prefix clas name with dot
 wings.dnd.$gadgetMasks = null;
 
 wings.dnd.init = function() {
-	var $dragableGadgets = $(this.gadgetSelector, this.columnSelector);
+	var $dragableGadgets = $(this.GADGET_SELECTOR, this.COLUMN_SELECTOR);
 
 	//create overlays
 	$dragableGadgets.each(function(i) {
-		$("<div>").addClass(wings.dnd.overlay).css({
+		$("<div>").addClass(wings.dnd.OVERLAY).css({
 						"height":$(this).height(),
 						"width":$(this).width()
 		}).prependTo(this);
 	}); 
 
 	//change cursor pointer
-	$dragableGadgets.find(this.handleSelector).css({
-		'cursor':'move'
-	}).mousedown(function (e) {
-		var $gadgetBeingDragged = $(e.target).parent();
-		$gadgetBeingDragged.css({width: $gadgetBeingDragged.width() + 'px'});
-	}).mouseup(function (e) {
-		var $gadgetBeingDragged = $(e.target).parent();
-		$gadgetBeingDragged.css('width','');
-	});
+	$dragableGadgets.find(this.HANDLE_SELECTOR).css('cursor','move');
 
-	var $columns = $(this.columnSelector);
+	var $columns = $(this.COLUMN_SELECTOR);
 	
 	//find all gadget masks
-	this.$gadgetMasks = $dragableGadgets.find("." + wings.dnd.overlay);
+	this.$gadgetMasks = $dragableGadgets.find("." + this.OVERLAY);
 
 	//initialize dnd
 	$columns.sortable({
 		items: $dragableGadgets,				// set gadgets on a page as draggable items
-		connectWith: $columns,		// Connect each column with every other column
-		handle: this.handleSelector,			// Set gadget's titlebar as dnd handle 
-		placeholder: this.gadgetPlaceHolder,	// Gadget placeholder class
+		connectWith: this.COLUMN_SELECTOR,		// Connect each column with every other column
+		handle: this.HANDLE_SELECTOR,			// Set gadget's titlebar as dnd handle 
+		placeholder: this.GADGET_PLACEHOLDER,	// Gadget placeholder class
 		forcePlaceholderSize: true,
+		cursor: 'move',							// keep the cursor to 'move' during drag operation
 		revert: 50,								// Animation speed
 		delay: 10,								// Delay before action
-		containment: 'document'					// Set document as containment for dnd
-	});
-
-	$columns.bind('sortstart', function(event, ui) {
-		wings.dnd.$gadgetMasks.css("display","block");
-	});
-
-	$columns.bind('sortstop', function(event, ui) {	
-		wings.dnd.$gadgetMasks.css("display","none");
+		containment: 'document',					// Set document as containment for dnd
+		start: function(e, ui) {
+					wings.dnd.$gadgetMasks.css("display","block");
+					var $gadgetBeingDragged = $(ui.helper);
+					var $gadgetPlaceHolder = $(ui.placeholder);
+					$gadgetPlaceHolder.css({width:$gadgetBeingDragged.width(),height:$gadgetBeingDragged.height()});
+		},
+		stop: function(e, ui) {wings.dnd.$gadgetMasks.css("display","none");}
 	});
 };
