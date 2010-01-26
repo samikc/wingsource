@@ -21,14 +21,7 @@
   margin: 2px 2px 2px 2px;
   border: 1px solid #7aa5d6;
   padding: 0px;
-  float: left;
-}
-
-.gadgets-gadget {
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
-  width:100%;
+  display:block;
 }
 
 .gadgets-gadget-title-bar {
@@ -75,15 +68,24 @@
   margin: 0px;
   padding: 0px;
   border: 0px;
+  display:block;
 }
+
+.gadgets-gadget {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  width:100%;
+}
+
 
 .gadgets-log-entry {
 }
 
 /* Added following classes */
 body,img,p,h1,h2,h3,h4,h5,h6,ul,ol {
-	margin:0; 
-	padding:0; 
+	margin:0px; 
+	padding:0px; 
 	border:0px;
 	list-style:none; 
 }
