@@ -34,7 +34,7 @@ public class Main {
 	public static void main(String[] args) {
 		PluginEngine pe = new PluginEngine(new TypeResolver());
 		try {
-			pe.run("(l g1 g2 10)", System.out);
+			pe.run("(page (l g1 g2 10))", System.out);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

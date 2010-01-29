@@ -63,7 +63,20 @@ public class PagePluglet implements Pluglet {
 				layoutList.add((Layout) o);
 			}
 		}
-		
+		StringBuilder sbuild = new StringBuilder();
+		sbuild.append("<page>").append(NEWLINE);
+		sbuild.append("<layouts>").append(NEWLINE);
+		for (Layout l : layoutList) {
+			sbuild.append(l.toString()).append(NEWLINE);
+		}
+		sbuild.append("</layouts>").append(NEWLINE);
+		sbuild.append("<links>").append(NEWLINE);
+		for (Link link : linkList) {
+			sbuild.append(link.toString());
+		}
+		sbuild.append("</links>").append(NEWLINE);
+		sbuild.append("</page>").append(NEWLINE);
+		presponse.setResponse(sbuild.toString());
 	}
 
 }
