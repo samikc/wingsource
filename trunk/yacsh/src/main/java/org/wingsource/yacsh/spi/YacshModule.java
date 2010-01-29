@@ -18,6 +18,7 @@
 package org.wingsource.yacsh.spi;
 
 import org.wingsource.yacsh.GadgetService;
+import org.wingsource.yacsh.LinkService;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -33,6 +34,7 @@ public class YacshModule implements Module {
 	 */
 	public void configure(Binder binder) {
 		binder.bind(GadgetService.class).to(DummyGadgetService.class);
+		binder.bind(LinkService.class).to(DummyLinkService.class);
 	}
 
 }

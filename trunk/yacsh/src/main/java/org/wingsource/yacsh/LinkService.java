@@ -17,37 +17,13 @@
  */
 package org.wingsource.yacsh;
 
-import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
-import org.wingsource.yacsh.pluglet.LayoutPluglet;
-import org.wingsource.yacsh.pluglet.LinkPluglet;
-import org.wingsource.yacsh.pluglet.PagePluglet;
+import java.net.URL;
 
 /**
  * @author samikc
  *
  */
-public class TypeResolver implements TypeResolverService {
+public interface LinkService {
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
-	 */
-	public Pluglet resolve(String operation) {
-		// TODO Auto-generated method stub
-		if (operation.equals("l")) {
-			return new LayoutPluglet();
-		}
-		if (operation.equals("page")) {
-			return new PagePluglet();
-		}
-
-		if (operation.equals("link")) {
-			return new LinkPluglet();
-		}
-
-
-		
-		return null;
-	}
-
+	URL getLinkUrl(String id);
 }

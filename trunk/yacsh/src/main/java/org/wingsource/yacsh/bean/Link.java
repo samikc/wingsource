@@ -28,6 +28,8 @@ public class Link {
 	private String type;
 	private String pointerAttribute;
 	private String tag;
+	private static final String NEWLINE ="\n";
+
 	public Link(String id, String url, String type, String pointerAttribute,
 			String tag) {
 		super();
@@ -36,5 +38,14 @@ public class Link {
 		this.type = type;
 		this.pointerAttribute = pointerAttribute;
 		this.tag = tag;
+	}
+	
+	public String toString() {
+		StringBuilder sbuild = new StringBuilder();
+		sbuild.append("<link type='").append(type).append("' id='").append(id).append("'");
+		sbuild.append(" tag='").append(tag).append("' pattr='").append(pointerAttribute).append("' ");
+		sbuild.append(" url='").append(url).append("'");
+		sbuild.append(" />").append(NEWLINE);
+		return sbuild.toString();
 	}
 }
