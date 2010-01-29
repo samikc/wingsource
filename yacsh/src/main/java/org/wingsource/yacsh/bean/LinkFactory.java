@@ -15,39 +15,39 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.yacsh;
+package org.wingsource.yacsh.bean;
 
-import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
-import org.wingsource.yacsh.pluglet.LayoutPluglet;
-import org.wingsource.yacsh.pluglet.LinkPluglet;
-import org.wingsource.yacsh.pluglet.PagePluglet;
+import java.net.URL;
+
+import org.wingsource.yacsh.LinkService;
+
+import com.google.inject.Inject;
 
 /**
  * @author samikc
  *
  */
-public class TypeResolver implements TypeResolverService {
+public class LinkFactory {
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
-	 */
-	public Pluglet resolve(String operation) {
-		// TODO Auto-generated method stub
-		if (operation.equals("l")) {
-			return new LayoutPluglet();
-		}
-		if (operation.equals("page")) {
-			return new PagePluglet();
-		}
-
-		if (operation.equals("link")) {
-			return new LinkPluglet();
-		}
+	private LinkService linkService;
+	
+	@Inject
+	public LinkFactory(LinkService linkService) {
+		super();
+		this.linkService = linkService;
+	}
 
 
-		
-		return null;
+	public Link getCssLink(String id) {
+		URL url = linkService.getLinkUrl(id);
+		Link link = new Link(id, url.toString(), "CSS", "href", "link");
+		return link;
+	}
+
+	public Link getJsLink(String id) {
+		URL url = linkService.getLinkUrl(id);
+		Link link = new Link(id, url.toString(), "js", "src", "script");
+		return link;
 	}
 
 }

@@ -17,9 +17,17 @@
  */
 package org.wingsource.yacsh.pluglet;
 
+import java.util.List;
+
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
+import org.wingsource.yacsh.bean.Link;
+import org.wingsource.yacsh.bean.LinkFactory;
+import org.wingsource.yacsh.spi.YacshModule;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * @author samikc
@@ -47,8 +55,19 @@ public class LinkPluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		// TODO Auto-generated method stub
-
+		List<Object> list = prequest.getOperandList();
+		String type = list.get(0).toString();
+		Link l = null;
+		String id = list.get(1).toString();
+		Injector i = Guice.createInjector(new YacshModule());
+		LinkFactory lf = i.getInstance(LinkFactory.class);
+		if (type.equals("CSS")) {
+			l = lf.getCssLink(id);
+		}
+		if (type.equals("JS")) {
+			l = lf.getJsLink(id);
+		}
+		presponse.setResponse(l);
 	}
 
 }
