@@ -62,6 +62,8 @@ public class LayoutPluglet implements Pluglet {
 		StringBuilder sbuild = new StringBuilder();
 		Integer width = 100;
 		sbuild.append("<layout>").append(NEWLINE);
+		Injector i = Guice.createInjector(new YacshModule());
+
 		for (Object o : operandList) {
 			String operand = (String) o;
 			try {
@@ -71,7 +73,6 @@ public class LayoutPluglet implements Pluglet {
 				// If we are here that implies that it is not a number so we can process it
 				// for gadget id.
 				//Gadget g = new Gadget();
-				Injector i = Guice.createInjector(new YacshModule());
 				Gadget g = i.getInstance(Gadget.class);
 				g.setId(operand);
 				sbuild.append(g.toXml());
