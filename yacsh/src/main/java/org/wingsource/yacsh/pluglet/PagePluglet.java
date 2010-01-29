@@ -25,6 +25,7 @@ import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
 import org.wingsource.yacsh.bean.Layout;
 import org.wingsource.yacsh.bean.Link;
+import org.wingsource.yacsh.bean.Page;
 
 /**
  * @author samikc
@@ -76,7 +77,9 @@ public class PagePluglet implements Pluglet {
 		}
 		sbuild.append("</links>").append(NEWLINE);
 		sbuild.append("</page>").append(NEWLINE);
-		presponse.setResponse(sbuild.toString());
+		Page page = new Page();
+		page.setPage(sbuild.toString());
+		presponse.setResponse(page);
 	}
 
 }
