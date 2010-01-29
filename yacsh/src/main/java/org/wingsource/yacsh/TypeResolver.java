@@ -20,6 +20,7 @@ package org.wingsource.yacsh;
 import org.wingsource.plugin.Pluglet;
 import org.wingsource.plugin.TypeResolverService;
 import org.wingsource.yacsh.pluglet.LayoutPluglet;
+import org.wingsource.yacsh.pluglet.PagePluglet;
 
 /**
  * @author samikc
@@ -35,6 +36,10 @@ public class TypeResolver implements TypeResolverService {
 		if (operation.equals("l")) {
 			return new LayoutPluglet();
 		}
+		if (operation.equals("page")) {
+			return new PagePluglet();
+		}
+
 		return null;
 	}
 
