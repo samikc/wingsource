@@ -17,21 +17,16 @@
  */
 package org.wingsource.yacsh.pluglet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
-import org.wingsource.yacsh.bean.Layout;
-import org.wingsource.yacsh.bean.Link;
 
 /**
  * @author samikc
  *
  */
-public class PagePluglet implements Pluglet {
-	private static final String NEWLINE = "\n";
+public class LinkPluglet implements Pluglet {
+
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
 	 */
@@ -52,18 +47,8 @@ public class PagePluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> list = prequest.getOperandList();
-		List<Layout> layoutList = new ArrayList<Layout>();
-		List<Link>   linkList = new ArrayList<Link>();
-		for (Object o : list) {
-			if (o instanceof Link) {
-				linkList.add((Link)o);
-			}
-			if (o instanceof Layout) {
-				layoutList.add((Layout) o);
-			}
-		}
-		
+		// TODO Auto-generated method stub
+
 	}
 
 }

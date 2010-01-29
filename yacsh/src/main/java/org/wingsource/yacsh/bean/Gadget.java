@@ -17,7 +17,19 @@
  */
 package org.wingsource.yacsh.bean;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.wingsource.yacsh.GadgetService;
+import org.wingsource.yacsh.xml.gadget.Module;
+import org.wingsource.yacsh.xml.gadget.Module.Content;
 
 import com.google.inject.Inject;
 
@@ -27,8 +39,13 @@ import com.google.inject.Inject;
  */
 public class Gadget {
 
+	// Constant for new line
+	private static final String NEWLINE = "\n";
+	
 	private String id;
 	private GadgetService gadgetService;
+	private String title = null;
+	private ArrayList<String> views = new ArrayList<String>();
 	public String getId() {
 		return id;
 	}
@@ -45,10 +62,38 @@ public class Gadget {
 
 	public String toXml() {
 		StringBuilder sbuild = new StringBuilder();
-		
-		sbuild.append("<gadget>");
-		sbuild.append("<id>").append(id).append("</id>");
-		sbuild.append("</gadget>");
+		try {
+			JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			URL url = gadgetService.getGadgetXmlUrl(this.id);
+			InputStream is = url.openStream();
+			Module module = (Module)unmarshaller.unmarshal(is);
+			this.title = module.getModulePrefs().getTitle();
+			List<Content> contents = module.getContent();
+			for (Content c : contents) {
+				String v = c.getView();
+				if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
+					views.add(c.getView());
+				}
+			}
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sbuild.append("<gadget>").append(this.NEWLINE);
+		sbuild.append("<id>").append(id).append("</id>").append(this.NEWLINE);
+		sbuild.append("<title>").append(this.title).append("</title>").append(this.NEWLINE);
+		if (views.size() > 0) {
+			sbuild.append("<views>").append(this.NEWLINE);
+			for (String s : views) {
+				sbuild.append("<view>").append(s).append("</view>").append(this.NEWLINE);
+			}
+			sbuild.append("</views>").append(this.NEWLINE);
+		}
+		sbuild.append("</gadget>").append(this.NEWLINE);
 		return sbuild.toString();
 	}
 }

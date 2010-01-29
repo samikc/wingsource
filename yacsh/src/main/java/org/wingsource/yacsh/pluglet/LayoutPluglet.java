@@ -34,6 +34,9 @@ import com.google.inject.Injector;
  *
  */
 public class LayoutPluglet implements Pluglet {
+	// Constant for new line
+	private static final String NEWLINE = "\n";
+
 
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
@@ -58,12 +61,12 @@ public class LayoutPluglet implements Pluglet {
 		List<Object> operandList = prequest.getOperandList();
 		StringBuilder sbuild = new StringBuilder();
 		Integer width = 100;
-		sbuild.append("<layout>");
+		sbuild.append("<layout>").append(NEWLINE);
 		for (Object o : operandList) {
 			String operand = (String) o;
 			try {
 				width = Integer.parseInt(operand);
-				sbuild.append("<width>").append(width.toString()).append("</width>");
+				sbuild.append("<width>").append(width.toString()).append("</width>").append(NEWLINE);
 			}catch(NumberFormatException e) {
 				// If we are here that implies that it is not a number so we can process it
 				// for gadget id.
@@ -74,7 +77,7 @@ public class LayoutPluglet implements Pluglet {
 				sbuild.append(g.toXml());
 			}
 		}
-		sbuild.append("</layout>");
+		sbuild.append("</layout>").append(NEWLINE);
 		Layout layout = new Layout();
 		layout.setLayoutXml(sbuild.toString());
 		presponse.setResponse(layout);

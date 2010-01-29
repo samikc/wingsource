@@ -15,33 +15,26 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.yacsh;
-
-import java.io.IOException;
-
-import org.antlr.runtime.RecognitionException;
-import org.wingsource.plugin.engine.PluginEngine;
+package org.wingsource.yacsh.bean;
 
 /**
  * @author samikc
  *
  */
-public class Main {
+public class Link {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		PluginEngine pe = new PluginEngine(new TypeResolver());
-		try {
-			pe.run("(l g1 g2 10)", System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RecognitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private String id;
+	private String url;
+	private String type;
+	private String pointerAttribute;
+	private String tag;
+	public Link(String id, String url, String type, String pointerAttribute,
+			String tag) {
+		super();
+		this.id = id;
+		this.url = url;
+		this.type = type;
+		this.pointerAttribute = pointerAttribute;
+		this.tag = tag;
 	}
-
 }
