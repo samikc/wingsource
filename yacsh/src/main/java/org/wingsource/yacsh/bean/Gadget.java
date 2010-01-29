@@ -45,6 +45,7 @@ public class Gadget {
 	private String id;
 	private GadgetService gadgetService;
 	private String title = null;
+	private String gadgetUrl;
 	private ArrayList<String> views = new ArrayList<String>();
 	public String getId() {
 		return id;
@@ -66,6 +67,7 @@ public class Gadget {
 			JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			URL url = gadgetService.getGadgetXmlUrl(this.id);
+			this.gadgetUrl = url.toString();
 			InputStream is = url.openStream();
 			Module module = (Module)unmarshaller.unmarshal(is);
 			this.title = module.getModulePrefs().getTitle();
@@ -86,6 +88,7 @@ public class Gadget {
 		sbuild.append("<gadget>").append(this.NEWLINE);
 		sbuild.append("<id>").append(id).append("</id>").append(this.NEWLINE);
 		sbuild.append("<title>").append(this.title).append("</title>").append(this.NEWLINE);
+		sbuild.append("<url>").append(this.gadgetUrl).append("</url>").append(this.NEWLINE);
 		if (views.size() > 0) {
 			sbuild.append("<views>").append(this.NEWLINE);
 			for (String s : views) {
