@@ -15,11 +15,8 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wiingsource.yacsh.pluglet;
+package org.wingsource.yacsh.pluglet;
 
-import java.util.List;
-
-import org.wiingsource.yacsh.bean.Gadget;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
@@ -28,7 +25,7 @@ import org.wingsource.plugin.Pluglet;
  * @author samikc
  *
  */
-public class LayoutPluglet implements Pluglet {
+public class PagePluglet implements Pluglet {
 
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
@@ -50,24 +47,7 @@ public class LayoutPluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> operandList = prequest.getOperandList();
-		StringBuilder sbuild = new StringBuilder();
-		Integer width = 100;
-		sbuild.append("<layout>");
-		for (Object o : operandList) {
-			String operand = (String) o;
-			try {
-				width = Integer.parseInt(operand);
-				sbuild.append("<width>").append(width.toString()).append("</width>");
-			}catch(NumberFormatException e) {
-				// If we are here that implies that it is not a number so we can process it
-				// for gadget id.
-				Gadget g = new Gadget();
-				g.setId(operand);
-				sbuild.append(g.toXml());
-			}
-		}
-		sbuild.append("</layout>");
-		presponse.setResponse(sbuild.toString());
+
 	}
+
 }

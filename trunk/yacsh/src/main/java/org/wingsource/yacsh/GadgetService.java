@@ -15,27 +15,20 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wiingsource.yacsh;
+package org.wingsource.yacsh;
 
-import org.wiingsource.yacsh.pluglet.LayoutPluglet;
-import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
+import java.net.URL;
 
 /**
  * @author samikc
  *
  */
-public class TypeResolver implements TypeResolverService {
+public interface GadgetService {
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
+	/***
+	 * This method returns the URL object of a gadget id.
+	 * @param id - An alphanumeric string
+	 * @return
 	 */
-	public Pluglet resolve(String operation) {
-		// TODO Auto-generated method stub
-		if (operation.equals("l")) {
-			return new LayoutPluglet();
-		}
-		return null;
-	}
-
+	URL getGadgetXmlUrl(String id);
 }
