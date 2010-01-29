@@ -15,29 +15,26 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wiingsource.yacsh.bean;
+package org.wingsource.yacsh.bean;
 
 /**
  * @author samikc
  *
  */
-public class Gadget {
+public class Layout {
 
-	private String id;
+	private String layoutXml;
 
-	public String getId() {
-		return id;
+	public String getLayoutXml() {
+		return layoutXml;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setLayoutXml(String layoutXml) {
+		this.layoutXml = layoutXml;
 	}
 	
-	public String toXml() {
-		StringBuilder sbuild = new StringBuilder();
-		sbuild.append("<gadget>");
-		sbuild.append("<id>").append(id).append("</id>");
-		sbuild.append("</gadget>");
-		return sbuild.toString();
+	public String toString() {
+		return layoutXml;
 	}
+	
 }
