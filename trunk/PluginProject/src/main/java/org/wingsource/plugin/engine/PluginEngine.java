@@ -20,7 +20,10 @@ package org.wingsource.plugin.engine;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.antlr.runtime.RecognitionException;
 import org.wingsource.plugin.PluginRequest;
@@ -29,12 +32,14 @@ import org.wingsource.plugin.Pluglet;
 import org.wingsource.plugin.TypeResolverService;
 import org.wingsource.plugin.sexp.Operand;
 import org.wingsource.plugin.sexp.Operation;
+import org.wingsource.plugin.util.ThreadList;
 
 /**
  * @author samikc
  *
  */
 public class PluginEngine {
+	private static final Logger logger=Logger.getLogger(Operation.class.getName());
 	TypeResolverService trs;
 	PluginServiceManager pMgr;
 	public PluginEngine(TypeResolverService trs) {
@@ -51,26 +56,78 @@ public class PluginEngine {
 	}
 	
 	public PluginResponse run(String expression) throws IOException, RecognitionException {
-		return pMgr.execute(expression, trs);
+		Operation operation = Operation.toOperation(expression);
+		return pMgr.execute(operation, trs);
 	}
 
 	private class PluginServiceManager {
 	
-		public PluginResponse execute(String expression,TypeResolverService trs) throws IOException, RecognitionException {
-			Operation operation = Operation.toOperation(expression);
+		/**
+		 * This class is responsible for resolving an operation to a simple operand. It implements Runnable
+		 * so that it could be executed independently in a separate thread.
+		 * 
+		 * @author vpillai
+		 *
+		 */
+		private class OperationResolver implements Runnable {
+			
+			private PluginServiceManager pluginServiceManager;
+			private Operation operation;
+			private TypeResolverService trs;
+			private PluginResponse pluginResponse = null;
+			
+			public OperationResolver(PluginServiceManager pMgr, Operation operation, TypeResolverService trs) {
+				this.pluginServiceManager = pMgr;
+				this.operation = operation;
+				this.trs = trs;
+			}
+
+			/**
+			 * Invokes execute() method of plugin service manager to resolve a given operation.
+			 * 
+			 */
+			public void run() {
+				try {
+					this.pluginResponse = this.pluginServiceManager.execute(operation, trs);
+				} catch (Exception e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
+				} 
+			}
+			
+			/**
+			 * Return the PluginResponse
+			 * 
+			 * @return
+			 */
+			public PluginResponse getResponse() {
+				return this.pluginResponse;
+			}
+		}
+		/**************************** END OF OperationResolver class *************************************/
+		
+		public PluginResponse execute(Operation operation,TypeResolverService trs) throws IOException, RecognitionException {
+			
 			Pluglet pServ = trs.resolve(operation.operator());
 			List<Object> operandList = new ArrayList<Object>();
+			ThreadList<OperationResolver> oList = new ThreadList<OperationResolver>(operation.operator());
 			for (Operand op : operation.operands()) {
 				switch(op.type()) {
 				case ATOM:
 					operandList.add(op.value());
 					break;
 				case OPERATION:
-					PluginResponse pRes = execute(op.value().toString(), trs);
-					operandList.add(pRes.getResponse());
+					Operation opn = (Operation)op.value();
+					oList.add(new OperationResolver(this, opn, trs));
 					break;
 				}
 			}
+			oList.execute();
+//			logger.finest("Continue " + operation.operator());
+			for(OperationResolver or : oList) {
+				PluginResponse pResponse = or.getResponse();
+				operandList.add(pResponse.getResponse());
+			}
+			
 			PluginRequest prequest = new Request();
 			prequest.setOperandList(operandList);
 			PluginResponse presponse = new Response(null);
@@ -80,4 +137,6 @@ public class PluginEngine {
 			return presponse;
 		}
 	}
+	
+	/**************************** END OF PluginServiceManager class *************************************/
 }
