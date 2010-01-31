@@ -22,6 +22,7 @@ import java.util.List;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
+import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Gadget;
 import org.wingsource.yacsh.bean.Layout;
 import org.wingsource.yacsh.spi.YacshModule;
@@ -62,7 +63,7 @@ public class LayoutPluglet implements Pluglet {
 		StringBuilder sbuild = new StringBuilder();
 		Integer width = 100;
 		sbuild.append("<layout>").append(NEWLINE);
-		Injector i = Guice.createInjector(new YacshModule());
+		Injector i = YacshConfig.get();
 
 		for (Object o : operandList) {
 			String operand = (String) o;

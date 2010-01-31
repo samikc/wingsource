@@ -17,33 +17,25 @@
  */
 package org.wingsource.yacsh;
 
-import java.io.IOException;
-
-import org.antlr.runtime.RecognitionException;
-import org.wingsource.plugin.engine.PluginEngine;
-import org.wingsource.yacsh.spi.YacshModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 
 /**
  * @author samikc
  *
  */
-public class Main {
+public class YacshConfig {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		PluginEngine pe = new PluginEngine(new TypeResolver());
-		YacshConfig.init(new YacshModule());
-		try {
-			pe.run("(page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui))", System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RecognitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private static Injector injector;
+	
+	private YacshConfig() {}
+	
+	public static void init(Module module) {
+		injector = Guice.createInjector(module);
 	}
-
+	
+	public static Injector get() {
+		return injector;
+	}
 }
