@@ -22,6 +22,7 @@ import java.util.List;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
+import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Link;
 import org.wingsource.yacsh.bean.LinkFactory;
 import org.wingsource.yacsh.spi.YacshModule;
@@ -59,14 +60,9 @@ public class LinkPluglet implements Pluglet {
 		String type = list.get(0).toString();
 		Link l = null;
 		String id = list.get(1).toString();
-		Injector i = Guice.createInjector(new YacshModule());
+		Injector i = YacshConfig.get();
 		LinkFactory lf = i.getInstance(LinkFactory.class);
-		if (type.equals("CSS")) {
-			l = lf.getCssLink(id);
-		}
-		if (type.equals("JS")) {
-			l = lf.getJsLink(id);
-		}
+		l = lf.get(id, type);
 		presponse.setResponse(l);
 	}
 

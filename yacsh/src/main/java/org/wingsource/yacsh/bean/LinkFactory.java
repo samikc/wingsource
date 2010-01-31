@@ -38,16 +38,18 @@ public class LinkFactory {
 	}
 
 
-	public Link getCssLink(String id) {
+	public Link get(String id, String type) {
 		URL url = linkService.getLinkUrl(id);
-		Link link = new Link(id, url.toString(), "CSS", "href", "link");
-		return link;
-	}
+		Link ret = null;
+		if (type.equalsIgnoreCase("JS")) {
+			ret = new Link(id, url.toString(), "js", "src", "script");
+		}
 
-	public Link getJsLink(String id) {
-		URL url = linkService.getLinkUrl(id);
-		Link link = new Link(id, url.toString(), "js", "src", "script");
-		return link;
+		if (type.equalsIgnoreCase("CSS")) {
+			ret = new Link(id, url.toString(), "CSS", "href", "link");
+		}
+
+		return ret;
 	}
 
 }
