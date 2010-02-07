@@ -25,5 +25,9 @@ import java.net.URL;
  */
 public interface LinkService {
 
-	URL getLinkUrl(String id);
+	enum Mime {JS, CSS, UNKNOWN};
+	
+	String getLinkUrl(String id);
+	
+	Mime getType(String id);
 }
