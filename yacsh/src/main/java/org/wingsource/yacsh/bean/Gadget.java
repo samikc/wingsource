@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -41,6 +42,7 @@ public class Gadget {
 
 	// Constant for new line
 	private static final String NEWLINE = "\n";
+	private static final Logger log = Logger.getLogger(Gadget.class.getName());
 	
 	private String id;
 	private GadgetService gadgetService;
@@ -62,6 +64,7 @@ public class Gadget {
 	}
 
 	public String toXml() {
+		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
 		try {
 			JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
@@ -97,6 +100,8 @@ public class Gadget {
 			sbuild.append("</views>").append(this.NEWLINE);
 		}
 		sbuild.append("</gadget>").append(this.NEWLINE);
+		long t2 = System.currentTimeMillis();
+		log.info("The id : "+this.id+" "+ (t2 - t1) + " ms.");
 		return sbuild.toString();
 	}
 }
