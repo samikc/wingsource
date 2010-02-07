@@ -60,26 +60,22 @@ public class LayoutPlugin implements Plugin {
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
 		List<Object> operandList = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
-		StringBuilder sbuild = new StringBuilder();
 		Integer width = 100;
-		sbuild.append("<layout>").append(NEWLINE);
+		
+		Layout layout = new Layout();
 		Injector i = YacshConfig.get();
 
 		for (Object o : operandList) {
-			String operand = (String) o;
-			try {
+			
+			if(o instanceof Gadget) {
+				layout.addGadget((Gadget)o);
+			}
+			else {
+				String operand = (String) o;
 				width = Integer.parseInt(operand);
-				sbuild.append("<width>").append(width.toString()).append("</width>").append(NEWLINE);
-			}catch(NumberFormatException e) {
-				// If we are here that implies that it is not a number so we can process it
-				// for gadget id.
-				//Gadget g = new Gadget();
-				sbuild.append(operand);
+				layout.setWidth(width);
 			}
 		}
-		sbuild.append("</layout>").append(NEWLINE);
-		Layout layout = new Layout();
-		layout.setLayoutXml(sbuild.toString());
 		presponse.setResponse(layout);
 	}
 }

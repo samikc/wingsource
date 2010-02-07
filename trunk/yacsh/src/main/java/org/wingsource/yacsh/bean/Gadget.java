@@ -49,6 +49,7 @@ public class Gadget {
 	private String title = null;
 	private String gadgetUrl;
 	private ArrayList<String> views = new ArrayList<String>();
+	private int height;
 	public String getId() {
 		return id;
 	}
@@ -65,6 +66,10 @@ public class Gadget {
 				Module module = (Module)unmarshaller.unmarshal(is);
 				this.title = module.getModulePrefs().getTitle();
 				List<Content> contents = module.getContent();
+				Integer h = module.getModulePrefs().getHeight();
+				if(h != null) {
+					this.height = h;
+				}
 				for (Content c : contents) {
 					String v = c.getView();
 					if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
@@ -95,6 +100,7 @@ public class Gadget {
 		sbuild.append("<id>").append(id).append("</id>").append(this.NEWLINE);
 		sbuild.append("<title>").append(this.title).append("</title>").append(this.NEWLINE);
 		sbuild.append("<url>").append(this.gadgetUrl).append("</url>").append(this.NEWLINE);
+		sbuild.append("<height>").append(this.height).append("</height>").append(this.NEWLINE);
 		if (views.size() > 0) {
 			sbuild.append("<views>").append(this.NEWLINE);
 			for (String s : views) {
@@ -108,3 +114,4 @@ public class Gadget {
 		return sbuild.toString();
 	}
 }
+
