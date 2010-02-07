@@ -56,7 +56,7 @@ public class LinkPluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> list = prequest.getOperandList();
+		List<Object> list = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
 		String type = list.get(0).toString();
 		Link l = null;
 		String id = list.get(1).toString();
