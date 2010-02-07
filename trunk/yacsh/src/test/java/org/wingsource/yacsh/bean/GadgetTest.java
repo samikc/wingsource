@@ -15,42 +15,34 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.yacsh;
+package org.wingsource.yacsh.bean;
 
-import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.yacsh.pluglet.GadgetPluglet;
-import org.wingsource.yacsh.pluglet.LayoutPluglet;
-import org.wingsource.yacsh.pluglet.LinkPluglet;
-import org.wingsource.yacsh.pluglet.PagePluglet;
+import static org.junit.Assert.*;
+
+import java.util.Date;
+
+import org.junit.Test;
+import org.wingsource.yacsh.spi.DummyGadgetService;
 
 /**
  * @author samikc
  *
  */
-public class YacshSymbolResolver implements SymbolResolverService {
+public class GadgetTest {
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
+	/**
+	 * Test method for {@link org.wingsource.yacsh.bean.Gadget#toXml()}.
 	 */
-	public Pluglet resolve(String symbol) {
-		// TODO Auto-generated method stub
-		if (symbol.equals("l")) {
-			return new LayoutPluglet();
-		}
-		if (symbol.equals("page")) {
-			return new PagePluglet();
-		}
-
-		if (symbol.equals("link")) {
-			return new LinkPluglet();
-		}
-
-		if (symbol.startsWith("g")) {
-			return new GadgetPluglet();
-		}
+	@Test
+	public void testToXml() {
+		Gadget g = new Gadget(new DummyGadgetService());
+		g.setId("g2");
+		long t1 = System.currentTimeMillis();
+		String gadgetXml = g.toXml();
+		long t2 = System.currentTimeMillis();
+		assertTrue(gadgetXml.startsWith("<gadget"));
 		
-		return null;
+		System.out.println((t2 - t1) + "ms.");
 	}
 
 }

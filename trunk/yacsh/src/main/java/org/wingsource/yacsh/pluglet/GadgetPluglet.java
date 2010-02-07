@@ -17,28 +17,28 @@
  */
 package org.wingsource.yacsh.pluglet;
 
-import java.util.List;
-
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
 import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Gadget;
-import org.wingsource.yacsh.bean.Layout;
-import org.wingsource.yacsh.spi.YacshModule;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author samikc
  *
  */
-public class LayoutPluglet implements Pluglet {
-	// Constant for new line
-	private static final String NEWLINE = "\n";
+public class GadgetPluglet implements Pluglet {
 
-
+	private static final Logger logger = Logger.getLogger(GadgetPluglet.class.getName());
+	
+	private static final Map<String, String> cache = new HashMap<String, String>();
+	
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
 	 */
@@ -58,28 +58,23 @@ public class LayoutPluglet implements Pluglet {
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
-	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> operandList = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
-		StringBuilder sbuild = new StringBuilder();
-		Integer width = 100;
-		sbuild.append("<layout>").append(NEWLINE);
-		Injector i = YacshConfig.get();
-
-		for (Object o : operandList) {
-			String operand = (String) o;
-			try {
-				width = Integer.parseInt(operand);
-				sbuild.append("<width>").append(width.toString()).append("</width>").append(NEWLINE);
-			}catch(NumberFormatException e) {
-				// If we are here that implies that it is not a number so we can process it
-				// for gadget id.
-				//Gadget g = new Gadget();
-				sbuild.append(operand);
-			}
+	public void service(PluginRequest request, PluginResponse response) {
+		String id = (String) request.getAttribute(PluginRequest.ID);
+		logger.info(id);
+		
+		if(this.cache.containsKey(id)) {
+			response.setResponse(cache.get(id));
 		}
-		sbuild.append("</layout>").append(NEWLINE);
-		Layout layout = new Layout();
-		layout.setLayoutXml(sbuild.toString());
-		presponse.setResponse(layout);
+		else {
+			Injector i = YacshConfig.get();
+			Gadget g = i.getInstance(Gadget.class);
+			g.setId(id);
+			String gadgetXml = g.toXml();
+			this.cache.put(id, gadgetXml);
+			response.setResponse(gadgetXml);	
+		}
+		
+//		8if (prequest.get44)
 	}
+
 }
