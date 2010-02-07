@@ -134,7 +134,6 @@ public class PluginEngine {
 			}
 
 			oList.execute();
-			logger.info("Continue " + operation.operator());
 			for(SymbolResolver or : oList) {
 				PluginResponse pResponse = or.getResponse();
 				operandList.add(pResponse.getResponse());
@@ -159,7 +158,6 @@ public class PluginEngine {
 				return presponse;
 			}
 			PluginRequest pRequest = new Request();
-			//TODO: Need to determine the list of request parameters that should be passed to every operand.
 			pRequest.setAttribute(PluginRequest.ID, symbol);
 			pluglet.init();
 			pluglet.service(pRequest, presponse);
