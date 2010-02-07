@@ -21,7 +21,7 @@ package org.wingsource.plugin;
  * @author samikc
  *
  */
-public interface Pluglet {
+public interface Plugin {
 	
 	/***
 	 * Called just after the PluginService object is created.
@@ -29,7 +29,7 @@ public interface Pluglet {
 	void init();
 	
 	/***
-	 * Called to actually serve the process for a {@link Pluglet}.
+	 * Called to actually serve the process for a {@link Plugin}.
 	 * @param prequest
 	 * @param presponse
 	 */

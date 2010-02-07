@@ -23,5 +23,5 @@ package org.wingsource.plugin;
  */
 public interface SymbolResolverService {
 
-	public Pluglet resolve(String symbol);
+	public Plugin resolve(String symbol);
 }

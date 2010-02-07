@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 import org.antlr.runtime.RecognitionException;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
-import org.wingsource.plugin.Pluglet;
+import org.wingsource.plugin.Plugin;
 import org.wingsource.plugin.SymbolResolverService;
 import org.wingsource.plugin.sexp.Operand;
 import org.wingsource.plugin.sexp.Operation;
@@ -126,7 +126,7 @@ public class PluginEngine {
 		
 		public PluginResponse execute(Operation operation,SymbolResolverService srs) throws IOException, RecognitionException {
 			
-			Pluglet pluglet = srs.resolve(operation.operator());
+			Plugin pluglet = srs.resolve(operation.operator());
 			List<Object> operandList = new ArrayList<Object>();
 			ThreadList<SymbolResolver> oList = new ThreadList<SymbolResolver>(operation.operator());
 			for (Operand op : operation.operands()) {
@@ -151,7 +151,7 @@ public class PluginEngine {
 
 		public PluginResponse execute(String symbol,SymbolResolverService srs) throws IOException, RecognitionException {
 			
-			Pluglet pluglet = srs.resolve(symbol);
+			Plugin pluglet = srs.resolve(symbol);
 			PluginResponse presponse = new Response(null);
 			if (pluglet == null) {
 				presponse.setResponse(symbol);
