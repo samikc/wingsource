@@ -17,12 +17,12 @@
  */
 package org.wingsource.yacsh;
 
-import org.wingsource.plugin.Pluglet;
+import org.wingsource.plugin.Plugin;
 import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.yacsh.pluglet.GadgetPluglet;
-import org.wingsource.yacsh.pluglet.LayoutPluglet;
-import org.wingsource.yacsh.pluglet.LinkPluglet;
-import org.wingsource.yacsh.pluglet.PagePluglet;
+import org.wingsource.yacsh.plugin.GadgetPlugin;
+import org.wingsource.yacsh.plugin.LayoutPlugin;
+import org.wingsource.yacsh.plugin.LinkPlugin;
+import org.wingsource.yacsh.plugin.PagePlugin;
 
 /**
  * @author samikc
@@ -33,21 +33,21 @@ public class YacshSymbolResolver implements SymbolResolverService {
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
 	 */
-	public Pluglet resolve(String symbol) {
+	public Plugin resolve(String symbol) {
 		// TODO Auto-generated method stub
 		if (symbol.equals("l")) {
-			return new LayoutPluglet();
+			return new LayoutPlugin();
 		}
 		if (symbol.equals("page")) {
-			return new PagePluglet();
+			return new PagePlugin();
 		}
 
 		if (symbol.equals("link")) {
-			return new LinkPluglet();
+			return new LinkPlugin();
 		}
 
 		if (symbol.startsWith("g")) {
-			return new GadgetPluglet();
+			return new GadgetPlugin();
 		}
 		
 		return null;

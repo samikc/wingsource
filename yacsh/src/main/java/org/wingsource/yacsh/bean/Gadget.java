@@ -54,7 +54,31 @@ public class Gadget {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		if(this.id != id) {
+			this.id = id;
+			try {
+				JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				URL url = gadgetService.getGadgetXmlUrl(this.id);
+				this.gadgetUrl = url.toString();
+				InputStream is = url.openStream();
+				Module module = (Module)unmarshaller.unmarshal(is);
+				this.title = module.getModulePrefs().getTitle();
+				List<Content> contents = module.getContent();
+				for (Content c : contents) {
+					String v = c.getView();
+					if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
+						views.add(c.getView());
+					}
+				}
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Inject
@@ -66,28 +90,7 @@ public class Gadget {
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
-		try {
-			JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			URL url = gadgetService.getGadgetXmlUrl(this.id);
-			this.gadgetUrl = url.toString();
-			InputStream is = url.openStream();
-			Module module = (Module)unmarshaller.unmarshal(is);
-			this.title = module.getModulePrefs().getTitle();
-			List<Content> contents = module.getContent();
-			for (Content c : contents) {
-				String v = c.getView();
-				if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
-					views.add(c.getView());
-				}
-			}
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		sbuild.append("<gadget>").append(this.NEWLINE);
 		sbuild.append("<id>").append(id).append("</id>").append(this.NEWLINE);
 		sbuild.append("<title>").append(this.title).append("</title>").append(this.NEWLINE);
