@@ -18,7 +18,9 @@
 package org.wingsource.plugin.engine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.wingsource.plugin.PluginRequest;
 
@@ -28,21 +30,17 @@ import org.wingsource.plugin.PluginRequest;
  */
 public class Request implements PluginRequest {
 
-	List<Object> operandList = new ArrayList<Object>();
+	Map<Object, Object> requestMap = new HashMap<Object, Object>();
 	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.PluginRequest#getParameter(java.lang.String)
+	 * @see org.wingsource.plugin.PluginRequest#getAttribute()
 	 */
-	/*
-	public Pluglet getParameter(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getAttribute(Object key) {
+		return this.requestMap.get(key);
 	}
-	*/
-	public List<Object> getOperandList() {
-		return operandList;
+	/* (non-Javadoc)
+	 * @see org.wingsource.plugin.PluginRequest#setAttribute(java.lang.Object, java.lang.Object)
+	 */
+	public void setAttribute(Object key, Object value) {
+		this.requestMap.put(key, value);
 	}
-	public void setOperandList(List<Object> operandList) {
-		this.operandList = operandList;
-	}
-
 }
