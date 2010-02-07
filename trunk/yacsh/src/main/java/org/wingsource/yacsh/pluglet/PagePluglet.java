@@ -53,7 +53,7 @@ public class PagePluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> list = prequest.getOperandList();
+		List<Object> list = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
 		List<Layout> layoutList = new ArrayList<Layout>();
 		List<Link>   linkList = new ArrayList<Link>();
 		for (Object o : list) {

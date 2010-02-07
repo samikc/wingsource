@@ -59,7 +59,7 @@ public class LayoutPluglet implements Pluglet {
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> operandList = prequest.getOperandList();
+		List<Object> operandList = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
 		StringBuilder sbuild = new StringBuilder();
 		Integer width = 100;
 		sbuild.append("<layout>").append(NEWLINE);
