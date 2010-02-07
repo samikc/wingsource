@@ -42,6 +42,7 @@ import org.wingsource.plugin.util.ThreadList;
  */
 public class PluginEngine {
 	private static final Logger logger=Logger.getLogger(Operation.class.getName());
+	
 	SymbolResolverService srs;
 	PluginServiceManager pMgr;
 	
@@ -139,11 +140,12 @@ public class PluginEngine {
 				operandList.add(pResponse.getResponse());
 			}
 			
-			PluginRequest prequest = new Request();
-			prequest.setOperandList(operandList);
+			PluginRequest pRequest = new Request();
+			pRequest.setAttribute(PluginRequest.ID, operation.operator());
+			pRequest.setAttribute(PluginRequest.OPERANDS, operandList);
 			PluginResponse presponse = new Response(null);
 			pluglet.init();
-			pluglet.service(prequest, presponse);
+			pluglet.service(pRequest, presponse);
 			pluglet.destroy();
 			return presponse;
 		}
@@ -156,10 +158,11 @@ public class PluginEngine {
 				presponse.setResponse(symbol);
 				return presponse;
 			}
-			PluginRequest prequest = new Request();
+			PluginRequest pRequest = new Request();
 			//TODO: Need to determine the list of request parameters that should be passed to every operand.
+			pRequest.setAttribute(PluginRequest.ID, symbol);
 			pluglet.init();
-			pluglet.service(prequest, presponse);
+			pluglet.service(pRequest, presponse);
 			pluglet.destroy();
 			return presponse;
 		}

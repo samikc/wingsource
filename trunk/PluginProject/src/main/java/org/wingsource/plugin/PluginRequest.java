@@ -24,7 +24,9 @@ import java.util.List;
  *
  */
 public interface PluginRequest {
-
+	String ID = "ORG.WINGSOURCE.PLUGIN.THIS.ID";
+	String OPERANDS = "ORG.WINGSOURCE.PLUGIN.OPERANDS";
+	
 	/***
 	 * This method is used to retrieve the parameter that are provided as  
 	 * @param name
@@ -32,7 +34,7 @@ public interface PluginRequest {
 	 */
 	//public Pluglet getParameter(String name);
 	
-	public List<Object> getOperandList();
+	public Object getAttribute(Object key);
 	
-	public void setOperandList(List<Object> list);
+	public void setAttribute(Object key, Object value);
 }
