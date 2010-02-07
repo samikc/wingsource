@@ -20,7 +20,7 @@
 		</ul>
 	</xsl:for-each>
 	</body>
-	<xsl:for-each select="//link[@type='CSS']">
+	<xsl:for-each select="//link[@type='js']">
 		<script type="text/javascript" src="{@url}"></script>
 	</xsl:for-each>
 	</html>
