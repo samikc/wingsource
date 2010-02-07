@@ -34,9 +34,8 @@ public class MainTest extends TestCase {
 	 * @param args
 	 */
 	public void testMain() {
-		PluginEngine pe = new PluginEngine(new DummyTypeResolver());
+		PluginEngine pe = new PluginEngine(new DummySymbolResolver());
 		try {
-			//pe.run("(+ 2 (- 6 3) 3 (- -6 3))", context, System.out);
 			Integer i = (Integer) pe.run("(+ 2 (- 005 -3) 3 (- -6 3))").getResponse();
 			System.out.println("Answer: " + i);
 			assertTrue(i== 4);

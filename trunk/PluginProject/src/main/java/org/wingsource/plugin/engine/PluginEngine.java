@@ -20,8 +20,10 @@ package org.wingsource.plugin.engine;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +31,7 @@ import org.antlr.runtime.RecognitionException;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
+import org.wingsource.plugin.SymbolResolverService;
 import org.wingsource.plugin.sexp.Operand;
 import org.wingsource.plugin.sexp.Operation;
 import org.wingsource.plugin.util.ThreadList;
@@ -40,11 +42,12 @@ import org.wingsource.plugin.util.ThreadList;
  */
 public class PluginEngine {
 	private static final Logger logger=Logger.getLogger(Operation.class.getName());
-	TypeResolverService trs;
+	SymbolResolverService srs;
 	PluginServiceManager pMgr;
-	public PluginEngine(TypeResolverService trs) {
+	
+	public PluginEngine(SymbolResolverService srs) {
 		super();
-		this.trs = trs;
+		this.srs = srs;
 		pMgr = new PluginServiceManager();
 	}
 
@@ -57,7 +60,7 @@ public class PluginEngine {
 	
 	public PluginResponse run(String expression) throws IOException, RecognitionException {
 		Operation operation = Operation.toOperation(expression);
-		return pMgr.execute(operation, trs);
+		return pMgr.execute(operation, srs);
 	}
 
 	private class PluginServiceManager {
@@ -69,17 +72,24 @@ public class PluginEngine {
 		 * @author vpillai
 		 *
 		 */
-		private class OperationResolver implements Runnable {
+		private class SymbolResolver implements Runnable {
 			
 			private PluginServiceManager pluginServiceManager;
-			private Operation operation;
-			private TypeResolverService trs;
+			private Operand operand;
+			private SymbolResolverService srs;
 			private PluginResponse pluginResponse = null;
 			
-			public OperationResolver(PluginServiceManager pMgr, Operation operation, TypeResolverService trs) {
+			/**
+			 * constructor that takes an operand 
+			 * 
+			 * @param pMgr
+			 * @param operand
+			 * @param srs
+			 */
+			public SymbolResolver(PluginServiceManager pMgr, Operand operand, SymbolResolverService srs) {
 				this.pluginServiceManager = pMgr;
-				this.operation = operation;
-				this.trs = trs;
+				this.operand = operand;
+				this.srs = srs;
 			}
 
 			/**
@@ -88,7 +98,15 @@ public class PluginEngine {
 			 */
 			public void run() {
 				try {
-					this.pluginResponse = this.pluginServiceManager.execute(operation, trs);
+					switch(this.operand.type()) {
+					case ATOM:
+						this.pluginResponse = this.pluginServiceManager.execute((String) this.operand.value(), srs);
+						break;
+					case OPERATION:
+						this.pluginResponse = this.pluginServiceManager.execute((Operation)operand.value(), srs);
+						break;
+					}
+
 				} catch (Exception e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
 				} 
@@ -103,27 +121,20 @@ public class PluginEngine {
 				return this.pluginResponse;
 			}
 		}
-		/**************************** END OF OperationResolver class *************************************/
+		/**************************** END OF OperandResolver class *************************************/
 		
-		public PluginResponse execute(Operation operation,TypeResolverService trs) throws IOException, RecognitionException {
+		public PluginResponse execute(Operation operation,SymbolResolverService srs) throws IOException, RecognitionException {
 			
-			Pluglet pServ = trs.resolve(operation.operator());
+			Pluglet pluglet = srs.resolve(operation.operator());
 			List<Object> operandList = new ArrayList<Object>();
-			ThreadList<OperationResolver> oList = new ThreadList<OperationResolver>(operation.operator());
+			ThreadList<SymbolResolver> oList = new ThreadList<SymbolResolver>(operation.operator());
 			for (Operand op : operation.operands()) {
-				switch(op.type()) {
-				case ATOM:
-					operandList.add(op.value());
-					break;
-				case OPERATION:
-					Operation opn = (Operation)op.value();
-					oList.add(new OperationResolver(this, opn, trs));
-					break;
-				}
+				oList.add(new SymbolResolver(this, op, srs));
 			}
+
 			oList.execute();
-//			logger.finest("Continue " + operation.operator());
-			for(OperationResolver or : oList) {
+			logger.info("Continue " + operation.operator());
+			for(SymbolResolver or : oList) {
 				PluginResponse pResponse = or.getResponse();
 				operandList.add(pResponse.getResponse());
 			}
@@ -131,12 +142,28 @@ public class PluginEngine {
 			PluginRequest prequest = new Request();
 			prequest.setOperandList(operandList);
 			PluginResponse presponse = new Response(null);
-			pServ.init();
-			pServ.service(prequest, presponse);
-			pServ.destroy();
+			pluglet.init();
+			pluglet.service(prequest, presponse);
+			pluglet.destroy();
+			return presponse;
+		}
+
+		public PluginResponse execute(String symbol,SymbolResolverService srs) throws IOException, RecognitionException {
+			
+			Pluglet pluglet = srs.resolve(symbol);
+			PluginResponse presponse = new Response(null);
+			if (pluglet == null) {
+				presponse.setResponse(symbol);
+				return presponse;
+			}
+			PluginRequest prequest = new Request();
+			//TODO: Need to determine the list of request parameters that should be passed to every operand.
+			pluglet.init();
+			pluglet.service(prequest, presponse);
+			pluglet.destroy();
 			return presponse;
 		}
 	}
 	
-	/**************************** END OF PluginServiceManager class *************************************/
+	/**************************** END OF PluginServiceManager class *************************************/	
 }
