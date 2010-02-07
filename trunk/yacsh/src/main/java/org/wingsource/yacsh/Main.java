@@ -33,7 +33,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		PluginEngine pe = new PluginEngine(new TypeResolver());
+		PluginEngine pe = new PluginEngine(new YacshSymbolResolver());
 		YacshConfig.init(new YacshModule());
 		try {
 			pe.run("(page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui))", System.out);

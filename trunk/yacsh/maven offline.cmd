@@ -1,0 +1,1 @@
+mvn -o -e -f %~dp0pom.xml clean install

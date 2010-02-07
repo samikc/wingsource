@@ -18,7 +18,7 @@
 package org.wingsource.yacsh;
 
 import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
+import org.wingsource.plugin.SymbolResolverService;
 import org.wingsource.yacsh.pluglet.LayoutPluglet;
 import org.wingsource.yacsh.pluglet.LinkPluglet;
 import org.wingsource.yacsh.pluglet.PagePluglet;
@@ -27,7 +27,7 @@ import org.wingsource.yacsh.pluglet.PagePluglet;
  * @author samikc
  *
  */
-public class TypeResolver implements TypeResolverService {
+public class YacshSymbolResolver implements SymbolResolverService {
 
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
