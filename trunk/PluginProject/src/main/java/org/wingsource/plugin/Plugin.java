@@ -30,10 +30,10 @@ public interface Plugin {
 	
 	/***
 	 * Called to actually serve the process for a {@link Plugin}.
-	 * @param prequest
-	 * @param presponse
+	 * @param request
+	 * @param response
 	 */
-	void service(PluginRequest prequest,PluginResponse presponse);
+	void service(PluginRequest request,PluginResponse response);
 	
 	/***
 	 * Called at the end of the service and before the object is relased for a garbage 
