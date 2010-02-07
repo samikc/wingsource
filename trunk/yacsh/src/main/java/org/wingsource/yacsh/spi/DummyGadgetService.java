@@ -17,9 +17,18 @@
  */
 package org.wingsource.yacsh.spi;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.wingsource.plugin.util.ClasspathSearch;
 import org.wingsource.yacsh.GadgetService;
 
 /**
@@ -27,30 +36,58 @@ import org.wingsource.yacsh.GadgetService;
  *
  */
 public class DummyGadgetService implements GadgetService {
+	
+	private static final Logger logger = Logger.getLogger(DummyGadgetService.class.getName());
 
+	private static Map <String, String> GADGET_MAP = new HashMap<String, String>();
+	static {
+		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, ".", "plugin.repository");
+		
+		for(URL url: urls) {
+			try {
+				InputStream in = url.openStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String line = br.readLine();
+				int l = 0;
+				while (line != null) {
+				  String[] tokens = line.split(",");
+
+				  if(tokens.length == 3) {
+					  if(tokens[1].equalsIgnoreCase("gadget")) {
+						  GADGET_MAP.put(tokens[0], tokens[2]);
+					  }
+				  }
+				  else {
+					  logger.log(Level.SEVERE, "Incorrect number of tokens found in plugin.repository at line# " + l);
+			      }
+					  
+				  line = br.readLine();
+				  l++;
+				}
+				
+				br.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		logger.finest(GADGET_MAP.toString());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.wiingsource.yacsh.GadgetService#getGadgetXmlUrl(java.lang.String)
 	 */
 	public URL getGadgetXmlUrl(String id) {
 		// TODO Auto-generated method stub
 		URL ret = null;
-		if (id.equalsIgnoreCase("g1")) {
-			try {
-				ret = new URL("http://ralph.feedback.googlepages.com/googlecalendarviewer.xml");
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		
+		try {
+			ret = new URL(GADGET_MAP.get(id));
+		} catch (MalformedURLException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		if (id.equalsIgnoreCase("g2")) {
-			try {
-				ret = new URL("http://gwidgets.com/lig/gpa/p132/love-romance-dating-quotes-tips.xml");
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
+		
 		return ret;
 	}
 

@@ -39,7 +39,7 @@ public class Main {
 			pe.run("(page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui))", System.out);
 			
 			long t1 = System.currentTimeMillis();
-			pe.run("(page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui))", System.out);
+			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui)) xform)", System.out);
 			long t2 = System.currentTimeMillis();
 			System.out.println((t2 - t2) + " ms");
 		} catch (IOException e) {
