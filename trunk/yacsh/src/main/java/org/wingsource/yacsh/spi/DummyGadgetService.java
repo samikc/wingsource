@@ -52,7 +52,7 @@ public class DummyGadgetService implements GadgetService {
 				while (line != null) {
 				  String[] tokens = line.split(",");
 
-				  if(tokens.length == 3) {
+				  if(tokens.length >= 3) {
 					  if(tokens[1].equalsIgnoreCase("gadget")) {
 						  GADGET_MAP.put(tokens[0], tokens[2]);
 					  }

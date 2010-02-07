@@ -70,7 +70,7 @@ public class URLPlugin implements Plugin {
 				while (line != null) {
 				  String[] tokens = line.split(",");
 
-				  if(tokens.length == 3) {
+				  if(tokens.length >= 3) {
 					  if(tokens[1].equalsIgnoreCase("url")) {
 						  URL_MAP.put(tokens[0], tokens[2]);
 					  }

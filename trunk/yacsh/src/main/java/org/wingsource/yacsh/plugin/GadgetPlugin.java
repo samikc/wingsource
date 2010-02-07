@@ -60,7 +60,7 @@ public class GadgetPlugin implements Plugin {
 	 */
 	public void service(PluginRequest request, PluginResponse response) {
 		String id = (String) request.getAttribute(PluginRequest.ID);
-		logger.info(id);
+//		logger.info(id);
 		
 		if(this.cache.containsKey(id)) {
 			response.setResponse(cache.get(id));
@@ -72,8 +72,6 @@ public class GadgetPlugin implements Plugin {
 			this.cache.put(id, g);
 			response.setResponse(g);	
 		}
-		
-//		8if (prequest.get44)
 	}
 
 }

@@ -57,7 +57,7 @@ public class YacshSymbolResolver implements SymbolResolverService {
 				while (line != null) {
 				  String[] tokens = line.split(",");
 
-				  if(tokens.length == 3) {
+				  if(tokens.length >= 3) {
 					  TYPE_MAP.put(tokens[0], tokens[1]);
 				  }
 				  else {
@@ -89,10 +89,6 @@ public class YacshSymbolResolver implements SymbolResolverService {
 		else if (symbol.equals("page")) {
 			return new PagePlugin();
 		}
-
-		else if (symbol.equals("link")) {
-			return new LinkPlugin();
-		}
 		else if (symbol.equals("xslt")) {
 			return new TransformerPlugin();
 		}
@@ -106,6 +102,9 @@ public class YacshSymbolResolver implements SymbolResolverService {
 				}
 				else if(type.equalsIgnoreCase("url")) {
 					return new URLPlugin();
+				}
+				else if (type.equalsIgnoreCase("link")) {
+					return new LinkPlugin();
 				}
 			}
 		}

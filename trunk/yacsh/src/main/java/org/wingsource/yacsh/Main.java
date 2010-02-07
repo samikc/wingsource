@@ -18,6 +18,7 @@
 package org.wingsource.yacsh;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.antlr.runtime.RecognitionException;
 import org.wingsource.plugin.engine.PluginEngine;
@@ -28,6 +29,8 @@ import org.wingsource.yacsh.spi.YacshModule;
  *
  */
 public class Main {
+	
+	private static final Logger logger = Logger.getLogger(Main.class.getName());
 
 	/**
 	 * @param args
@@ -36,12 +39,10 @@ public class Main {
 		PluginEngine pe = new PluginEngine(new YacshSymbolResolver());
 		YacshConfig.init(new YacshModule());
 		try {
-			pe.run("(page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui))", System.out);
-			
 			long t1 = System.currentTimeMillis();
-			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) (link CSS wing) (link JS wingjquery) (link JS wingjqueryui)) xform)", System.out);
+			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)", System.out);
 			long t2 = System.currentTimeMillis();
-			System.out.println((t2 - t2) + " ms");
+			logger.finest((t2 - t1) + " ms");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

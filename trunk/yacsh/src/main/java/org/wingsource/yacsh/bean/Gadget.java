@@ -110,7 +110,7 @@ public class Gadget {
 		}
 		sbuild.append("</gadget>").append(this.NEWLINE);
 		long t2 = System.currentTimeMillis();
-		log.info("The id : "+this.id+" "+ (t2 - t1) + " ms.");
+		log.finest("The id : "+this.id+" "+ (t2 - t1) + " ms.");
 		return sbuild.toString();
 	}
 }

@@ -20,6 +20,7 @@ package org.wingsource.yacsh.bean;
 import java.net.URL;
 
 import org.wingsource.yacsh.LinkService;
+import org.wingsource.yacsh.LinkService.Mime;
 
 import com.google.inject.Inject;
 
@@ -38,17 +39,19 @@ public class LinkFactory {
 	}
 
 
-	public Link get(String id, String type) {
-		URL url = linkService.getLinkUrl(id);
+	public Link get(String id) {
+		String url = linkService.getLinkUrl(id);
+		Mime type = linkService.getType(id);
 		Link ret = null;
-		if (type.equalsIgnoreCase("JS")) {
-			ret = new Link(id, url.toString(), "js", "src", "script");
+		switch(type) {
+			case JS:	ret = new Link(id, url, "js", "src", "script");
+						break;
+			
+			case CSS:	ret = new Link(id, url, "CSS", "href", "link");
+						break;
+						
+			default:	break;
 		}
-
-		if (type.equalsIgnoreCase("CSS")) {
-			ret = new Link(id, url.toString(), "CSS", "href", "link");
-		}
-
 		return ret;
 	}
 

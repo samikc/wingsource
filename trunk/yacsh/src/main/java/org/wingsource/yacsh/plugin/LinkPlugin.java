@@ -17,7 +17,10 @@
  */
 package org.wingsource.yacsh.plugin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
@@ -25,6 +28,7 @@ import org.wingsource.plugin.Plugin;
 import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Link;
 import org.wingsource.yacsh.bean.LinkFactory;
+import org.wingsource.yacsh.spi.DummyGadgetService;
 import org.wingsource.yacsh.spi.YacshModule;
 
 import com.google.inject.Guice;
@@ -35,6 +39,8 @@ import com.google.inject.Injector;
  *
  */
 public class LinkPlugin implements Plugin {
+	
+
 
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
@@ -55,15 +61,11 @@ public class LinkPlugin implements Plugin {
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
-	public void service(PluginRequest prequest, PluginResponse presponse) {
-		List<Object> list = (List<Object>)prequest.getAttribute(PluginRequest.OPERANDS);
-		String type = list.get(0).toString();
-		Link l = null;
-		String id = list.get(1).toString();
+	public void service(PluginRequest request, PluginResponse response) {
+		String id = (String) request.getAttribute(PluginRequest.ID);
 		Injector i = YacshConfig.get();
 		LinkFactory lf = i.getInstance(LinkFactory.class);
-		l = lf.get(id, type);
-		presponse.setResponse(l);
+		Link link = lf.get(id);
+		response.setResponse(link);
 	}
-
 }

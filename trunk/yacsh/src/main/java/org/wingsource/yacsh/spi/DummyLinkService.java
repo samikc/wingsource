@@ -17,9 +17,18 @@
  */
 package org.wingsource.yacsh.spi;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.wingsource.plugin.util.ClasspathSearch;
 import org.wingsource.yacsh.LinkService;
 
 /**
@@ -27,38 +36,58 @@ import org.wingsource.yacsh.LinkService;
  *
  */
 public class DummyLinkService implements LinkService{
+	private static final Logger logger = Logger.getLogger(DummyLinkService.class.getName());
+	
+	private static Map <String, String> LINK_URL_MAP = new HashMap<String, String>();
+	private static Map <String, String> LINK_TYPE_MAP = new HashMap<String, String>();
+	
+	static {
+		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, ".", "plugin.repository");
+		
+		for(URL url: urls) {
+			try {
+				InputStream in = url.openStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String line = br.readLine();
+				int l = 0;
+				while (line != null) {
+				  String[] tokens = line.split(",");
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.yacsh.LinkService#getLinkUrl()
-	 */
-	public URL getLinkUrl(String id) {
-		URL ret = null;
-		if (id.equalsIgnoreCase("wing")) {
-			try {
-				ret = new URL("http://localhost:8080/wing-example/web/css/wing.css");
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		if (id.equalsIgnoreCase("wingjquery")) {
-			try {
-				ret = new URL("http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js");
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		if (id.equalsIgnoreCase("wingjqueryui")) {
-			try {
-				ret = new URL("http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js");
-			} catch (MalformedURLException e) {
+				  if(tokens.length == 4) {
+					  if(tokens[1].equalsIgnoreCase("link")) {
+						  LINK_URL_MAP.put(tokens[0], tokens[2]);
+						  LINK_TYPE_MAP.put(tokens[0], tokens[3]);
+					  }
+				  }
+				  line = br.readLine();
+				  l++;
+				}
+				
+				br.close();
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		return ret;
+		logger.finest(LINK_URL_MAP.toString());
+	}
+
+	/* (non-Javadoc)
+	 * @see org.wingsource.yacsh.LinkService#getLinkUrl()
+	 */
+	public String getLinkUrl(String id) {
+		return LINK_URL_MAP.get(id);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.wingsource.yacsh.LinkService#getType()
+	 */
+	public Mime getType(String id) {
+		String type = LINK_TYPE_MAP.get(id);
+		return type != null ? (type.equalsIgnoreCase("js") ? Mime.JS 
+								:	(type.equalsIgnoreCase("css") ?  Mime.CSS : Mime.UNKNOWN))
+			   : Mime.UNKNOWN;
 	}
 
 }
