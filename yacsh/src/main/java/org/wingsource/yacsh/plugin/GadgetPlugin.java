@@ -37,7 +37,7 @@ public class GadgetPlugin implements Plugin {
 
 	private static final Logger logger = Logger.getLogger(GadgetPlugin.class.getName());
 	
-	private static final Map<String, String> cache = new HashMap<String, String>();
+	private static final Map<String, Gadget> cache = new HashMap<String, Gadget>();
 	
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
@@ -69,9 +69,8 @@ public class GadgetPlugin implements Plugin {
 			Injector i = YacshConfig.get();
 			Gadget g = i.getInstance(Gadget.class);
 			g.setId(id);
-			String gadgetXml = g.toXml();
-			this.cache.put(id, gadgetXml);
-			response.setResponse(gadgetXml);	
+			this.cache.put(id, g);
+			response.setResponse(g);	
 		}
 		
 //		8if (prequest.get44)

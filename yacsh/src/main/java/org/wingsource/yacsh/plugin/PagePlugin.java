@@ -68,7 +68,7 @@ public class PagePlugin implements Plugin {
 		sbuild.append("<page>").append(NEWLINE);
 		sbuild.append("<layouts>").append(NEWLINE);
 		for (Layout l : layoutList) {
-			sbuild.append(l.toString()).append(NEWLINE);
+			sbuild.append(l.toXml()).append(NEWLINE);
 		}
 		sbuild.append("</layouts>").append(NEWLINE);
 		sbuild.append("<links>").append(NEWLINE);
