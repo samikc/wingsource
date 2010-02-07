@@ -15,30 +15,13 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.example;
-
-import org.wingsource.plugin.Pluglet;
-import org.wingsource.plugin.TypeResolverService;
+package org.wingsource.plugin;
 
 /**
  * @author samikc
  *
  */
-public class DummyTypeResolver implements TypeResolverService{
+public interface SymbolResolverService {
 
-	/* (non-Javadoc)
-	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
-	 */
-	public Pluglet resolve(String operation) {
-		// TODO Auto-generated method stub
-		if (operation.equalsIgnoreCase("+")) {
-			return new PlusPlugin();
-		}
-		if (operation.equalsIgnoreCase("-")) {
-			return new MinusPlugin();
-		}
-
-		return null;
-	}
-
+	public Pluglet resolve(String symbol);
 }
