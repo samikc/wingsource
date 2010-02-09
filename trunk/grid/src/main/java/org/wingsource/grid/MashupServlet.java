@@ -41,7 +41,12 @@ public class MashupServlet extends HttpServlet {
 		try {
 			PluginEngine pe = new PluginEngine(new YacshSymbolResolver());
 			YacshConfig.init(new YacshModule());
-			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 49) (l g1 g2 49) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)", response.getOutputStream());
+			String expr = request.getParameter("expr");
+			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
+			if (expr != null) {
+				page = expr;
+			}
+			pe.run(page, response.getOutputStream());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
