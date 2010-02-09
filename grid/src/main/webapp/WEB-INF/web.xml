@@ -3,5 +3,15 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>Grid Web Application</display-name>
+  <servlet>
+      <servlet-name>mashup</servlet-name>
+      <description>This is the mashup servlet</description>
+      <servlet-class>org.wingsource.grid.MashupServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>mashup</servlet-name>
+      <url-pattern>*.mash</url-pattern>
+    </servlet-mapping>
 </web-app>
