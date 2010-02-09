@@ -1,7 +1,7 @@
 #id,type,url,contenttype (optional)
 g1,gadget,http://ralph.feedback.googlepages.com/googlecalendarviewer.xml
 g2,gadget,http://gwidgets.com/lig/gpa/p132/love-romance-dating-quotes-tips.xml
-xform,url,cp://yacsh.xsl
+xform,url,cp://APP-INF/yacsh.xsl
 wingskin,link,/shindig/gadgets/files/container-x/gadgets.css,css
 shindigRpc,link,/shindig/gadgets/js/rpc.js,js
 shindigCookies,link,/shindig/gadgets/files/container/cookies.js,js

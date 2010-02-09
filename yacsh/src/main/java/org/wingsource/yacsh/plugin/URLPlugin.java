@@ -59,7 +59,7 @@ public class URLPlugin implements Plugin {
 	public void init() {
 		if(!URL_MAP.isEmpty()) return;
 		
-		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, ".", "plugin.repository");
+		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, "APP-INF", "plugin.repository");
 		
 		for(URL url: urls) {
 			try {

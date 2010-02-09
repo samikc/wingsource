@@ -42,7 +42,7 @@ public class DummyLinkService implements LinkService{
 	private static Map <String, String> LINK_TYPE_MAP = new HashMap<String, String>();
 	
 	static {
-		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, ".", "plugin.repository");
+		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, "APP-INF", "plugin.repository");
 		
 		for(URL url: urls) {
 			try {
