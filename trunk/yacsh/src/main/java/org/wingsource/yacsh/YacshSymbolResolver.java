@@ -46,7 +46,7 @@ public class YacshSymbolResolver implements SymbolResolverService {
 	private static final Logger logger = Logger.getLogger(YacshSymbolResolver.class.getName());
 	private static Map <String, String> TYPE_MAP = new HashMap<String, String>();
 	static {
-		URL[] urls = ClasspathSearch.instance().search(YacshSymbolResolver.class, ".", "plugin.repository");
+		URL[] urls = ClasspathSearch.instance().search(YacshSymbolResolver.class, "APP-INF", "plugin.repository");
 		
 		for(URL url: urls) {
 			try {

@@ -39,7 +39,7 @@ import com.google.inject.Inject;
  * @author samikc
  *
  */
-public class Gadget {
+public class Gadget implements Cloneable{
 
 	// Constant for new line
 	private static final String NEWLINE = "\n";
@@ -58,7 +58,7 @@ public class Gadget {
 		super();
 		this.uuid = UUID.randomUUID();
 		this.gadgetService = gadgetService;
-	}	
+	}
 	
 	public String getId() {
 		return id;
@@ -117,6 +117,13 @@ public class Gadget {
 		long t2 = System.currentTimeMillis();
 		log.finest("The id : "+this.id+" "+ (t2 - t1) + " ms.");
 		return sbuild.toString();
+	}
+	
+	
+	public Object clone() throws CloneNotSupportedException {
+		Gadget g = (Gadget) super.clone();
+		g.uuid = UUID.randomUUID();
+		return g;
 	}
 }
 

@@ -41,7 +41,7 @@ public class DummyGadgetService implements GadgetService {
 
 	private static Map <String, String> GADGET_MAP = new HashMap<String, String>();
 	static {
-		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, ".", "plugin.repository");
+		URL[] urls = ClasspathSearch.instance().search(DummyGadgetService.class, "APP-INF", "plugin.repository");
 		
 		for(URL url: urls) {
 			try {

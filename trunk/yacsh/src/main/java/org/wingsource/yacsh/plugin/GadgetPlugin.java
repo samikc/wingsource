@@ -27,6 +27,7 @@ import com.google.inject.Injector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -63,7 +64,11 @@ public class GadgetPlugin implements Plugin {
 //		logger.info(id);
 		
 		if(this.cache.containsKey(id)) {
-			response.setResponse(cache.get(id));
+			try {
+				response.setResponse(cache.get(id).clone());
+			} catch (CloneNotSupportedException e) {
+				logger.log(Level.SEVERE, "Couldn't clone gadget with id:" + id, e);
+			}
 		}
 		else {
 			Injector i = YacshConfig.get();
