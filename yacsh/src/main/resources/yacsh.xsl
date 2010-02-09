@@ -13,9 +13,9 @@
 	</head>
 	<body>
 	<xsl:for-each select="//layout">
-		<ul>
+		<ul class="column" style='width:{width}%'>
 		<xsl:for-each select="gadget">
-			<li class="gadgets-gadget-chrome" spec='{url}'><xsl:value-of select="title"></xsl:value-of></li>		
+			<li id='{uuid}' class="gadgets-gadget-chrome" spec='{url}'><xsl:value-of select="title"></xsl:value-of></li>		
 		</xsl:for-each>
 		</ul>
 	</xsl:for-each>

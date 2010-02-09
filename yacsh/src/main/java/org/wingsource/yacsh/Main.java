@@ -40,7 +40,7 @@ public class Main {
 		YacshConfig.init(new YacshModule());
 		try {
 			long t1 = System.currentTimeMillis();
-			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 50) (l g1 g2 50) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)", System.out);
+			pe.run("(xslt (page (l g1 g2 100) (l g1 g2 49) (l g1 g2 49) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)", System.out);
 			long t2 = System.currentTimeMillis();
 			logger.finest((t2 - t1) + " ms");
 		} catch (IOException e) {

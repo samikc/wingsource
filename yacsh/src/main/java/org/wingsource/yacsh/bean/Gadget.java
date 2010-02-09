@@ -18,6 +18,7 @@
 package org.wingsource.yacsh.bean;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,12 +45,21 @@ public class Gadget {
 	private static final String NEWLINE = "\n";
 	private static final Logger log = Logger.getLogger(Gadget.class.getName());
 	
+	private UUID uuid;
 	private String id;
 	private GadgetService gadgetService;
 	private String title = null;
 	private String gadgetUrl;
 	private ArrayList<String> views = new ArrayList<String>();
 	private int height;
+	
+	@Inject
+	public Gadget(GadgetService gadgetService) {
+		super();
+		this.uuid = UUID.randomUUID();
+		this.gadgetService = gadgetService;
+	}	
+	
 	public String getId() {
 		return id;
 	}
@@ -86,17 +96,12 @@ public class Gadget {
 		}
 	}
 	
-	@Inject
-	public Gadget(GadgetService gadgetService) {
-		super();
-		this.gadgetService = gadgetService;
-	}
-
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
 
 		sbuild.append("<gadget>").append(this.NEWLINE);
+		sbuild.append("<uuid>").append(this.uuid).append("</uuid>").append(this.NEWLINE);
 		sbuild.append("<id>").append(id).append("</id>").append(this.NEWLINE);
 		sbuild.append("<title>").append(this.title).append("</title>").append(this.NEWLINE);
 		sbuild.append("<url>").append(this.gadgetUrl).append("</url>").append(this.NEWLINE);
