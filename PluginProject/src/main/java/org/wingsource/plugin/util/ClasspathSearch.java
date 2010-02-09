@@ -305,7 +305,11 @@ public class ClasspathSearch {
     		try {
     			//get the path to the zip archive. Use '!' delimiter 
 				String filePath = this.getJarFilePath(uri);
-				String subPath =this.getRelativePathInsideJar(uri);  
+				String subPath =this.getRelativePathInsideJar(uri);
+				
+				//replace %20 with ""
+				filePath = filePath.replaceAll("%20", " ");
+				
 				ZipFile zFile = new ZipFile(new File(filePath));
 				Enumeration en = zFile.entries();
 				
