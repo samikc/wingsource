@@ -6,7 +6,7 @@
 //
 
 
-package org.wingsource.plugin.manager.xml.wsp;
+package org.wingsource.plugin.lang.xml.wsp;
 
 import java.util.ArrayList;
 import java.util.List;

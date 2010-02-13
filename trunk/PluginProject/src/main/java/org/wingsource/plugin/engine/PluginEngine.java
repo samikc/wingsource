@@ -29,8 +29,8 @@ import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Plugin;
 import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.plugin.sexp.Operand;
-import org.wingsource.plugin.sexp.Operation;
+import org.wingsource.plugin.lang.sexp.Operand;
+import org.wingsource.plugin.lang.sexp.Operation;
 import org.wingsource.plugin.util.ThreadList;
 
 /**

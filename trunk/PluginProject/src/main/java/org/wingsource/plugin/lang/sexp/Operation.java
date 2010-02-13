@@ -15,7 +15,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.sexp;
+package org.wingsource.plugin.lang.sexp;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -30,9 +30,9 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
-import org.wingsource.plugin.sexp.Operand.Type;
-import org.wingsource.plugin.sexp.antlr.SexpLexer;
-import org.wingsource.plugin.sexp.antlr.SexpParser;
+import org.wingsource.plugin.lang.sexp.Operand.Type;
+import org.wingsource.plugin.lang.sexp.antlr.SexpLexer;
+import org.wingsource.plugin.lang.sexp.antlr.SexpParser;
 
 /**
  * @author vpillai
