@@ -189,10 +189,10 @@ public class Manager {
 //					}
 //					logger.info("4 ");
 //					
-					Class clazz = Class.forName(className);
+					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
 					logger.info("5");
-					ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
-					logger.info("6"+ret.getClass().getName());
+					ret = clazz.newInstance();
+					logger.info("6 "+ret.getClass().getName());
 					//return ret;
 				}catch(Exception e) {
 					e.printStackTrace();
