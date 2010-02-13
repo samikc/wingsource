@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -45,7 +46,12 @@ import org.wingsource.plugin.manager.xml.wsp.Plugins;
  *
  */
 public class Manager {
+	/**
+	 * The logger variable for logging at different levels.
+	 */	
+	public static final Logger logger=Logger.getLogger(Manager.class.getName());
 
+	
 	/***
 	 * Stores all the class names that this manager has discovered by looking at
 	 * wplugin.xml file in the jar files in the directories.
@@ -77,6 +83,7 @@ public class Manager {
 	
 	private void loadAllJars() throws Exception{
 		String commonDir = System.getProperty("user.home");
+		logger.info("Common Dir: " + commonDir);
 		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
 		List<String> jarList = this.getAllJars(dirName);
 		this.loadInfo(jarList,dirName);
@@ -137,6 +144,7 @@ public class Manager {
 					Manager mgr = new Manager();
 					String className = mgr.symbol2ClassMapper.get(symbol);
 					String jarName = mgr.class2JarMapper.get(className);
+					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
 					ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
 					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) Class.forName(className, true, cl);
