@@ -52,7 +52,7 @@ public class PluginEngine {
 	
 	public PluginEngine() {
 		super();
-		this.srs = Manager.getResolver();
+		this.srs = Manager.instance().getResolver();
 		pMgr = new PluginServiceManager();
 	}
 
