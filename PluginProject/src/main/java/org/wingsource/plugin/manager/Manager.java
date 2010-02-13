@@ -148,8 +148,10 @@ public class Manager {
 					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
 					logger.info("3");
-					ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
+					URLClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
 					logger.info("4 ");
+					
+					logger.info(cl.getURLs()[0].getFile());
 					
 			        //Get the System Classloader
 			        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
