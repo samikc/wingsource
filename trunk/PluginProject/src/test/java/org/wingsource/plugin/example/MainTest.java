@@ -47,5 +47,19 @@ public class MainTest extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		pe = new PluginEngine(new DummySymbolResolver());
+		//PluginEngine pe = new PluginEngine();
+		try {
+			Integer i = (Integer) pe.run("(+ 2 (- 005 -3) 3 (- -6 3))").getResponse();
+			System.out.println("Answer: " + i);
+			assertTrue(i== 4);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RecognitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
