@@ -66,8 +66,17 @@ public class Manager {
 	
 	private Map<String,String>  symbol2ClassMapper = new HashMap<String, String>();
 	
+	private static final Manager SINGLE_INSTANCE = new Manager();
+	
 	private Manager() {
 		this.bootstrap();
+	}
+	
+	/**
+	 * Singleton method
+	 */
+	public static final Manager instance() {
+		return SINGLE_INSTANCE;
 	}
 	
 	/***
@@ -137,13 +146,11 @@ public class Manager {
         }
         return ret;
 	}
-	public static void addURL(URL u) throws IOException {
+	public void addURL(URL u) throws IOException {
 
 		final Class[] parameters = new Class[] { URL.class };
-		URLClassLoader sysloader = (URLClassLoader) ClassLoader
-				.getSystemClassLoader();
+		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 		Class sysclass = URLClassLoader.class;
-
 
 		try {
 			Method method = sysclass.getDeclaredMethod("addURL", parameters);
@@ -154,22 +161,20 @@ public class Manager {
 			throw new IOException(
 					"Error, could not add URL to system classloader");
 		}// end try catch
-
-
 	}// end method
 	
 	
-	public static SymbolResolverService getResolver() {
+	public SymbolResolverService getResolver() {
 		return new SymbolResolverService() {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
 				org.wingsource.plugin.Plugin ret = null;
 				try {
-					Manager mgr = new Manager();
+					Manager mgr = Manager.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
 					String jarName = mgr.class2JarMapper.get(className);
 					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
-					Manager.addURL(f.toURI().toURL());
+					mgr.addURL(f.toURI().toURL());
 			        //Get the System Classloader
 			        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
 //			        URL[] urlArray = new URL[((URLClassLoader)sysClassLoader).getURLs().length + 1];
