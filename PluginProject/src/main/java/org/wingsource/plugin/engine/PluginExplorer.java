@@ -39,8 +39,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.plugin.manager.xml.wsp.Plugin;
-import org.wingsource.plugin.manager.xml.wsp.Plugins;
+import org.wingsource.plugin.lang.xml.wsp.Plugin;
+import org.wingsource.plugin.lang.xml.wsp.Plugins;
 import org.wingsource.plugin.util.ClasspathSearch;
 
 /**
@@ -132,7 +132,7 @@ public class PluginExplorer {
 	}
 	
 	private void loadInfo(List<String> jarNameList) throws Exception{
-		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.manager.xml.wsp");
+		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		for (String jarFileName : jarNameList) {
 			InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));

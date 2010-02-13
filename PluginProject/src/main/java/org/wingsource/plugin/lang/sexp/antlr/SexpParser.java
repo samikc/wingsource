@@ -1,6 +1,6 @@
 // $ANTLR 3.0.1 D:\\dev\\PluginProject\\src\\main\\java\\org\\wingsource\\plugin\\sexp\\antlr\\Sexp.g 2010-01-20 22:50:35
 
-package org.wingsource.plugin.sexp.antlr;
+package org.wingsource.plugin.lang.sexp.antlr;
 
 
 import org.antlr.runtime.*;

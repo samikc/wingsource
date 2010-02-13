@@ -6,7 +6,7 @@
 //
 
 
-package org.wingsource.plugin.manager.xml.wsp;
+package org.wingsource.plugin.lang.xml.wsp;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
