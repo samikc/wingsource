@@ -15,7 +15,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.manager;
+package org.wingsource.plugin.engine;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -49,12 +49,17 @@ import org.wingsource.plugin.util.ClasspathSearch;
  * @author samikc
  *
  */
-public class Manager {
+public class PluginExplorer {
 	/**
 	 * The logger variable for logging at different levels.
 	 */	
-	public static final Logger logger=Logger.getLogger(Manager.class.getName());
+	public static final Logger logger=Logger.getLogger(PluginExplorer.class.getName());
 
+	// The wsp => wingsource plugin
+	public final static  String PLUGIN_HOME_DIRECTORY_NAME = ".wsp"; 
+	
+	// The plugin XML file name
+	public final static String PLUGIN_XML_FILE_NAME = "plugin.xml";
 	
 	/***
 	 * Stores all the class names that this manager has discovered by looking at
@@ -69,16 +74,16 @@ public class Manager {
 	
 	private Map<String,String>  symbol2ClassMapper = new HashMap<String, String>();
 	
-	private static final Manager SINGLE_INSTANCE = new Manager();
+	private static final PluginExplorer SINGLE_INSTANCE = new PluginExplorer();
 	
-	private Manager() {
+	private PluginExplorer() {
 		this.bootstrap();
 	}
 	
 	/**
 	 * Singleton method
 	 */
-	public static final Manager instance() {
+	public static final PluginExplorer instance() {
 		return SINGLE_INSTANCE;
 	}
 	
@@ -96,7 +101,7 @@ public class Manager {
 	
 	private void loadAllJars() throws Exception{
 		String commonDir = System.getProperty("user.home");
-		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
+		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
 		logger.finest("Common Dir: " + commonDir);
 		
 		List<String> jarList = this.getAllJars(dirName);
@@ -113,7 +118,7 @@ public class Manager {
 		}
 		
 		//add file paths from class path
-		URL[] urls = ClasspathSearch.instance().search(Manager.class, ".wsp", "*.jar");
+		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, ".wsp", "*.jar");
 		
 		for(URL url: urls) {
 			ret.add(url.getFile());
@@ -130,7 +135,7 @@ public class Manager {
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.manager.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		for (String jarFileName : jarNameList) {
-			InputStream is = new ByteArrayInputStream(this.read(Constant.PLUGIN_XML_FILE_NAME, jarFileName));
+			InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));
 			Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
 			List<Plugin> pluginList = plugins.getPlugin();
 			for (Plugin p : pluginList) {
@@ -181,6 +186,7 @@ public class Manager {
 			Method method = sysclass.getDeclaredMethod("addURL", parameters);
 			method.setAccessible(true);
 			method.invoke(sysloader, new Object[] { u });
+			method.setAccessible(false);
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, t.getMessage(), t);
 			throw new IOException("Error, could not add URL to system classloader");
@@ -196,7 +202,7 @@ public class Manager {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
 				org.wingsource.plugin.Plugin ret = null;
 				try {
-					Manager mgr = Manager.instance();
+					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
 					String jarName = mgr.class2JarMapper.get(className);
 					if(jarName != null) {
