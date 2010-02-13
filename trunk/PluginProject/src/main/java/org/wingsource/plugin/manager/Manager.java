@@ -79,7 +79,7 @@ public class Manager {
 		String commonDir = System.getProperty("user.home");
 		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
 		List<String> jarList = this.getAllJars(dirName);
-		this.loadInfo(jarList);
+		this.loadInfo(jarList,dirName);
 	}
 	
 	private List<String> getAllJars(String directory) {
@@ -93,11 +93,11 @@ public class Manager {
 		return ret;
 	}
 	
-	private void loadInfo(List<String> jarNameList) throws Exception{
+	private void loadInfo(List<String> jarNameList,String dir) throws Exception{
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.manager.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		for (String jarFileName : jarNameList) {
-			InputStream is = new ByteArrayInputStream(this.read(Constant.PLUGIN_XML_FILE_NAME, jarFileName));
+			InputStream is = new ByteArrayInputStream(this.read(Constant.PLUGIN_XML_FILE_NAME, dir+jarFileName));
 			Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
 			List<Plugin> pluginList = plugins.getPlugin();
 			for (Plugin p : pluginList) {
