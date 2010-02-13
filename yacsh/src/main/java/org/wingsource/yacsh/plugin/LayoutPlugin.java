@@ -25,9 +25,6 @@ import org.wingsource.plugin.Plugin;
 import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Gadget;
 import org.wingsource.yacsh.bean.Layout;
-import org.wingsource.yacsh.spi.YacshModule;
-
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**

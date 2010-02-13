@@ -17,8 +17,6 @@
  */
 package org.wingsource.yacsh;
 
-import java.net.URL;
-
 /**
  * @author samikc
  *
