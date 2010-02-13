@@ -18,15 +18,10 @@
 package org.wingsource.grid;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.wingsource.plugin.engine.PluginEngine;
-import org.wingsource.plugin.util.ClasspathSearch;
 import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.YacshSymbolResolver;
 import org.wingsource.yacsh.spi.YacshModule;
