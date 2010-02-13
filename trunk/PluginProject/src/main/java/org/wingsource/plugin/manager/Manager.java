@@ -41,6 +41,7 @@ import javax.xml.bind.Unmarshaller;
 import org.wingsource.plugin.SymbolResolverService;
 import org.wingsource.plugin.manager.xml.wsp.Plugin;
 import org.wingsource.plugin.manager.xml.wsp.Plugins;
+import org.wingsource.plugin.util.ClasspathSearch;
 
 /**
  * The plugin manager core data structure is stored here. This is also the 
@@ -95,10 +96,11 @@ public class Manager {
 	
 	private void loadAllJars() throws Exception{
 		String commonDir = System.getProperty("user.home");
-		logger.finest("Common Dir: " + commonDir);
 		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
+		logger.finest("Common Dir: " + commonDir);
+		
 		List<String> jarList = this.getAllJars(dirName);
-		this.loadInfo(jarList,dirName);
+		this.loadInfo(jarList);
 	}
 	
 	private List<String> getAllJars(String directory) {
@@ -106,24 +108,36 @@ public class Manager {
 		File dir = new File(directory);
 		for (String f : dir.list()) {
 			if (f.endsWith("jar")) {
-				ret.add(f);
+				ret.add(directory + f);
 			}
 		}
+		
+		//add file paths from class path
+		URL[] urls = ClasspathSearch.instance().search(Manager.class, ".wsp", "*.jar");
+		
+		for(URL url: urls) {
+			ret.add(url.getFile());
+		}
+		
+//		for(String s: ret) {
+//			System.out.println(s);
+//		}
+		
 		return ret;
 	}
 	
-	private void loadInfo(List<String> jarNameList,String dir) throws Exception{
+	private void loadInfo(List<String> jarNameList) throws Exception{
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.manager.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		for (String jarFileName : jarNameList) {
-			InputStream is = new ByteArrayInputStream(this.read(Constant.PLUGIN_XML_FILE_NAME, dir+jarFileName));
+			InputStream is = new ByteArrayInputStream(this.read(Constant.PLUGIN_XML_FILE_NAME, jarFileName));
 			Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
 			List<Plugin> pluginList = plugins.getPlugin();
 			for (Plugin p : pluginList) {
 				String clazz = p.getClazz();
 				String symbol = p.getId();
 				logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
-				this.class2JarMapper.put(clazz, dir+jarFileName);
+				this.class2JarMapper.put(clazz, jarFileName);
 				this.symbol2ClassMapper.put(symbol, clazz);
 			}
 		}
