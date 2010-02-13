@@ -29,7 +29,8 @@
   padding: 0px;
   border: 0px;
   background-color: #e5ecf9;
-  height:18px;
+  background:transparent url(images/titlestrip.jpg) repeat-x left top; 
+  height:25px;
 }
 
 .gadgets-gadget-title {
@@ -45,6 +46,7 @@
   padding: 0px;
   border: 0px;
   font-size: smaller;
+  float:right;
 }
 
 .gadgets-gadget-user-prefs-dialog {
@@ -62,6 +64,9 @@
 }
 
 .gadgets-gadget-title-button {
+margin:1px;
+border:0px;
+padding:1px;
 }
 
 .gadgets-gadget-content {
