@@ -11,6 +11,10 @@
       <id>JBoss maven</id>
       <url>http://repository.jboss.com/maven2/</url>
     </repository>
+    <repository>
+      <id>Central maven</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -23,6 +27,16 @@
 	  <groupId>org.antlr</groupId>
 	  <artifactId>antlr</artifactId>
 	  <version>3.0.1</version> 
+	</dependency>
+	<dependency>
+		<groupId>javax.xml</groupId>
+		<artifactId>jaxb-impl</artifactId>
+		<version>2.0EA3</version>
+	</dependency>
+	<dependency>
+		<groupId>javax.xml.bind</groupId>
+		<artifactId>jaxb-api</artifactId>
+		<version>2.1</version>
 	</dependency>
   </dependencies>
   <build>
