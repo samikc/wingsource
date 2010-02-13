@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -94,7 +95,7 @@ public class Manager {
 	
 	private void loadAllJars() throws Exception{
 		String commonDir = System.getProperty("user.home");
-		logger.info("Common Dir: " + commonDir);
+		logger.finest("Common Dir: " + commonDir);
 		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
 		List<String> jarList = this.getAllJars(dirName);
 		this.loadInfo(jarList,dirName);
@@ -121,7 +122,7 @@ public class Manager {
 			for (Plugin p : pluginList) {
 				String clazz = p.getClazz();
 				String symbol = p.getId();
-				logger.info("Plugin class : "+clazz+ " symbol "+symbol);
+				logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
 				this.class2JarMapper.put(clazz, dir+jarFileName);
 				this.symbol2ClassMapper.put(symbol, clazz);
 			}
@@ -167,9 +168,8 @@ public class Manager {
 			method.setAccessible(true);
 			method.invoke(sysloader, new Object[] { u });
 		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new IOException(
-					"Error, could not add URL to system classloader");
+			logger.log(Level.SEVERE, t.getMessage(), t);
+			throw new IOException("Error, could not add URL to system classloader");
 		}// end try catch
 	}// end method
 	
@@ -185,16 +185,14 @@ public class Manager {
 					Manager mgr = Manager.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
 					String jarName = mgr.class2JarMapper.get(className);
-					logger.info("Jar name: " + jarName);
-					File f = new File(jarName);
-					mgr.addFileToSystemClassLoader(f);
-					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-					logger.info("5");
-					ret = clazz.newInstance();
-					logger.info("6 "+ret.getClass().getName());
-					//return ret;
+					if(jarName != null) {
+						File f = new File(jarName);
+						mgr.addFileToSystemClassLoader(f);
+						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+						ret = clazz.newInstance();
+					}
 				}catch(Exception e) {
-					e.printStackTrace();
+					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
 				return ret;
 			}
