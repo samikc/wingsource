@@ -110,6 +110,7 @@ public class Manager {
 			for (Plugin p : pluginList) {
 				String clazz = p.getClazz();
 				String symbol = p.getId();
+				logger.info("Plugin class : "+clazz+ " symbol "+symbol);
 				this.class2JarMapper.put(clazz, dir+jarFileName);
 				this.symbol2ClassMapper.put(symbol, clazz);
 			}
