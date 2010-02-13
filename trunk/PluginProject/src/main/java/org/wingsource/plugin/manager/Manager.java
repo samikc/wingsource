@@ -147,22 +147,29 @@ public class Manager {
 					String jarName = mgr.class2JarMapper.get(className);
 					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
-					logger.info("3");
-					URLClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
-					logger.info("4 ");
-					
-					logger.info(cl.getURLs()[0].getFile());
-					
+
 			        //Get the System Classloader
 			        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
-
+			        URL[] urlArray = new URL[((URLClassLoader)sysClassLoader).getURLs().length + 1];
 			        //Get the URLs
 			        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
 
 			        for(int i=0; i< urls.length; i++)
 			        {
+			        	urlArray[i] = urls[i];
 			            System.out.println(urls[i].getFile());
 			        }  
+			        
+			        int x = urls.length - 1;
+			        
+			        urlArray[x] = f.toURI().toURL();
+
+					logger.info("3");
+					URLClassLoader cl = new URLClassLoader(urlArray, Manager.class.getClass().getClassLoader());
+					logger.info("4 ");
+					
+					logger.info(cl.getURLs()[0].getFile());
+					
 					
 					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) cl.loadClass(className);
 					logger.info("5");
