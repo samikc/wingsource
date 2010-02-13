@@ -149,8 +149,20 @@ public class Manager {
 					File f = new File(jarName);
 					logger.info("3");
 					ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
-					logger.info("4");
-					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) Class.forName(className, true, cl);
+					logger.info("4 ");
+					
+			        //Get the System Classloader
+			        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
+
+			        //Get the URLs
+			        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
+
+			        for(int i=0; i< urls.length; i++)
+			        {
+			            System.out.println(urls[i].getFile());
+			        }  
+					
+					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) cl.loadClass(className);
 					logger.info("5");
 					ret = clazz.newInstance();
 					logger.info("6"+ret.getClass().getName());
