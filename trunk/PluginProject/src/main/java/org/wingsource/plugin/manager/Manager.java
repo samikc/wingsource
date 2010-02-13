@@ -68,10 +68,14 @@ public class Manager {
 	 * all the information into class2JarMapper map. 
 	 */
 	private void bootstrap() {
-		this.loadAllJars();
+		try {
+			this.loadAllJars();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void loadAllJars() {
+	private void loadAllJars() throws Exception{
 		String commonDir = System.getProperty("user.home");
 		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(Constant.PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
 		List<String> jarList = this.getAllJars(dirName);
@@ -128,13 +132,19 @@ public class Manager {
 	public static SymbolResolverService getResolver() {
 		return new SymbolResolverService() {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
-				Manager mgr = new Manager();
-				String className = mgr.symbol2ClassMapper.get(symbol);
-				String jarName = mgr.class2JarMapper.get(className);
-				File f = new File(jarName);
-				ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
-				Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) Class.forName(className, true, cl);
-				org.wingsource.plugin.Plugin ret = clazz.newInstance();
+				org.wingsource.plugin.Plugin ret = null;
+				try {
+					Manager mgr = new Manager();
+					String className = mgr.symbol2ClassMapper.get(symbol);
+					String jarName = mgr.class2JarMapper.get(className);
+					File f = new File(jarName);
+					ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
+					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) Class.forName(className, true, cl);
+					ret = clazz.newInstance();
+					//return ret;
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 				return ret;
 			}
 		};
