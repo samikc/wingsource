@@ -17,21 +17,12 @@
  */
 package org.wingsource.yacsh.plugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Plugin;
 import org.wingsource.yacsh.YacshConfig;
 import org.wingsource.yacsh.bean.Link;
 import org.wingsource.yacsh.bean.LinkFactory;
-import org.wingsource.yacsh.spi.DummyGadgetService;
-import org.wingsource.yacsh.spi.YacshModule;
-
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**

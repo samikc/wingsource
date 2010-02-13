@@ -17,8 +17,6 @@
  */
 package org.wingsource.yacsh.bean;
 
-import java.net.URL;
-
 import org.wingsource.yacsh.LinkService;
 import org.wingsource.yacsh.LinkService.Mime;
 
