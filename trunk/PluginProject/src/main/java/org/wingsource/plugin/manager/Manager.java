@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -136,6 +137,27 @@ public class Manager {
         }
         return ret;
 	}
+	public static void addURL(URL u) throws IOException {
+
+		final Class[] parameters = new Class[] { URL.class };
+		URLClassLoader sysloader = (URLClassLoader) ClassLoader
+				.getSystemClassLoader();
+		Class sysclass = URLClassLoader.class;
+
+
+		try {
+			Method method = sysclass.getDeclaredMethod("addURL", parameters);
+			method.setAccessible(true);
+			method.invoke(sysloader, new Object[] { u });
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw new IOException(
+					"Error, could not add URL to system classloader");
+		}// end try catch
+
+
+	}// end method
+	
 	
 	public static SymbolResolverService getResolver() {
 		return new SymbolResolverService() {
@@ -147,33 +169,29 @@ public class Manager {
 					String jarName = mgr.class2JarMapper.get(className);
 					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
-
+					Manager.addURL(f.toURI().toURL());
 			        //Get the System Classloader
 			        ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
-			        URL[] urlArray = new URL[((URLClassLoader)sysClassLoader).getURLs().length + 1];
-			        //Get the URLs
-			        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
-
-			        for(int i=0; i< urls.length; i++)
-			        {
-			        	urlArray[i] = urls[i];
-			            System.out.println(urls[i].getFile());
-			        }  
-			        
-			        int x = urls.length - 1;
-			        
-			        urlArray[x] = f.toURI().toURL();
-
-					logger.info("3");
-					URLClassLoader cl = new URLClassLoader(urlArray, Manager.class.getClass().getClassLoader());
-					logger.info("4 ");
-					
-					logger.info(cl.getURLs()[0].getFile());
-					
-					
-					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) cl.loadClass(className);
+//			        URL[] urlArray = new URL[((URLClassLoader)sysClassLoader).getURLs().length + 1];
+//			        //Copy URLS from System class loader to the newly created class loader
+//			        URL[] urls = ((URLClassLoader)sysClassLoader).getURLs();
+//
+//			        for(int i=0; i< urls.length; i++) {
+//			        	urlArray[i] = urls[i];
+//			        }  
+//			        
+//			        urlArray[urlArray.length - 1] = f.toURI().toURL();
+//			        
+//					logger.info("3");
+//					URLClassLoader cl = new URLClassLoader(urlArray, Manager.class.getClass().getClassLoader());
+//					for(URL url: cl.getURLs()) {
+//						System.out.println("URL:" + url);
+//					}
+//					logger.info("4 ");
+//					
+					Class clazz = Class.forName(className);
 					logger.info("5");
-					ret = clazz.newInstance();
+					ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 					logger.info("6"+ret.getClass().getName());
 					//return ret;
 				}catch(Exception e) {
