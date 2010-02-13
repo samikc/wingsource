@@ -17,8 +17,6 @@
  */
 package org.wingsource.plugin;
 
-import java.util.List;
-
 /**
  * @author samikc
  *
