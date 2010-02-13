@@ -147,9 +147,12 @@ public class Manager {
 					String jarName = mgr.class2JarMapper.get(className);
 					logger.info("Jar name: " + jarName);
 					File f = new File(jarName);
+					logger.info("3");
 					ClassLoader cl = new URLClassLoader(new URL[] {f.toURI().toURL()}, Manager.class.getClass().getClassLoader());
+					logger.info("4");
 					Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>) Class.forName(className, true, cl);
 					ret = clazz.newInstance();
+					logger.info("5"+ret.getClass().getName());
 					//return ret;
 				}catch(Exception e) {
 					e.printStackTrace();
