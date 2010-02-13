@@ -29,7 +29,6 @@ import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Plugin;
 import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.plugin.manager.Manager;
 import org.wingsource.plugin.sexp.Operand;
 import org.wingsource.plugin.sexp.Operation;
 import org.wingsource.plugin.util.ThreadList;
@@ -52,7 +51,7 @@ public class PluginEngine {
 	
 	public PluginEngine() {
 		super();
-		this.srs = Manager.instance().getResolver();
+		this.srs = PluginExplorer.instance().getResolver();
 		pMgr = new PluginServiceManager();
 	}
 
