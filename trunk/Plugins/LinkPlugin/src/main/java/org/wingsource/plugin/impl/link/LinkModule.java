@@ -1,4 +1,4 @@
-package org.wingsource.plugin.impl;
+package org.wingsource.plugin.impl.link;
 
 
 import com.google.inject.Binder;
