@@ -1,4 +1,4 @@
 <plugins version="1 1 1 1 0" updatesite="http://example.com/wingsource/plugin/updatesite">
-	<plugin id="+" class="org.wingsource.pluginplus.MyPlusPlugin"/>
-	<plugin id="-" class="org.wingsource.pluginplus.MyMinusPlugin"/>
+
+	<plugin id="crawl" class="org.wingsource.plugin.impl.crawler.CrawlerPlugin"/>
 </plugins>
