@@ -26,9 +26,9 @@
     </dependency>
     <dependency>
       <groupId>org.wingsource</groupId>
-      <artifactId>yacsh</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>  
+      <artifactId>plugin</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>    
   </dependencies>
   <build>
     <finalName>grid</finalName>
