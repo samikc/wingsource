@@ -69,7 +69,7 @@ public class Gadget implements Cloneable{
 		if(this.id != id) {
 			this.id = id;
 			try {
-				JAXBContext context = JAXBContext.newInstance("org.wingsource.yacsh.xml.gadget");
+				JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				URL url = gadgetService.getGadgetXmlUrl(this.id);
 				this.gadgetUrl = url.toString();
