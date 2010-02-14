@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.wingsource.plugin.impl;
+package org.wingsource.plugin.impl.url;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
