@@ -34,6 +34,7 @@ public class MashupServlet extends HttpServlet {
 			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
 //			YacshConfig.init(new YacshModule());
 			String expr = request.getParameter("expr");
+			System.out.println(expr);
 			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
 			if (expr != null) {
 				page = expr;
