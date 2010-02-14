@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.antlr.runtime.RecognitionException;
+import org.wingsource.plugin.OperandTypeResolverService;
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Plugin;
@@ -43,18 +44,19 @@ public class PluginEngine {
 	SymbolResolverService srs;
 	PluginServiceManager pMgr;
 	
+	public PluginEngine() {
+		this(PluginExplorer.instance().getResolver(null));
+	}
+
+	public PluginEngine(OperandTypeResolverService otrs) {
+		this(PluginExplorer.instance().getResolver(otrs));
+	}
+	
 	public PluginEngine(SymbolResolverService srs) {
-		super();
 		this.srs = srs;
 		pMgr = new PluginServiceManager();
 	}
 	
-	public PluginEngine() {
-		super();
-		this.srs = PluginExplorer.instance().getResolver();
-		pMgr = new PluginServiceManager();
-	}
-
 	public void run(String expression, OutputStream os) throws IOException, RecognitionException {
 		PluginResponse pRes = this.run(expression);
 		Object obj = pRes.getResponse();

@@ -38,6 +38,7 @@ import java.util.zip.ZipInputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.wingsource.plugin.OperandTypeResolverService;
 import org.wingsource.plugin.SymbolResolverService;
 import org.wingsource.plugin.lang.xml.wsp.Plugin;
 import org.wingsource.plugin.lang.xml.wsp.Plugins;
@@ -197,19 +198,28 @@ public class PluginExplorer {
 		this.addURL(file.toURI().toURL());
 	}
 	
-	public SymbolResolverService getResolver() {
+	public SymbolResolverService getResolver(final OperandTypeResolverService otrs) {
 		return new SymbolResolverService() {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
 				org.wingsource.plugin.Plugin ret = null;
 				try {
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
-					String jarName = mgr.class2JarMapper.get(className);
-					if(jarName != null) {
-						File f = new File(jarName);
-						mgr.addFileToSystemClassLoader(f);
-						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-						ret = clazz.newInstance();
+					if(className!=null) {
+						String jarName = mgr.class2JarMapper.get(className);
+						if(jarName != null) {
+							File f = new File(jarName);
+							mgr.addFileToSystemClassLoader(f);
+							Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+							ret = clazz.newInstance();
+						}
+					}
+					else {
+						//the symbol may be an operand so try to get it's type.
+						if(otrs != null) {
+							String type = otrs.resolve(symbol);
+							ret = this.resolve(type);
+						}
 					}
 				}catch(Exception e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
