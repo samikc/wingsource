@@ -15,42 +15,17 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.impl.bean;
-
-import org.wingsource.plugin.impl.LinkService;
-import org.wingsource.plugin.impl.LinkService.Mime;
-
-import com.google.inject.Inject;
+package org.wingsource.plugin.impl.link;
 
 /**
  * @author samikc
  *
  */
-public class LinkFactory {
+public interface LinkService {
 
-	private LinkService linkService;
+	enum Mime {JS, CSS, UNKNOWN};
 	
-	@Inject
-	public LinkFactory(LinkService linkService) {
-		super();
-		this.linkService = linkService;
-	}
-
-
-	public Link get(String id) {
-		String url = linkService.getLinkUrl(id);
-		Mime type = linkService.getType(id);
-		Link ret = null;
-		switch(type) {
-			case JS:	ret = new Link(id, url, "js", "src", "script");
-						break;
-			
-			case CSS:	ret = new Link(id, url, "CSS", "href", "link");
-						break;
-						
-			default:	break;
-		}
-		return ret;
-	}
-
+	String getLinkUrl(String id);
+	
+	Mime getType(String id);
 }

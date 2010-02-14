@@ -15,13 +15,13 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.impl;
+package org.wingsource.plugin.impl.link;
 
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
 import org.wingsource.plugin.Plugin;
-import org.wingsource.plugin.impl.bean.Link;
-import org.wingsource.plugin.impl.bean.LinkFactory;
+import org.wingsource.plugin.impl.link.bean.Link;
+import org.wingsource.plugin.impl.link.bean.LinkFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

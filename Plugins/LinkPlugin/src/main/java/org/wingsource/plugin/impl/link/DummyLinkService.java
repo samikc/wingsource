@@ -15,7 +15,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package org.wingsource.plugin.impl;
+package org.wingsource.plugin.impl.link;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.wingsource.plugin.util.ClasspathSearch;
-import org.wingsource.plugin.impl.LinkService;
+import org.wingsource.plugin.impl.link.LinkService;
 
 /**
  * @author samikc
