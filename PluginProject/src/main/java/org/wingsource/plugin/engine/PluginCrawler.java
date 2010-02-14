@@ -53,7 +53,7 @@ public class PluginCrawler {
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.crawler");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		this.crawler = (Crawler) unmarshaller.unmarshal(new File(crawlerFileName));
-		this.srs = PluginExplorer.instance().getResolver();
+		this.srs = PluginExplorer.instance().getResolver(null);
 	}
 	
 	public void crawl() {
