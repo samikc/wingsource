@@ -22,9 +22,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.wingsource.plugin.engine.PluginEngine;
-import org.wingsource.yacsh.YacshConfig;
-import org.wingsource.yacsh.YacshSymbolResolver;
-import org.wingsource.yacsh.spi.YacshModule;
 
 /**
  * @author pillvin
@@ -34,8 +31,8 @@ public class MashupServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PluginEngine pe = new PluginEngine(new YacshSymbolResolver());
-			YacshConfig.init(new YacshModule());
+			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
+//			YacshConfig.init(new YacshModule());
 			String expr = request.getParameter("expr");
 			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
 			if (expr != null) {
