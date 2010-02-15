@@ -125,10 +125,6 @@ public class PluginExplorer {
 			ret.add(url.getFile());
 		}
 		
-//		for(String s: ret) {
-//			System.out.println(s);
-//		}
-		
 		return ret;
 	}
 	
@@ -136,15 +132,21 @@ public class PluginExplorer {
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		for (String jarFileName : jarNameList) {
-			InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));
-			Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
-			List<Plugin> pluginList = plugins.getPlugin();
-			for (Plugin p : pluginList) {
-				String clazz = p.getClazz();
-				String symbol = p.getId();
-				logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
-				this.class2JarMapper.put(clazz, jarFileName);
-				this.symbol2ClassMapper.put(symbol, clazz);
+			try {
+				InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));
+				Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
+				List<Plugin> pluginList = plugins.getPlugin();
+				for (Plugin p : pluginList) {
+					String clazz = p.getClazz();
+					String symbol = p.getId();
+					logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
+					this.class2JarMapper.put(clazz, jarFileName);
+					this.symbol2ClassMapper.put(symbol, clazz);
+				}
+			}
+			catch(Exception e) {
+				//do Nothing
+				logger.log(Level.SEVERE, e.getMessage());
 			}
 		}
 		
@@ -194,10 +196,16 @@ public class PluginExplorer {
 		}// end try catch
 	}// end method
 	
-	private void addFileToSystemClassLoader(File file) throws MalformedURLException, IOException {
+	private void addFileToClassLoader(File file) throws MalformedURLException, IOException {
 		URLClassLoader scl = (URLClassLoader) ClassLoader.getSystemClassLoader();
 		logger.info("scl:" + scl.getClass().getName());
 		this.addURL(scl, file.toURI().toURL());
+		
+		for(URL url: scl.getURLs()) {
+			System.out.println(url.toString());
+		}
+
+		
 		URLClassLoader tcl = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		if(tcl != null) {
 			logger.info("tcl:" + tcl.getClass().getName());
@@ -226,9 +234,10 @@ public class PluginExplorer {
 						String jarName = mgr.class2JarMapper.get(className);
 						if(jarName != null) {
 							File f = new File(jarName);
-							mgr.addFileToSystemClassLoader(f);
-							Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-							//Class clazz = mgr.cloader.loadClass(className);
+							mgr.addFileToClassLoader(f);
+							//Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+							logger.info("loading class:"+className);
+							Class clazz = getClass().getClassLoader().loadClass(className);
 							ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 						}
 					}
