@@ -75,8 +75,6 @@ public class PluginExplorer {
 	
 	private Map<String,String>  symbol2ClassMapper = new HashMap<String, String>();
 	
-	URLClassLoader cloader = null;
-	
 	private static final PluginExplorer SINGLE_INSTANCE = new PluginExplorer();
 	
 	private PluginExplorer() {
@@ -96,10 +94,6 @@ public class PluginExplorer {
 	 */
 	private void bootstrap() {
 		try {
-			URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-			this.cloader = sysloader;
-			File f = new File("C:\\Windows\\System32\\config\\systemprofile\\.wsp\\plugin-1.0-SNAPSHOT.jar");
-			addURL(f.toURI().toURL());
 			this.loadAllJars();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -183,7 +177,7 @@ public class PluginExplorer {
 	 * @param u
 	 * @throws IOException
 	 */
-	private void addURL(URL u) throws IOException {
+	private void addURL(URLClassLoader cl, URL u) throws IOException {
 
 		final Class[] parameters = new Class[] { URL.class };
 
@@ -192,7 +186,7 @@ public class PluginExplorer {
 		try {
 			Method method = sysclass.getDeclaredMethod("addURL", parameters);
 			method.setAccessible(true);
-			method.invoke(this.cloader, new Object[] { u });
+			method.invoke(cl, new Object[] { u });
 			method.setAccessible(false);
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, t.getMessage(), t);
@@ -201,7 +195,24 @@ public class PluginExplorer {
 	}// end method
 	
 	private void addFileToSystemClassLoader(File file) throws MalformedURLException, IOException {
-		this.addURL(file.toURI().toURL());
+		URLClassLoader scl = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		logger.info("scl:" + scl.getClass().getName());
+		this.addURL(scl, file.toURI().toURL());
+		URLClassLoader tcl = (URLClassLoader) Thread.currentThread().getContextClassLoader();
+		if(tcl != null) {
+			logger.info("tcl:" + tcl.getClass().getName());
+			this.addURL(tcl, file.toURI().toURL());
+		}
+		
+		URLClassLoader cl = (URLClassLoader) getClass( ).getClassLoader();
+		logger.info("cl:" + cl.getClass().getName());
+		if(cl != null) {
+			this.addURL(cl, file.toURI().toURL());
+			
+			for(URL url: cl.getURLs()) {
+				System.out.println(url.toString());
+			}
+		}
 	}
 	
 	public SymbolResolverService getResolver(final OperandTypeResolverService otrs) {
@@ -216,8 +227,8 @@ public class PluginExplorer {
 						if(jarName != null) {
 							File f = new File(jarName);
 							mgr.addFileToSystemClassLoader(f);
-							//Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-							Class clazz = mgr.cloader.loadClass(className);
+							Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+							//Class clazz = mgr.cloader.loadClass(className);
 							ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 						}
 					}
