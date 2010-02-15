@@ -96,6 +96,8 @@ public class PluginExplorer {
 	 */
 	private void bootstrap() {
 		try {
+			URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+			this.cloader = sysloader;
 			this.loadAllJars();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -182,14 +184,13 @@ public class PluginExplorer {
 	private void addURL(URL u) throws IOException {
 
 		final Class[] parameters = new Class[] { URL.class };
-		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		this.cloader = sysloader;
+
 		Class sysclass = URLClassLoader.class;
 
 		try {
 			Method method = sysclass.getDeclaredMethod("addURL", parameters);
 			method.setAccessible(true);
-			method.invoke(sysloader, new Object[] { u });
+			method.invoke(this.cloader, new Object[] { u });
 			method.setAccessible(false);
 		} catch (Throwable t) {
 			logger.log(Level.SEVERE, t.getMessage(), t);
@@ -218,13 +219,14 @@ public class PluginExplorer {
 							ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 						}
 					}
+					/*
 					else {
 						//the symbol may be an operand so try to get it's type.
 						if(otrs != null) {
 							String type = otrs.resolve(symbol);
 							ret = this.resolve(type);
 						}
-					}
+					}*/
 				}catch(Exception e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
