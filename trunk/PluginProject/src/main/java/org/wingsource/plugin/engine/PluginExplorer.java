@@ -75,6 +75,8 @@ public class PluginExplorer {
 	
 	private Map<String,String>  symbol2ClassMapper = new HashMap<String, String>();
 	
+	URLClassLoader cloader = null;
+	
 	private static final PluginExplorer SINGLE_INSTANCE = new PluginExplorer();
 	
 	private PluginExplorer() {
@@ -181,6 +183,7 @@ public class PluginExplorer {
 
 		final Class[] parameters = new Class[] { URL.class };
 		URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+		this.cloader = sysloader;
 		Class sysclass = URLClassLoader.class;
 
 		try {
@@ -210,8 +213,9 @@ public class PluginExplorer {
 						if(jarName != null) {
 							File f = new File(jarName);
 							mgr.addFileToSystemClassLoader(f);
-							Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-							ret = clazz.newInstance();
+							//Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+							Class clazz = mgr.cloader.loadClass(className);
+							ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 						}
 					}
 					else {
