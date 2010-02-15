@@ -98,6 +98,8 @@ public class PluginExplorer {
 		try {
 			URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 			this.cloader = sysloader;
+			File f = new File("C:\\Windows\\System32\\config\\systemprofile\\.wsp\\plugin-1.0-SNAPSHOT.jar");
+			addURL(f.toURI().toURL());
 			this.loadAllJars();
 		}catch(Exception e) {
 			e.printStackTrace();
