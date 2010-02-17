@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,6 +41,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.wingsource.plugin.OperandTypeResolverService;
 import org.wingsource.plugin.SymbolResolverService;
+import org.wingsource.plugin.engine.loader.PluginEngineClassLoader;
 import org.wingsource.plugin.lang.xml.wsp.Plugin;
 import org.wingsource.plugin.lang.xml.wsp.Plugins;
 import org.wingsource.plugin.util.ClasspathSearch;
@@ -77,6 +79,8 @@ public class PluginExplorer {
 	
 	private static final PluginExplorer SINGLE_INSTANCE = new PluginExplorer();
 	
+	public PluginEngineClassLoader peCl = null;
+	
 	private PluginExplorer() {
 		this.bootstrap();
 	}
@@ -107,6 +111,7 @@ public class PluginExplorer {
 		
 		List<String> jarList = this.getAllJars(dirName);
 		this.loadInfo(jarList);
+		this.setContextClassLoader();
 	}
 	
 	private List<String> getAllJars(String directory) {
@@ -124,6 +129,14 @@ public class PluginExplorer {
 		for(URL url: urls) {
 			ret.add(url.getFile());
 		}
+
+		URL[] urls1 = ClasspathSearch.instance().search(PluginExplorer.class, "WEB-INF", "*.jar");
+		
+		for(URL url: urls1) {
+			System.out.println("=====>"+url.getFile()+"<======");
+			ret.add(url.getFile());
+		}
+
 		
 		return ret;
 	}
@@ -131,17 +144,24 @@ public class PluginExplorer {
 	private void loadInfo(List<String> jarNameList) throws Exception{
 		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.xml.wsp");
 		Unmarshaller unmarshaller = context.createUnmarshaller();
+		URL[] urlArray = new URL[jarNameList.size()];
+		int i = 0;
 		for (String jarFileName : jarNameList) {
 			try {
 				InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));
 				Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
 				List<Plugin> pluginList = plugins.getPlugin();
+				File f = new File(jarFileName);
+				urlArray[i] = f.toURI().toURL();
+				i++;
 				for (Plugin p : pluginList) {
 					String clazz = p.getClazz();
 					String symbol = p.getId();
 					logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
 					this.class2JarMapper.put(clazz, jarFileName);
 					this.symbol2ClassMapper.put(symbol, clazz);
+					
+					
 				}
 			}
 			catch(Exception e) {
@@ -149,7 +169,11 @@ public class PluginExplorer {
 				logger.log(Level.SEVERE, e.getMessage());
 			}
 		}
-		
+		this.peCl = new PluginEngineClassLoader(urlArray,Thread.currentThread().getContextClassLoader());
+	}
+	
+	private void setContextClassLoader() {
+		Thread.currentThread().setContextClassLoader(this.peCl);
 	}
 	
 	private byte[] read(String filename,String jarFileName) throws IOException {
@@ -197,6 +221,7 @@ public class PluginExplorer {
 	}// end method
 	
 	private void addFileToClassLoader(File file) throws MalformedURLException, IOException {
+		/*
 		URLClassLoader scl = (URLClassLoader) ClassLoader.getSystemClassLoader();
 		logger.info("scl:" + scl.getClass().getName());
 		this.addURL(scl, file.toURI().toURL());
@@ -205,13 +230,13 @@ public class PluginExplorer {
 			System.out.println(url.toString());
 		}
 
-		
+				
 		URLClassLoader tcl = (URLClassLoader) Thread.currentThread().getContextClassLoader();
 		if(tcl != null) {
 			logger.info("tcl:" + tcl.getClass().getName());
 			this.addURL(tcl, file.toURI().toURL());
 		}
-		
+		*/
 		URLClassLoader cl = (URLClassLoader) getClass( ).getClassLoader();
 		logger.info("cl:" + cl.getClass().getName());
 		if(cl != null) {
@@ -221,12 +246,13 @@ public class PluginExplorer {
 				System.out.println(url.toString());
 			}
 		}
+
 	}
 	
 	public SymbolResolverService getResolver(final OperandTypeResolverService otrs) {
 		return new SymbolResolverService() {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
-				org.wingsource.plugin.Plugin ret = null;
+				
 				try {
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
@@ -234,11 +260,34 @@ public class PluginExplorer {
 						String jarName = mgr.class2JarMapper.get(className);
 						if(jarName != null) {
 							File f = new File(jarName);
-							mgr.addFileToClassLoader(f);
+							//mgr.addFileToClassLoader(f);
 							//Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
 							logger.info("loading class:"+className);
-							Class clazz = getClass().getClassLoader().loadClass(className);
-							ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
+							//Class clazz = getClass().getClassLoader().loadClass(className);
+							ClassLoader cl = Thread.currentThread().getContextClassLoader();
+							System.out.println(cl.getClass().getCanonicalName());
+							Class clazz = mgr.peCl.loadClass(className);
+							Class pluginClass = mgr.peCl.loadClass("org.wingsource.plugin.Plugin");
+							
+							System.out.println("THE CLAZZ : "+clazz.getCanonicalName());
+							//Thread.currentThread().setContextClassLoader(mgr.peCl);
+							ClassLoader cl1 = Thread.currentThread().getContextClassLoader();
+							System.out.println(cl1.getClass().getCanonicalName());
+							Object o = clazz.newInstance();
+							
+							Constructor ctor = o.getClass().getConstructor();
+							
+							Object obj = ctor.newInstance();
+							org.wingsource.plugin.Plugin ret = null;
+							System.out.println("========================================");
+							System.out.println("TTTT0"+pluginClass.getClassLoader());
+							System.out.println("TTTT1"+org.wingsource.plugin.Plugin.class.getClassLoader());
+							System.out.println("TTTT2"+obj.getClass().getClassLoader());
+
+							ret =  (org.wingsource.plugin.Plugin) obj;
+
+							return ret;
+							//Thread.currentThread().setContextClassLoader(cl);
 						}
 					}
 					/*
@@ -252,7 +301,7 @@ public class PluginExplorer {
 				}catch(Exception e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
-				return ret;
+				return null;
 			}
 		};
 	}
