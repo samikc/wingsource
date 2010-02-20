@@ -88,10 +88,18 @@ public class PluginExplorer {
 	private void loadPlugins() throws Exception{
 
 		//add file paths from class path
-		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, ".", PLUGIN_XML_FILE_NAME);
+		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, "PLUGIN-INF",PLUGIN_XML_FILE_NAME);
 		
-		for(URL url: urls) {
-			loadPlugin(url.openStream());
+		if((urls != null) && (urls.length > 0)) {
+			logger.info("Found " + urls.length + " files with name plugin.xml. Loading them now...");
+			
+			for(URL url: urls) {
+				logger.info("loading " + url.toString());
+				loadPlugin(url.openStream());
+			}
+		}
+		else {
+			logger.info("Could not find any file matching plugin.xml");
 		}
 	}
 	
