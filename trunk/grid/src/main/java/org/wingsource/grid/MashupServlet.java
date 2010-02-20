@@ -17,7 +17,6 @@
  */
 package org.wingsource.grid;
 
-import java.io.File;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,6 @@ public class MashupServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
-//			YacshConfig.init(new YacshModule());
 			String expr = request.getParameter("expr");
 			System.out.println(expr);
 			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
@@ -52,8 +50,9 @@ public class MashupServlet extends HttpServlet {
 	
 	public static void main(String[] args) {
 		try {
-			File f = new File("C:/Program Files/Apache Software Foundation/Tomcat 6.0/webapps/grid/WEB-INF/lib/yacsh-0.0.1-SNAPSHOT.jar");
-			System.out.println(f.exists());
+			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
+			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
+			pe.run(page, System.out);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
