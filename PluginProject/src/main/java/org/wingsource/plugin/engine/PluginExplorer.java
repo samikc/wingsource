@@ -17,31 +17,19 @@
  */
 package org.wingsource.plugin.engine;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.wingsource.plugin.OperandTypeResolverService;
 import org.wingsource.plugin.SymbolResolverService;
-import org.wingsource.plugin.engine.loader.PluginEngineClassLoader;
 import org.wingsource.plugin.lang.xml.wsp.Plugin;
 import org.wingsource.plugin.lang.xml.wsp.Plugins;
 import org.wingsource.plugin.util.ClasspathSearch;
@@ -58,9 +46,6 @@ public class PluginExplorer {
 	 */	
 	public static final Logger logger=Logger.getLogger(PluginExplorer.class.getName());
 
-	// The wsp => wingsource plugin
-	public final static  String PLUGIN_HOME_DIRECTORY_NAME = ".wsp"; 
-	
 	// The plugin XML file name
 	public final static String PLUGIN_XML_FILE_NAME = "plugin.xml";
 	
@@ -73,13 +58,9 @@ public class PluginExplorer {
 	 *  
 	 *  The public bootstrap method does all the trick to create this information.
 	 */
-	private Map<String, String> class2JarMapper = new HashMap<String, String>();
-	
 	private Map<String,String>  symbol2ClassMapper = new HashMap<String, String>();
 	
 	private static final PluginExplorer SINGLE_INSTANCE = new PluginExplorer();
-	
-	public PluginEngineClassLoader peCl = null;
 	
 	private PluginExplorer() {
 		this.bootstrap();
@@ -98,210 +79,76 @@ public class PluginExplorer {
 	 */
 	private void bootstrap() {
 		try {
-			this.loadAllJars();
+			this.loadPlugins();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void loadAllJars() throws Exception{
-		String commonDir = System.getProperty("user.home");
-		String dirName = (new StringBuilder().append(commonDir).append(File.separator).append(PLUGIN_HOME_DIRECTORY_NAME).append(File.separator)).toString();
-		logger.finest("Common Dir: " + commonDir);
-		
-		List<String> jarList = this.getAllJars(dirName);
-		this.loadInfo(jarList);
-		this.setContextClassLoader();
-	}
-	
-	private List<String> getAllJars(String directory) {
-		List<String> ret = new ArrayList<String>();
-		File dir = new File(directory);
-		for (String f : dir.list()) {
-			if (f.endsWith("jar")) {
-				ret.add(directory + f);
-			}
-		}
-		
+	private void loadPlugins() throws Exception{
+
 		//add file paths from class path
-		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, ".wsp", "*.jar");
+		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, ".", PLUGIN_XML_FILE_NAME);
 		
 		for(URL url: urls) {
-			ret.add(url.getFile());
+			loadPlugin(url.openStream());
 		}
-
-		URL[] urls1 = ClasspathSearch.instance().search(PluginExplorer.class, "WEB-INF", "*.jar");
-		
-		for(URL url: urls1) {
-			System.out.println("=====>"+url.getFile()+"<======");
-			ret.add(url.getFile());
-		}
-
-		
-		return ret;
-	}
-	
-	private void loadInfo(List<String> jarNameList) throws Exception{
-		JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.xml.wsp");
-		Unmarshaller unmarshaller = context.createUnmarshaller();
-		URL[] urlArray = new URL[jarNameList.size()];
-		int i = 0;
-		for (String jarFileName : jarNameList) {
-			try {
-				InputStream is = new ByteArrayInputStream(this.read(PLUGIN_XML_FILE_NAME, jarFileName));
-				Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
-				List<Plugin> pluginList = plugins.getPlugin();
-				File f = new File(jarFileName);
-				urlArray[i] = f.toURI().toURL();
-				i++;
-				for (Plugin p : pluginList) {
-					String clazz = p.getClazz();
-					String symbol = p.getId();
-					logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
-					this.class2JarMapper.put(clazz, jarFileName);
-					this.symbol2ClassMapper.put(symbol, clazz);
-					
-					
-				}
-			}
-			catch(Exception e) {
-				//do Nothing
-				logger.log(Level.SEVERE, e.getMessage());
-			}
-		}
-		this.peCl = new PluginEngineClassLoader(urlArray,Thread.currentThread().getContextClassLoader());
-	}
-	
-	private void setContextClassLoader() {
-		Thread.currentThread().setContextClassLoader(this.peCl);
-	}
-	
-	private byte[] read(String filename,String jarFileName) throws IOException {
-		FileInputStream fileStream = new FileInputStream(jarFileName);
-		ZipInputStream zis = new ZipInputStream(fileStream);
-		ZipEntry ze = null;
-		while ((ze = zis.getNextEntry())!= null && !ze.getName().equals(filename));
-		int size = (int)ze.getSize();
-		byte[] ret = new byte[size];
-		int rb=0;
-        int chunk=0;
-        while (((int)size - rb) > 0) {
-            chunk=zis.read(ret,rb,(int)size - rb);
-            if (chunk==-1) {
-               break;
-            }
-            rb+=chunk;
-        }
-        return ret;
 	}
 	
 	/**
-	 * Classpath Hack
-	 * 
-	 * taken from http://dev.eclipse.org/newslists/news.eclipse.platform/msg79732.html 
-	 * 
-	 * @param u
-	 * @throws IOException
+	 * @param openStream
 	 */
-	private void addURL(URLClassLoader cl, URL u) throws IOException {
-
-		final Class[] parameters = new Class[] { URL.class };
-
-		Class sysclass = URLClassLoader.class;
-
-		try {
-			Method method = sysclass.getDeclaredMethod("addURL", parameters);
-			method.setAccessible(true);
-			method.invoke(cl, new Object[] { u });
-			method.setAccessible(false);
-		} catch (Throwable t) {
-			logger.log(Level.SEVERE, t.getMessage(), t);
-			throw new IOException("Error, could not add URL to system classloader");
-		}// end try catch
-	}// end method
-	
-	private void addFileToClassLoader(File file) throws MalformedURLException, IOException {
-		/*
-		URLClassLoader scl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-		logger.info("scl:" + scl.getClass().getName());
-		this.addURL(scl, file.toURI().toURL());
+	private void loadPlugin(InputStream is) {
 		
-		for(URL url: scl.getURLs()) {
-			System.out.println(url.toString());
-		}
-
-				
-		URLClassLoader tcl = (URLClassLoader) Thread.currentThread().getContextClassLoader();
-		if(tcl != null) {
-			logger.info("tcl:" + tcl.getClass().getName());
-			this.addURL(tcl, file.toURI().toURL());
-		}
-		*/
-		URLClassLoader cl = (URLClassLoader) getClass( ).getClassLoader();
-		logger.info("cl:" + cl.getClass().getName());
-		if(cl != null) {
-			this.addURL(cl, file.toURI().toURL());
+		try {
+			JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.lang.xml.wsp");
+			Unmarshaller unmarshaller = context.createUnmarshaller();
 			
-			for(URL url: cl.getURLs()) {
-				System.out.println(url.toString());
+			Plugins plugins = (Plugins) unmarshaller.unmarshal(is);
+			List<Plugin> pluginList = plugins.getPlugin();
+			for (Plugin p : pluginList) {
+				String clazz = p.getClazz();
+				String symbol = p.getId();
+				logger.finest("Plugin class : "+clazz+ " symbol "+symbol);
+				this.symbol2ClassMapper.put(symbol, clazz);
 			}
 		}
-
+		catch(Exception e) {
+			//do Nothing
+			logger.log(Level.SEVERE, e.getMessage());
+		}
 	}
+
+	
 	
 	public SymbolResolverService getResolver(final OperandTypeResolverService otrs) {
 		return new SymbolResolverService() {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
-				
+				org.wingsource.plugin.Plugin ret = null;
 				try {
+					logger.finest("Symbol: " + symbol); 
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
+					logger.finest("class:" + className);
 					if(className!=null) {
-						String jarName = mgr.class2JarMapper.get(className);
-						if(jarName != null) {
-							File f = new File(jarName);
-							//mgr.addFileToClassLoader(f);
-							//Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
-							logger.info("loading class:"+className);
-							//Class clazz = getClass().getClassLoader().loadClass(className);
-							ClassLoader cl = Thread.currentThread().getContextClassLoader();
-							System.out.println(cl.getClass().getCanonicalName());
-							Class clazz = mgr.peCl.loadClass(className);
-							Class pluginClass = mgr.peCl.loadClass("org.wingsource.plugin.Plugin");
-							
-							System.out.println("THE CLAZZ : "+clazz.getCanonicalName());
-							//Thread.currentThread().setContextClassLoader(mgr.peCl);
-							ClassLoader cl1 = Thread.currentThread().getContextClassLoader();
-							System.out.println(cl1.getClass().getCanonicalName());
-							Object o = clazz.newInstance();
-							
-							Constructor ctor = o.getClass().getConstructor();
-							
-							Object obj = ctor.newInstance();
-							org.wingsource.plugin.Plugin ret = null;
-							System.out.println("========================================");
-							System.out.println("TTTT0"+pluginClass.getClassLoader());
-							System.out.println("TTTT1"+org.wingsource.plugin.Plugin.class.getClassLoader());
-							System.out.println("TTTT2"+obj.getClass().getClassLoader());
-
-							ret =  (org.wingsource.plugin.Plugin) obj;
-
-							return ret;
-							//Thread.currentThread().setContextClassLoader(cl);
-						}
+						
+						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
+						ret = (org.wingsource.plugin.Plugin) clazz.newInstance();
 					}
-					/*
 					else {
 						//the symbol may be an operand so try to get it's type.
 						if(otrs != null) {
 							String type = otrs.resolve(symbol);
-							ret = this.resolve(type);
+							logger.finest("type:" + type);
+							if(type != null) {
+								ret = this.resolve(type);
+							}
 						}
-					}*/
+					}
 				}catch(Exception e) {
 					logger.log(Level.SEVERE, e.getMessage(), e);
 				}
-				return null;
+				return ret;
 			}
 		};
 	}
