@@ -28,7 +28,37 @@
       <groupId>org.wingsource</groupId>
       <artifactId>plugin</artifactId>
       <version>1.0-SNAPSHOT</version>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.gadget</groupId>
+      <artifactId>GadgetPlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>        
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.layout</groupId>
+      <artifactId>LayoutPlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.link</groupId>
+      <artifactId>LinkPlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.url</groupId>
+      <artifactId>URLPlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.page</groupId>
+      <artifactId>PagePlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.wingsource.plugin.impl.transformer</groupId>
+      <artifactId>TransformerPlugin</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
     <build>
 	<plugins>
