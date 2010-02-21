@@ -64,10 +64,10 @@ public class TransformerPlugin implements Plugin {
 		byte[] op2 = (byte[])operandList.get(1);
 		
 		String xml = op1.toString();
-		String xsl = new String(op2);
+		byte[] xsl = op2;
 		
 		StreamSource xmlSource = new StreamSource(new ByteArrayInputStream(xml.getBytes()));
-		StreamSource xslSource = new StreamSource(new ByteArrayInputStream(xsl.getBytes()));
+		StreamSource xslSource = new StreamSource(new ByteArrayInputStream(xsl));
 		
 		//Get a transformer factory object
 		TransformerFactory xformFactory = TransformerFactory.newInstance();
