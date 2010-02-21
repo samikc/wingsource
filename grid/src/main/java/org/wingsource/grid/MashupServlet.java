@@ -33,10 +33,14 @@ public class MashupServlet extends HttpServlet {
 			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
 			String expr = request.getParameter("expr");
 			System.out.println(expr);
-			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
+			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsGadgets wingsDnd wings) xform)";
 			if (expr != null) {
 				page = expr;
 			}
+			
+			//TODO: Need to find out how content type can be set dynamically
+			response.setContentType("text/html");
+			
 			pe.run(page, response.getOutputStream());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -51,7 +55,7 @@ public class MashupServlet extends HttpServlet {
 	public static void main(String[] args) {
 		try {
 			PluginEngine pe = new PluginEngine(new GridOperandTypeResolver());
-			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsDnd wings) xform)";
+			String page = "(xslt (page (l g1 g2 33) (l g1 g2 33) (l g1 g2 33) wingskin shindigRpc shindigCookies shindigUtil shindigGadgets shindigUserPref jquery jqueryui wingsGadgets wingsDnd wings) xform)";
 			pe.run(page, System.out);
 		}
 		catch(Exception e) {
