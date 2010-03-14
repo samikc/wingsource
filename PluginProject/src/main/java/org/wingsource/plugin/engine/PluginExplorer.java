@@ -134,10 +134,10 @@ public class PluginExplorer {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
 				org.wingsource.plugin.Plugin ret = null;
 				try {
-					logger.finest("Symbol: " + symbol); 
+					logger.info("Symbol: " + symbol); 
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
-					logger.finest("class:" + className);
+					logger.info("class:" + className);
 					if(className!=null) {
 						
 						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
@@ -147,7 +147,7 @@ public class PluginExplorer {
 						//the symbol may be an operand so try to get it's type.
 						if(otrs != null) {
 							String type = otrs.resolve(symbol);
-							logger.finest("type:" + type);
+							logger.info("type:" + type);
 							if(type != null) {
 								ret = this.resolve(type);
 							}
