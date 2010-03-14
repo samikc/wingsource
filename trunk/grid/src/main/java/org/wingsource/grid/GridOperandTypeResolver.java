@@ -74,7 +74,9 @@ public class GridOperandTypeResolver implements OperandTypeResolverService {
 	 * @see org.wingsource.plugin.TypeResolverService#resolve(java.lang.String)
 	 */
 	public String resolve(String symbol) {
-			return TYPE_MAP.get(symbol);
+			String type = TYPE_MAP.get(symbol);
+			System.out.println("GridOperandTypeResolver::resolve("+symbol+") returned type=" + type);
+			return type;
 	}
 
 }
