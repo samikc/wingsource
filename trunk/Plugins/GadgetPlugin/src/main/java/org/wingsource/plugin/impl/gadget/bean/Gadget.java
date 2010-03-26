@@ -17,6 +17,8 @@
  */
 package org.wingsource.plugin.impl.gadget.bean;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import java.io.InputStream;
@@ -32,6 +34,7 @@ import javax.xml.bind.Unmarshaller;
 import org.wingsource.plugin.impl.gadget.GadgetService;
 import org.wingsource.plugin.impl.gadget.xml.Module;
 import org.wingsource.plugin.impl.gadget.xml.Module.Content;
+import org.wingsource.plugin.impl.gadget.xml.Module.ModulePrefs;
 
 
 import com.google.inject.Inject;
@@ -45,14 +48,17 @@ public class Gadget implements Cloneable{
 	// Constant for new line
 	private static final String NEWLINE = "\n";
 	private static final Logger log = Logger.getLogger(Gadget.class.getName());
+	private static final String RENDER_INLINE = "inline"; //a reserved keyword for inline html.
 	
 	private UUID uuid;
 	private String id;
 	private org.wingsource.plugin.impl.gadget.GadgetService gadgetService;
 	private String title = null;
 	private String gadgetUrl;
+	private String render;
 	private ArrayList<String> views = new ArrayList<String>();
 	private int height;
+	private byte[] content = null;
 	
 	@Inject
 	public Gadget(GadgetService gadgetService) {
@@ -75,7 +81,9 @@ public class Gadget implements Cloneable{
 				this.gadgetUrl = url.toString();
 				InputStream is = url.openStream();
 				Module module = (Module)unmarshaller.unmarshal(is);
-				this.title = module.getModulePrefs().getTitle();
+				ModulePrefs mPrefs = module.getModulePrefs();
+				this.title = mPrefs.getTitle();
+				this.render = mPrefs.getRenderInline();
 				List<Content> contents = module.getContent();
 				Integer h = module.getModulePrefs().getHeight();
 				if(h != null) {
@@ -83,10 +91,16 @@ public class Gadget implements Cloneable{
 				}
 				for (Content c : contents) {
 					String v = c.getView();
+					String href = c.getHref();
+					if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
+						this.content = this.getContent(href);
+					}
+
 					if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
 						views.add(c.getView());
 					}
 				}
+				
 			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -97,6 +111,28 @@ public class Gadget implements Cloneable{
 		}
 	}
 	
+	private byte[] getContent(String href) {
+		ByteArrayOutputStream buf = new ByteArrayOutputStream(); 
+		try {
+			URL url = new URL(href);
+			InputStream in = url.openStream();
+			
+			BufferedInputStream bis = new BufferedInputStream(in); 
+		    
+		    int result = bis.read(); 
+		    while(result != -1) { 
+		      byte b = (byte)result; 
+		      buf.write(b); 
+		      result = bis.read(); 
+		    } 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return buf.toByteArray();
+	}
+
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
@@ -113,6 +149,13 @@ public class Gadget implements Cloneable{
 				sbuild.append("<view>").append(s).append("</view>").append(this.NEWLINE);
 			}
 			sbuild.append("</views>").append(this.NEWLINE);
+		}
+		if(this.content != null) {
+			sbuild.append("<content>").append(NEWLINE);
+			sbuild.append("<![CDATA[").append(NEWLINE);
+			sbuild.append(new String(this.content));
+			sbuild.append("]]>").append(NEWLINE);
+			sbuild.append("</content>").append(NEWLINE);
 		}
 		sbuild.append("</gadget>").append(this.NEWLINE);
 		long t2 = System.currentTimeMillis();
