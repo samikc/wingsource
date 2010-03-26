@@ -60,10 +60,7 @@ public class LayoutPlugin implements Plugin {
 		Layout layout = new Layout();
 
 		for (Object o : operandList) {
-			if(o instanceof byte[]) {
-				layout.add((byte[]) o);
-			}
-			else if(o instanceof Gadget) {
+			if(o instanceof Gadget) {
 				layout.add((Gadget)o);
 			}
 			else {

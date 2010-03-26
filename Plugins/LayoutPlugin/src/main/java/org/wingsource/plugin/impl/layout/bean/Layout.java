@@ -31,7 +31,7 @@ public class Layout {
 	private String layoutXml;
 	private static final String NEWLINE = "\n";
 	private Integer width;
-	private List<Object> contentList = new ArrayList<Object>();
+	private List<Gadget> contentList = new ArrayList<Gadget>();
 
 	public String getLayoutXml() {
 		return layoutXml;
@@ -45,27 +45,13 @@ public class Layout {
 		StringBuilder sbuild = new StringBuilder();
 		sbuild.append("<layout>").append(NEWLINE);
 		sbuild.append("<width>").append(width.toString()).append("</width>").append(NEWLINE);
-		for (Object content : contentList) {
-			if(content instanceof Gadget) {
-				sbuild.append(((Gadget)content).toXml());
-			}
-			else if(content instanceof byte[]) {
-				sbuild.append(this.toInlineContentXml((byte[])content));
-			}
+		for (Gadget gadget : contentList) {
+				sbuild.append(gadget.toXml());
 		}
 		sbuild.append("</layout>").append(NEWLINE);
 		return sbuild.toString();
 	}
 
-	private String toInlineContentXml(byte[] content) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<content>").append(NEWLINE);
-		sb.append("<![CDATA[").append(NEWLINE);
-		sb.append(new String(content));
-		sb.append("]]>").append(NEWLINE);
-		sb.append("</content>").append(NEWLINE);
-		return sb.toString();
-	}
 
 	/**
 	 * @return the width
@@ -85,11 +71,7 @@ public class Layout {
 		this.contentList.add(g);
 	}
 	
-	public void add(byte[] inlineContent) {
-		this.contentList.add(inlineContent);
+	public List<Gadget> getGadgetList() {
+		return this.contentList;
 	}
-	
-//	public List<Gadget> getGadgetList() {
-//		return this.contentList;
-//	}
 }
