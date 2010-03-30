@@ -58,15 +58,23 @@ public class PluginEngine {
 	}
 	
 	public void run(String expression, OutputStream os) throws IOException, RecognitionException {
-		PluginResponse pRes = this.run(expression);
+		this.run(expression, null, os);
+	}
+	
+	public void run(String expression, PluginRequest request, OutputStream os) throws IOException, RecognitionException {
+		PluginResponse pRes = this.run(expression, request);
 		Object obj = pRes.getResponse();
 		String out = obj.toString();
 		os.write(out.getBytes());
 	}
-	
+
 	public PluginResponse run(String expression) throws IOException, RecognitionException {
+		return this.run(expression, (PluginRequest) null);
+	}
+	
+	public PluginResponse run(String expression, PluginRequest request) throws IOException, RecognitionException {
 		Operation operation = Operation.toOperation(expression);
-		return pMgr.execute(operation, srs);
+		return pMgr.execute(operation, request, srs);
 	}
 
 	private class PluginServiceManager {
@@ -83,6 +91,7 @@ public class PluginEngine {
 			private PluginServiceManager pluginServiceManager;
 			private Operand operand;
 			private SymbolResolverService srs;
+			private PluginRequest pluginRequest = null;
 			private PluginResponse pluginResponse = null;
 			
 			/**
@@ -92,9 +101,10 @@ public class PluginEngine {
 			 * @param operand
 			 * @param srs
 			 */
-			public SymbolResolver(PluginServiceManager pMgr, Operand operand, SymbolResolverService srs) {
+			public SymbolResolver(PluginServiceManager pMgr, Operand operand, PluginRequest request, SymbolResolverService srs) {
 				this.pluginServiceManager = pMgr;
 				this.operand = operand;
+				this.pluginRequest = request;
 				this.srs = srs;
 			}
 
@@ -106,10 +116,10 @@ public class PluginEngine {
 				try {
 					switch(this.operand.type()) {
 					case ATOM:
-						this.pluginResponse = this.pluginServiceManager.execute((String) this.operand.value(), srs);
+						this.pluginResponse = this.pluginServiceManager.execute((String) this.operand.value(), this.pluginRequest, srs);
 						break;
 					case OPERATION:
-						this.pluginResponse = this.pluginServiceManager.execute((Operation)operand.value(), srs);
+						this.pluginResponse = this.pluginServiceManager.execute((Operation)operand.value(), this.pluginRequest, srs);
 						break;
 					}
 
@@ -129,13 +139,13 @@ public class PluginEngine {
 		}
 		/**************************** END OF OperandResolver class *************************************/
 		
-		public PluginResponse execute(Operation operation,SymbolResolverService srs) throws IOException, RecognitionException {
+		public PluginResponse execute(Operation operation, PluginRequest request, SymbolResolverService srs) throws IOException, RecognitionException {
 			
 			Plugin pluglet = srs.resolve(operation.operator());
 			List<Object> operandList = new ArrayList<Object>();
 			ThreadList<SymbolResolver> oList = new ThreadList<SymbolResolver>(operation.operator());
 			for (Operand op : operation.operands()) {
-				oList.add(new SymbolResolver(this, op, srs));
+				oList.add(new SymbolResolver(this, op, request, srs));
 			}
 
 			oList.execute();
@@ -144,7 +154,7 @@ public class PluginEngine {
 				operandList.add(pResponse.getResponse());
 			}
 			
-			PluginRequest pRequest = new Request();
+			PluginRequest pRequest = request == null ? new Request() : request;
 			pRequest.setAttribute(PluginRequest.ID, operation.operator());
 			pRequest.setAttribute(PluginRequest.OPERANDS, operandList);
 			PluginResponse presponse = new Response(null);
@@ -154,7 +164,7 @@ public class PluginEngine {
 			return presponse;
 		}
 
-		public PluginResponse execute(String symbol,SymbolResolverService srs) throws IOException, RecognitionException {
+		public PluginResponse execute(String symbol, PluginRequest request, SymbolResolverService srs) throws IOException, RecognitionException {
 			
 			Plugin pluglet = srs.resolve(symbol);
 			PluginResponse presponse = new Response(null);
@@ -162,7 +172,7 @@ public class PluginEngine {
 				presponse.setResponse(symbol);
 				return presponse;
 			}
-			PluginRequest pRequest = new Request();
+			PluginRequest pRequest = request == null ? new Request() : request;
 			pRequest.setAttribute(PluginRequest.ID, symbol);
 			pluglet.init();
 			pluglet.service(pRequest, presponse);
