@@ -61,6 +61,7 @@ public class GadgetPlugin implements Plugin {
 	 */
 	public void service(PluginRequest request, PluginResponse response) {
 		String id = (String) request.getAttribute(PluginRequest.ID);
+		
 //		logger.info(id);
 		
 		if(this.cache.containsKey(id)) {
