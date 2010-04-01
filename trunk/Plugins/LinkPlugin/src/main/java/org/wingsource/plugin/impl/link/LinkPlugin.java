@@ -57,7 +57,8 @@ public class LinkPlugin implements Plugin {
 		String id = (String) request.getAttribute(PluginRequest.ID);
 		Injector i = Guice.createInjector(new LinkModule());
 		LinkFactory lf = i.getInstance(LinkFactory.class);
-		Link link = lf.get(id);
-		response.setResponse(link);
+		Link[] links = lf.get(id);
+		
+		response.setResponse(links);
 	}
 }
