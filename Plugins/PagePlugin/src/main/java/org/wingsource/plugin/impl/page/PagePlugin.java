@@ -57,8 +57,11 @@ public class PagePlugin implements Plugin {
 		List<Layout> layoutList = new ArrayList<Layout>();
 		List<Link>   linkList = new ArrayList<Link>();
 		for (Object o : list) {
-			if (o instanceof Link) {
-				linkList.add((Link)o);
+			if (o instanceof Link[]) {
+				Link[] links = (Link[])o;
+				for(Link link: links) {
+					linkList.add(link);
+				}
 			}
 			if (o instanceof Layout) {
 				layoutList.add((Layout) o);
@@ -66,11 +69,11 @@ public class PagePlugin implements Plugin {
 		}
 		StringBuilder sbuild = new StringBuilder();
 		sbuild.append("<page>").append(NEWLINE);
-		sbuild.append("<layouts>").append(NEWLINE);
+		sbuild.append("<panels>").append(NEWLINE);
 		for (Layout l : layoutList) {
 			sbuild.append(l.toXml()).append(NEWLINE);
 		}
-		sbuild.append("</layouts>").append(NEWLINE);
+		sbuild.append("</panels>").append(NEWLINE);
 		sbuild.append("<links>").append(NEWLINE);
 		for (Link link : linkList) {
 			sbuild.append(link.toString());
