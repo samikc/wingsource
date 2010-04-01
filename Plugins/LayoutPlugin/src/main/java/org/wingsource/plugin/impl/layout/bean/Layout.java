@@ -43,12 +43,12 @@ public class Layout {
 	
 	public String toXml() {
 		StringBuilder sbuild = new StringBuilder();
-		sbuild.append("<layout>").append(NEWLINE);
+		sbuild.append("<panel>").append(NEWLINE);
 		sbuild.append("<width>").append(width.toString()).append("</width>").append(NEWLINE);
 		for (Gadget gadget : contentList) {
 				sbuild.append(gadget.toXml());
 		}
-		sbuild.append("</layout>").append(NEWLINE);
+		sbuild.append("</panel>").append(NEWLINE);
 		return sbuild.toString();
 	}
 
