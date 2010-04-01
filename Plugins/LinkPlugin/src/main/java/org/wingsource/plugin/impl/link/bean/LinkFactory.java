@@ -17,6 +17,8 @@
  */
 package org.wingsource.plugin.impl.link.bean;
 
+import java.util.ArrayList;
+
 import org.wingsource.plugin.impl.link.LinkService;
 import org.wingsource.plugin.impl.link.LinkService.Mime;
 
@@ -28,6 +30,7 @@ import com.google.inject.Inject;
  */
 public class LinkFactory {
 
+	public static final String LINK_DELIMITER = "~";
 	private LinkService linkService;
 	
 	@Inject
@@ -37,20 +40,28 @@ public class LinkFactory {
 	}
 
 
-	public Link get(String id) {
-		String url = linkService.getLinkUrl(id);
+	public Link[] get(String id) {
+
+		String complexUrl = linkService.getLinkUrl(id);
+		String[] urls = complexUrl.split(LINK_DELIMITER);
+		ArrayList<Link> links = new ArrayList<Link>();
 		Mime type = linkService.getType(id);
-		Link ret = null;
-		switch(type) {
-			case JS:	ret = new Link(id, url, "js", "src", "script");
-						break;
-			
-			case CSS:	ret = new Link(id, url, "CSS", "href", "link");
-						break;
-						
-			default:	break;
+		for(String url:urls) {
+			Link link = null;
+			switch(type) {
+				case JS:	link = new Link(id, url, "js", "src", "script");
+							break;
+				
+				case CSS:	link = new Link(id, url, "CSS", "href", "link");
+							break;
+							
+				default:	break;
+			}
+			links.add(link);
 		}
-		return ret;
+		Link[] linkArr = new Link[links.size()];
+		linkArr = links.toArray(linkArr);
+		return linkArr;
 	}
 
 }
