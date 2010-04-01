@@ -17,20 +17,23 @@
  */
 package org.wingsource.plugin.impl.gadget.bean;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.wingsource.plugin.impl.gadget.GadgetService;
 import org.wingsource.plugin.impl.gadget.xml.Module;
 import org.wingsource.plugin.impl.gadget.xml.Module.Content;
@@ -44,7 +47,9 @@ import com.google.inject.Inject;
  *
  */
 public class Gadget implements Cloneable{
-
+	
+	private static final Logger logger = Logger.getLogger(Gadget.class.getName());
+	
 	// Constant for new line
 	private static final String NEWLINE = "\n";
 	private static final Logger log = Logger.getLogger(Gadget.class.getName());
@@ -111,26 +116,45 @@ public class Gadget implements Cloneable{
 		}
 	}
 	
-	private byte[] getContent(String href) {
-		ByteArrayOutputStream buf = new ByteArrayOutputStream(); 
-		try {
-			URL url = new URL(href);
-			InputStream in = url.openStream();
-			
-			BufferedInputStream bis = new BufferedInputStream(in); 
-		    
-		    int result = bis.read(); 
-		    while(result != -1) { 
-		      byte b = (byte)result; 
-		      buf.write(b); 
-		      result = bis.read(); 
-		    } 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//	private byte[] getContent(String href) {
+//		ByteArrayOutputStream buf = new ByteArrayOutputStream(); 
+//		try {
+//			URL url = new URL(href);
+//			InputStream in = url.openStream();
+//			
+//			BufferedInputStream bis = new BufferedInputStream(in); 
+//		    
+//		    int result = bis.read(); 
+//		    while(result != -1) { 
+//		      byte b = (byte)result; 
+//		      buf.write(b); 
+//		      result = bis.read(); 
+//		    } 
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return buf.toByteArray();
+//	}
+
+	private static byte[] getContent(String href) {
+		System.out.println("Fetching content using HttpClient....");
+		HttpClient hc = new HttpClient();
+		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+		HttpMethod method = new GetMethod(href);
+		method.setFollowRedirects(true);
 		
-		return buf.toByteArray();
+		byte[] response = null;
+		try {
+			hc.executeMethod(method);
+			response = method.getResponseBody();
+		} catch (HttpException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return response;
 	}
 
 	public String toXml() {
