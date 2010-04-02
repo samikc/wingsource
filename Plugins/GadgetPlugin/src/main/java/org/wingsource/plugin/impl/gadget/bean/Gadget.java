@@ -84,8 +84,7 @@ public class Gadget implements Cloneable{
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				URL url = gadgetService.getGadgetXmlUrl(this.id);
 				this.gadgetUrl = url.toString();
-				InputStream is = url.openStream();
-				Module module = (Module)unmarshaller.unmarshal(is);
+				Module module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
 				ModulePrefs mPrefs = module.getModulePrefs();
 				this.title = mPrefs.getTitle();
 				this.render = mPrefs.getRenderInline();
@@ -109,37 +108,12 @@ public class Gadget implements Cloneable{
 			} catch (JAXBException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}
 	
-//	private byte[] getContent(String href) {
-//		ByteArrayOutputStream buf = new ByteArrayOutputStream(); 
-//		try {
-//			URL url = new URL(href);
-//			InputStream in = url.openStream();
-//			
-//			BufferedInputStream bis = new BufferedInputStream(in); 
-//		    
-//		    int result = bis.read(); 
-//		    while(result != -1) { 
-//		      byte b = (byte)result; 
-//		      buf.write(b); 
-//		      result = bis.read(); 
-//		    } 
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		return buf.toByteArray();
-//	}
-
 	private static byte[] getContent(String href) {
-		System.out.println("Fetching content using HttpClient....");
+		logger.info("Fetching content using HttpClient....");
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
@@ -157,6 +131,26 @@ public class Gadget implements Cloneable{
 		return response;
 	}
 
+	private static InputStream getContentStream(String href) {
+		logger.info("Fetching content using HttpClient....");
+		HttpClient hc = new HttpClient();
+		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+		HttpMethod method = new GetMethod(href);
+		method.setFollowRedirects(true);
+		
+		InputStream responseStream = null;
+		try {
+			hc.executeMethod(method);
+			responseStream = method.getResponseBodyAsStream();
+		} catch (HttpException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+		return responseStream;
+	}
+	
+	
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
