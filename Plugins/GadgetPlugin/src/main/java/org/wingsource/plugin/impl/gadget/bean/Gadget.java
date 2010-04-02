@@ -64,7 +64,7 @@ public class Gadget implements Cloneable{
 	private ArrayList<String> views = new ArrayList<String>();
 	private int height;
 	private byte[] content = null;
-	
+	private String userId;
 	@Inject
 	public Gadget(GadgetService gadgetService) {
 		super();
@@ -76,47 +76,47 @@ public class Gadget implements Cloneable{
 		return id;
 	}
 
-	public void setId(String id) {
-		if(this.id != id) {
-			this.id = id;
-			try {
-				JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
-				Unmarshaller unmarshaller = context.createUnmarshaller();
-				URL url = gadgetService.getGadgetXmlUrl(this.id);
-				this.gadgetUrl = url.toString();
-				Module module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
-				ModulePrefs mPrefs = module.getModulePrefs();
-				this.title = mPrefs.getTitle();
-				this.render = mPrefs.getRenderInline();
-				List<Content> contents = module.getContent();
-				Integer h = module.getModulePrefs().getHeight();
-				if(h != null) {
-					this.height = h;
-				}
-				for (Content c : contents) {
-					String v = c.getView();
-					String href = c.getHref();
-					if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
-						this.content = this.getContent(href);
-					}
-
-					if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
-						views.add(c.getView());
-					}
-				}
-				
-			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void load(String userId, String id) {
+		this.id = id;
+		this.userId = userId;
+		try {
+			JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			URL url = gadgetService.getGadgetXmlUrl(this.id);
+			this.gadgetUrl = url.toString();
+			Module module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
+			ModulePrefs mPrefs = module.getModulePrefs();
+			this.title = mPrefs.getTitle();
+			this.render = mPrefs.getRenderInline();
+			List<Content> contents = module.getContent();
+			Integer h = module.getModulePrefs().getHeight();
+			if(h != null) {
+				this.height = h;
 			}
+			for (Content c : contents) {
+				String v = c.getView();
+				String href = c.getHref();
+				if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
+					this.content = this.getContent(userId, href);
+				}
+
+				if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
+					views.add(c.getView());
+				}
+			}
+			
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	private static byte[] getContent(String href) {
+	private static byte[] getContent(String userId, String href) {
 		logger.info("Fetching content using HttpClient....");
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
+		method.setRequestHeader("xx-wings-user-id", userId);
 		method.setFollowRedirects(true);
 		
 		byte[] response = null;

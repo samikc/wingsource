@@ -38,8 +38,6 @@ public class GadgetPlugin implements Plugin {
 
 	private static final Logger logger = Logger.getLogger(GadgetPlugin.class.getName());
 	
-	private static final Map<String, Gadget> cache = new HashMap<String, Gadget>();
-	
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Pluglet#destroy()
 	 */
@@ -64,20 +62,14 @@ public class GadgetPlugin implements Plugin {
 		
 //		logger.info(id);
 		
-		if(this.cache.containsKey(id)) {
-			try {
-				response.setResponse(cache.get(id).clone());
-			} catch (CloneNotSupportedException e) {
-				logger.log(Level.SEVERE, "Couldn't clone gadget with id:" + id, e);
-			}
-		}
-		else {
-			Injector i = Guice.createInjector(new GadgetModule());
-			Gadget g = i.getInstance(Gadget.class);
-			g.setId(id);
-			this.cache.put(id, g);
-			response.setResponse(g);	
-		}
+		//check if request contains user id
+		String userId = (String) request.getAttribute("user.id");
+		logger.info("User Id" + userId);
+		
+		Injector i = Guice.createInjector(new GadgetModule());
+		Gadget g = i.getInstance(Gadget.class);
+		g.load(userId, id);
+		response.setResponse(g);	
 	}
 
 }
