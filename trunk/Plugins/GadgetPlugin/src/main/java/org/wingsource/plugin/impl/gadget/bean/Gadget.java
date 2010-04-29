@@ -30,10 +30,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.wingsource.plugin.impl.gadget.GadgetService;
 import org.wingsource.plugin.impl.gadget.xml.Module;
 import org.wingsource.plugin.impl.gadget.xml.Module.Content;
@@ -112,11 +114,11 @@ public class Gadget implements Cloneable{
 	}
 	
 	private static byte[] getContent(String userId, String href) {
-		logger.info("Fetching content using HttpClient....");
+		logger.info("Fetching content using HttpClient....user-Id: " + userId);
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
-		method.setRequestHeader("xx-wings-user-id", userId);
+		method.addRequestHeader("xx-wings-user-id", userId);
 		method.setFollowRedirects(true);
 		
 		byte[] response = null;
