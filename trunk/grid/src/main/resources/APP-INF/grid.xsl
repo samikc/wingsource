@@ -16,13 +16,21 @@
 	</xsl:for-each>
 	</head>
 	<body>
-	<xsl:for-each select="//layout">
-		<ul class="column" style='width:{width}%'>
-		<xsl:for-each select="gadget">
-			<li id='{uuid}' class="gadgets-gadget-chrome" spec='{url}'><xsl:value-of select="title"></xsl:value-of></li>		
-		</xsl:for-each>
-		</ul>
-	</xsl:for-each>
+			<xsl:for-each select="//panel">
+				<ul class="column" style='width:{width}%'>
+				<xsl:for-each select="gadget">
+					<xsl:choose>
+						<xsl:when test="content">
+							<li id='{uuid}' spec='{url}'><xsl:value-of select="content" disable-output-escaping="yes" ></xsl:value-of></li>
+						</xsl:when>
+						<xsl:otherwise>
+							<li id='{uuid}' class="gadgets-gadget-chrome" spec='{url}'><xsl:value-of select="title"></xsl:value-of></li>
+						</xsl:otherwise>
+					</xsl:choose>
+							
+				</xsl:for-each>
+				</ul>
+			</xsl:for-each>
 	</body>
 	<xsl:for-each select="//link[@type='js']">
 		<script type="text/javascript" src="{@url}"></script>
