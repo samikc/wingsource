@@ -39,7 +39,7 @@ import org.wingsource.plugin.util.ThreadList;
  *
  */
 public class PluginEngine {
-	private static final Logger logger=Logger.getLogger(Operation.class.getName());
+	private static final Logger logger=Logger.getLogger(PluginEngine.class.getName());
 	
 	SymbolResolverService srs;
 	PluginServiceManager pMgr;
@@ -165,17 +165,22 @@ public class PluginEngine {
 		}
 
 		public PluginResponse execute(String symbol, PluginRequest request, SymbolResolverService srs) throws IOException, RecognitionException {
-			
 			Plugin pluglet = srs.resolve(symbol);
+			
 			PluginResponse presponse = new Response(null);
 			if (pluglet == null) {
 				presponse.setResponse(symbol);
 				return presponse;
 			}
+			logger.info("Symbol:"+ symbol + " pluglet:" + pluglet.getClass().getName());
 			PluginRequest pRequest = request == null ? new Request() : request;
-			pRequest.setAttribute(PluginRequest.ID, symbol);
-			pluglet.init();
-			pluglet.service(pRequest, presponse);
+			
+			pluglet.init();			
+			//synchronize plugin request to avoid thread switching after plugin id has been set in the request.
+			synchronized(pRequest) {
+				pRequest.setAttribute(PluginRequest.ID, symbol);
+				pluglet.service(pRequest, presponse);
+			}
 			pluglet.destroy();
 			return presponse;
 		}
