@@ -137,7 +137,7 @@ public class PluginExplorer {
 					logger.info("Symbol: " + symbol); 
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
-					logger.info("class:" + className);
+					logger.info("Symbol: " + symbol + "class:" + className);
 					if(className!=null) {
 						
 						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
