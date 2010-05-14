@@ -97,39 +97,44 @@ public class URLPlugin implements Plugin {
 	 * @see org.wingsource.plugin.Plugin#service(org.wingsource.plugin.PluginRequest, org.wingsource.plugin.PluginResponse)
 	 */
 	public void service(PluginRequest request, PluginResponse response) {
-		
-		String pluginId = (String) request.getAttribute(PluginRequest.ID);
-		String u = URL_MAP.get(pluginId);
-		URL url = null;
-		//Handle classpath search separately as it is a proprietary implementation
-		if(u.startsWith("cp://")) {
-			String u1 = u.substring("cp://".length());
-			int lastSlashIndex = u1.lastIndexOf("/");
-			String folderName = null;
-			String wildcard = null;
-			if(lastSlashIndex == -1) {
-				folderName = ".";
-				wildcard = u1;
+		try {
+			String pluginId = (String) request.getAttribute(PluginRequest.ID);
+			String u = URL_MAP.get(pluginId);
+			URL url = null;
+			logger.info("PluginId:" +pluginId+ "Url:" + u);
+			//Handle classpath search separately as it is a proprietary implementation
+			if(u.startsWith("cp://")) {
+				String u1 = u.substring("cp://".length());
+				int lastSlashIndex = u1.lastIndexOf("/");
+				String folderName = null;
+				String wildcard = null;
+				if(lastSlashIndex == -1) {
+					folderName = ".";
+					wildcard = u1;
+				}
+				else {
+					folderName = u1.substring(0, lastSlashIndex);
+					wildcard = u1.substring(lastSlashIndex + 1);
+				}
+				URL[] urls = ClasspathSearch.instance().search(URLPlugin.class, folderName, wildcard);
+				if((urls != null) && (urls.length > 0)) {
+					url = urls[0];
+				}
 			}
 			else {
-				folderName = u1.substring(0, lastSlashIndex);
-				wildcard = u1.substring(lastSlashIndex + 1);
+				try {
+					url = new URL(u);
+				} catch (MalformedURLException e) {
+					logger.log(Level.SEVERE, e.getMessage(), e);
+				}
 			}
-			URL[] urls = ClasspathSearch.instance().search(URLPlugin.class, folderName, wildcard);
-			if((urls != null) && (urls.length > 0)) {
-				url = urls[0];
-			}
+			
+			//Got the URL. Lets set it in the response
+			response.setResponse(this.getContent(url));
 		}
-		else {
-			try {
-				url = new URL(u);
-			} catch (MalformedURLException e) {
-				logger.log(Level.SEVERE, e.getMessage(), e);
-			}
+		catch(Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		
-		//Got the URL. Lets set it in the response
-		response.setResponse(this.getContent(url));
 	}
 	
 	private byte[] getContent(URL url) {
