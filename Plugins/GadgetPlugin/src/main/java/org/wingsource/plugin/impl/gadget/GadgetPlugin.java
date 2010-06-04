@@ -27,7 +27,7 @@ import com.google.inject.Injector;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -60,16 +60,36 @@ public class GadgetPlugin implements Plugin {
 	public void service(PluginRequest request, PluginResponse response) {
 		String id = (String) request.getAttribute(PluginRequest.ID);
 		
-//		logger.info(id);
-		
 		//check if request contains user id
-		String userId = (String) request.getAttribute("token.id");
-		logger.info("User Id" + userId);
+		String tokenId = (String) request.getAttribute(PluginRequest.TOKEN_ID);
+		logger.info("User Id" + tokenId);
 		
 		Injector i = Guice.createInjector(new GadgetModule());
 		Gadget g = i.getInstance(Gadget.class);
-		g.load(userId, id);
+		Map<String, String> params = this.toMap(request);
+		g.load(tokenId, id, params);
 		response.setResponse(g);	
 	}
-
+	
+	private Map<String, String> toMap(PluginRequest request) {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		Set<Object> keys = request.keySet();
+		
+		for(Object k: keys) {
+			if(k instanceof String) {
+				String key = (String) k;
+				Object v = request.getAttribute(key);
+				
+				//skip reserved attributes
+				if(key.equals(PluginRequest.ID) || key.equals(PluginRequest.OPERANDS) || key.equals(PluginRequest.TOKEN_ID)) continue;
+				if(v instanceof String) {
+					String value = (String) v;
+					map.put(key, value);
+				}
+			}
+		}
+		
+		return map;
+	}
 }
