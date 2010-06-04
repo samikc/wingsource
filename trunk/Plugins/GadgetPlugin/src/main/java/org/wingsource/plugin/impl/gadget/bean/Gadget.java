@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +36,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.wingsource.plugin.impl.gadget.GadgetService;
@@ -78,9 +81,9 @@ public class Gadget implements Cloneable{
 		return id;
 	}
 
-	public void load(String userId, String id) {
+	public void load(String tokenId, String id, Map<String, String> requestParameters) {
 		this.id = id;
-		this.userId = userId;
+		this.userId = tokenId;
 		try {
 			JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
 			Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -99,7 +102,7 @@ public class Gadget implements Cloneable{
 				String v = c.getView();
 				String href = c.getHref();
 				if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
-					this.content = this.getContent(userId, href);
+					this.content = this.getContent(tokenId, href, requestParameters);
 				}
 
 				if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
@@ -113,13 +116,21 @@ public class Gadget implements Cloneable{
 		}
 	}
 	
-	private static byte[] getContent(String userId, String href) {
-		logger.info("Fetching content using HttpClient....user-Id: " + userId);
+	private static byte[] getContent(String tokenId, String href, Map<String, String> requestParameters) {
+		logger.info("Fetching content using HttpClient....user-Id: " + tokenId);
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
-		method.addRequestHeader("xx-wings-user-id", userId);
+		method.addRequestHeader("xx-wings-user-id", tokenId);
+		NameValuePair[] nvps = new NameValuePair[requestParameters.size()];
+		Set<String> keys = requestParameters.keySet();
+		int i = 0;
+		for(String key: keys) {
+			String value = requestParameters.get(key);
+			nvps[i++] = new NameValuePair(key, value);
+		}
 		method.setFollowRedirects(true);
+		method.setQueryString(nvps);
 		
 		byte[] response = null;
 		try {
