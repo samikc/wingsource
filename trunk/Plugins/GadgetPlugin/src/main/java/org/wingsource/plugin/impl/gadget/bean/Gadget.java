@@ -122,15 +122,27 @@ public class Gadget implements Cloneable{
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
 		method.addRequestHeader("xx-wings-user-id", tokenId);
-		NameValuePair[] nvps = new NameValuePair[requestParameters.size()];
+		ArrayList<NameValuePair> nvpList = new ArrayList<NameValuePair>();
 		Set<String> keys = requestParameters.keySet();
-		int i = 0;
 		for(String key: keys) {
 			String value = requestParameters.get(key);
-			nvps[i++] = new NameValuePair(key, value);
+			nvpList.add(new NameValuePair(key, value));
+		}
+		
+		String qs = method.getQueryString();
+		if(qs != null) {
+			String[] nvPairs = qs.split("&");
+			for(String nvPair: nvPairs) {
+				String[] mapping = nvPair.split("=");
+				nvpList.add(new NameValuePair(mapping[0],mapping[1]));
+			}
 		}
 		method.setFollowRedirects(true);
+		
+		NameValuePair[] nvps = new NameValuePair[nvpList.size()];
+		nvps = nvpList.toArray(nvps);
 		method.setQueryString(nvps);
+		
 		
 		byte[] response = null;
 		try {
