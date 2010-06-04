@@ -17,6 +17,8 @@
  */
 package org.wingsource.plugin;
 
+import java.util.Set;
+
 /**
  * @author samikc
  *
@@ -35,4 +37,6 @@ public interface PluginRequest {
 	public Object getAttribute(Object key);
 	
 	public void setAttribute(Object key, Object value);
+	
+	public Set<Object> keySet();
 }

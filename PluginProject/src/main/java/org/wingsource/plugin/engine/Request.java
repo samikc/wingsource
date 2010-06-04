@@ -19,6 +19,7 @@ package org.wingsource.plugin.engine;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.wingsource.plugin.PluginRequest;
 
@@ -40,5 +41,12 @@ public class Request implements PluginRequest {
 	 */
 	public void setAttribute(Object key, Object value) {
 		this.requestMap.put(key, value);
+	}
+	/* (non-Javadoc)
+	 * @see org.wingsource.plugin.PluginRequest#keySet()
+	 */
+	public Set<Object> keySet() {
+		// TODO Auto-generated method stub
+		return this.requestMap.keySet();
 	}
 }
