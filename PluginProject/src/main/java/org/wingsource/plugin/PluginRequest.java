@@ -26,6 +26,7 @@ import java.util.Set;
 public interface PluginRequest {
 	String ID = "ORG.WINGSOURCE.PLUGIN.THIS.ID";
 	String OPERANDS = "ORG.WINGSOURCE.PLUGIN.OPERANDS";
+	String TOKEN_ID = "token.id";
 	
 	/***
 	 * This method is used to retrieve the parameter that are provided as  
