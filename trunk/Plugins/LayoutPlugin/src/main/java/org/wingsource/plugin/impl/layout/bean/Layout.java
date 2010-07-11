@@ -31,6 +31,15 @@ public class Layout {
 	private String layoutXml;
 	private static final String NEWLINE = "\n";
 	private Integer width;
+	public String getDecorater() {
+		return decorater;
+	}
+
+	public void setDecorater(String decorater) {
+		this.decorater = decorater;
+	}
+
+	private String decorater;
 	private List<Gadget> contentList = new ArrayList<Gadget>();
 
 	public String getLayoutXml() {
@@ -48,6 +57,9 @@ public class Layout {
 		for (Gadget gadget : contentList) {
 				sbuild.append(gadget.toXml());
 		}
+		sbuild.append("<decoraters>");
+			sbuild.append("<decorater>").append(decorater).append("</decorater>");
+		sbuild.append("</decoraters>");
 		sbuild.append("</panel>").append(NEWLINE);
 		return sbuild.toString();
 	}

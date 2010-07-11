@@ -62,11 +62,16 @@ public class LayoutPlugin implements Plugin {
 		for (Object o : operandList) {
 			if(o instanceof Gadget) {
 				layout.add((Gadget)o);
-			}
-			else {
+			} else {
 				String operand = (String) o;
-				width = Integer.parseInt(operand);
-				layout.setWidth(width);
+				try {
+					width = Integer.parseInt(operand);
+					layout.setWidth(width);
+				}catch (NumberFormatException e) {
+					// This must be the decorator
+					layout.setDecorater(operand);
+				}
+				
 			}
 		}
 		presponse.setResponse(layout);
