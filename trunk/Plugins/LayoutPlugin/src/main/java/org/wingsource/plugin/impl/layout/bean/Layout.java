@@ -18,7 +18,9 @@
 package org.wingsource.plugin.impl.layout.bean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.wingsource.plugin.impl.gadget.bean.Gadget;
 
@@ -30,6 +32,7 @@ public class Layout {
 
 	private String layoutXml;
 	private static final String NEWLINE = "\n";
+	private static final String META_HEADER_PREFIX = "meta-";
 	private Integer width;
 	public String getDecorater() {
 		return decorater;
@@ -41,7 +44,8 @@ public class Layout {
 
 	private String decorater;
 	private List<Gadget> contentList = new ArrayList<Gadget>();
-
+	private Map<String, String> metadataMap = new HashMap<String, String>(); //extracts info for all gadget headers prefixed with 'meta-'
+	
 	public String getLayoutXml() {
 		return layoutXml;
 	}
@@ -81,9 +85,33 @@ public class Layout {
 	
 	public void add(Gadget g) {
 		this.contentList.add(g);
+		
+		//add meta data as well
+		Map<String, String> gHeaders = g.getHeaders();
+		
+		if(gHeaders != null) {
+			int startIndex = META_HEADER_PREFIX.length();
+			for(String headerName : gHeaders.keySet()) {
+				if(headerName.startsWith(META_HEADER_PREFIX)) {
+					int endIndex = headerName.length();
+					String metaName = headerName.substring(startIndex, endIndex);
+					if(metaName.trim().length() > 0) {
+						String value = gHeaders.get(headerName);
+						if(value != null) {
+							this.metadataMap.put(metaName, value);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public List<Gadget> getGadgetList() {
 		return this.contentList;
+	}
+
+	public Map<String, String> getMetadata() {
+
+		return this.metadataMap;
 	}
 }
