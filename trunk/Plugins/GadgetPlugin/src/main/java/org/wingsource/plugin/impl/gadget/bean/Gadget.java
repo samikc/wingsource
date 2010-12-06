@@ -71,6 +71,7 @@ public class Gadget implements Cloneable{
 	private int height;
 	private byte[] content = null;
 	private Map<String, String> headers = null;
+
 	private String userId;
 	@Inject
 	public Gadget(GadgetService gadgetService) {
@@ -179,6 +180,14 @@ public class Gadget implements Cloneable{
 		}
 		return responseStream;
 	}
+
+	/**
+	 * @return the headers
+	 */
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
+	
 	
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
