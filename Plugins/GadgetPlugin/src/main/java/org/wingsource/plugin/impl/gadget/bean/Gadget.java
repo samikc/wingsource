@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +39,6 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.wingsource.plugin.impl.gadget.GadgetService;
 import org.wingsource.plugin.impl.gadget.xml.Module;
 import org.wingsource.plugin.impl.gadget.xml.Module.Content;
@@ -49,6 +49,7 @@ import com.google.inject.Inject;
 
 /**
  * @author samikc
+ * @author pillvin
  *
  */
 public class Gadget implements Cloneable{
@@ -69,6 +70,7 @@ public class Gadget implements Cloneable{
 	private ArrayList<String> views = new ArrayList<String>();
 	private int height;
 	private byte[] content = null;
+	private Map<String, String> headers = null;
 	private String userId;
 	@Inject
 	public Gadget(GadgetService gadgetService) {
@@ -102,7 +104,9 @@ public class Gadget implements Cloneable{
 				String v = c.getView();
 				String href = c.getHref();
 				if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
-					this.content = this.getContent(tokenId, href, requestParameters);
+					 Response response = this.getResponse(tokenId, href, requestParameters);
+					 this.content = response.getContent();
+					 this.headers = response.getHeaders();
 				}
 
 				if (v != null && !v.equalsIgnoreCase("null") && !v.equalsIgnoreCase("")) {
@@ -111,12 +115,11 @@ public class Gadget implements Cloneable{
 			}
 			
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 	
-	private static byte[] getContent(String tokenId, String href, Map<String, String> requestParameters) {
+	private Response getResponse(String tokenId, String href, Map<String, String> requestParameters) {
 		logger.info("Fetching content using HttpClient....user-Id: " + tokenId);
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
@@ -144,19 +147,21 @@ public class Gadget implements Cloneable{
 		method.setQueryString(nvps);
 		
 		
-		byte[] response = null;
+		byte[] content = null;
+		Header[] headers = null;
 		try {
 			hc.executeMethod(method);
-			response = method.getResponseBody();
+			content = method.getResponseBody();
+			headers = method.getResponseHeaders();
 		} catch (HttpException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		return response;
+		return new Response(content,headers);
 	}
 
-	private static InputStream getContentStream(String href) {
+	private InputStream getContentStream(String href) {
 		logger.info("Fetching content using HttpClient....");
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
@@ -175,7 +180,6 @@ public class Gadget implements Cloneable{
 		return responseStream;
 	}
 	
-	
 	public String toXml() {
 		long t1 = System.currentTimeMillis();
 		StringBuilder sbuild = new StringBuilder();
@@ -192,6 +196,17 @@ public class Gadget implements Cloneable{
 				sbuild.append("<view>").append(s).append("</view>").append(this.NEWLINE);
 			}
 			sbuild.append("</views>").append(this.NEWLINE);
+		}
+		if(this.headers != null) {
+			sbuild.append("<headers>").append(NEWLINE);
+			for (String headerName : this.headers.keySet()) {
+				String headerValue = this.headers.get(headerName);
+				sbuild.append("<header>").append(this.NEWLINE);
+				sbuild.append("<name>").append(headerName).append("</name>").append(this.NEWLINE);
+				sbuild.append("<value>").append(headerValue).append("</value>").append(this.NEWLINE);
+				sbuild.append("</header>").append(this.NEWLINE);
+			}
+			sbuild.append("</headers>").append(NEWLINE);
 		}
 		if(this.content != null) {
 			sbuild.append("<content>").append(NEWLINE);
@@ -211,6 +226,38 @@ public class Gadget implements Cloneable{
 		Gadget g = (Gadget) super.clone();
 		g.uuid = UUID.randomUUID();
 		return g;
+	}
+	
+	private class Response {
+		private byte[] content;
+
+		private Map<String, String> headers;
+		
+		public Response(byte[] content, Header[] headers) {
+			this.content = content;
+			
+			if((headers != null) && (headers.length > 0)) {
+				this.headers = new HashMap<String, String>();
+				
+				for(Header header: headers) {
+					this.headers.put(header.getName(), header.getValue());
+				}
+			}
+		}
+		
+		/**
+		 * @return the content
+		 */
+		public byte[] getContent() {
+			return content;
+		}
+
+		/**
+		 * @return the headers
+		 */
+		public Map<String, String> getHeaders() {
+			return headers;
+		}		
 	}
 }
 
