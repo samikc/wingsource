@@ -18,7 +18,9 @@
 package org.wingsource.plugin.impl.page;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.wingsource.plugin.PluginRequest;
 import org.wingsource.plugin.PluginResponse;
@@ -29,6 +31,7 @@ import org.wingsource.plugin.impl.page.bean.Page;
 
 /**
  * @author samikc
+ * @author pillvin
  *
  */
 public class PagePlugin implements Plugin {
@@ -69,6 +72,17 @@ public class PagePlugin implements Plugin {
 		}
 		StringBuilder sbuild = new StringBuilder();
 		sbuild.append("<page>").append(NEWLINE);
+		Map<String, String> metadataMap = this.extractMetadata(layoutList);
+		
+		if(metadataMap != null) {
+			sbuild.append("<metadata>").append(NEWLINE);
+			for(String metaName : metadataMap.keySet()) {
+				String metaValue = metadataMap.get(metaName);
+				sbuild.append("<").append(metaName).append(">").append(metaValue).append("</").append(metaName).append(">").append(NEWLINE);
+			}
+			sbuild.append("</metadata>").append(NEWLINE);
+		}
+		
 		sbuild.append("<panels>").append(NEWLINE);
 		for (Layout l : layoutList) {
 			sbuild.append(l.toXml()).append(NEWLINE);
@@ -83,6 +97,19 @@ public class PagePlugin implements Plugin {
 		Page page = new Page();
 		page.setPage(sbuild.toString());
 		presponse.setResponse(page);
+	}
+	
+	private Map<String, String> extractMetadata(List<Layout> layoutList) {
+		Map<String, String> metaMap = new HashMap<String, String>();
+		for(Layout layout: layoutList) {
+			Map<String, String> layoutMetaMap = layout.getMetadata();
+			if(layoutMetaMap != null) {
+				metaMap.putAll(layoutMetaMap);
+			}
+		}
+		
+		return metaMap;
+		
 	}
 
 }
