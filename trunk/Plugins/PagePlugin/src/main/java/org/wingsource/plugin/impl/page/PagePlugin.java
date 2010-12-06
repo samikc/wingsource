@@ -78,7 +78,7 @@ public class PagePlugin implements Plugin {
 			sbuild.append("<metadata>").append(NEWLINE);
 			for(String metaName : metadataMap.keySet()) {
 				String metaValue = metadataMap.get(metaName);
-				sbuild.append("<").append(metaName).append(">").append(metaValue).append("</").append(metaName).append(">").append(NEWLINE);
+				sbuild.append("<meta name=\"").append(metaName).append("\" content=\"").append(metaValue).append("\"/>").append(NEWLINE);
 			}
 			sbuild.append("</metadata>").append(NEWLINE);
 		}
