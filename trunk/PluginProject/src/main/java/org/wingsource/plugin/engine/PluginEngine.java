@@ -107,7 +107,7 @@ public class PluginEngine {
 				this.pluginRequest = request;
 				this.srs = srs;
 			}
-
+			
 			/**
 			 * Invokes execute() method of plugin service manager to resolve a given operation.
 			 * 
@@ -140,48 +140,61 @@ public class PluginEngine {
 		/**************************** END OF OperandResolver class *************************************/
 		
 		public PluginResponse execute(Operation operation, PluginRequest request, SymbolResolverService srs) throws IOException, RecognitionException {
-			
-			Plugin pluglet = srs.resolve(operation.operator());
-			List<Object> operandList = new ArrayList<Object>();
-			ThreadList<SymbolResolver> oList = new ThreadList<SymbolResolver>(operation.operator());
-			for (Operand op : operation.operands()) {
-				oList.add(new SymbolResolver(this, op, request, srs));
-			}
-
-			oList.execute();
-			for(SymbolResolver or : oList) {
-				PluginResponse pResponse = or.getResponse();
-				operandList.add(pResponse.getResponse());
-			}
-			
-			PluginRequest pRequest = request == null ? new Request() : request;
-			pRequest.setAttribute(PluginRequest.ID, operation.operator());
-			pRequest.setAttribute(PluginRequest.OPERANDS, operandList);
 			PluginResponse presponse = new Response(null);
-			pluglet.init();
-			pluglet.service(pRequest, presponse);
-			pluglet.destroy();
+			try {
+				Plugin pluglet = srs.resolve(operation.operator());
+				List<Object> operandList = new ArrayList<Object>();
+				ThreadList<SymbolResolver> oList = new ThreadList<SymbolResolver>(operation.operator());
+				for (Operand op : operation.operands()) {
+					oList.add(new SymbolResolver(this, op, request, srs));
+				}
+	
+				oList.execute();
+				for(SymbolResolver or : oList) {
+					PluginResponse pResponse = or.getResponse();
+					operandList.add(pResponse.getResponse());
+				}
+				
+				PluginRequest pRequest = request == null ? new Request() : request;
+				pRequest.setAttribute(PluginRequest.ID, operation.operator());
+				pRequest.setAttribute(PluginRequest.OPERANDS, operandList);
+				
+				pluglet.init();
+				pluglet.service(pRequest, presponse);
+				pluglet.destroy();
+			}
+			catch(Exception e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}
 			return presponse;
 		}
 
 		public PluginResponse execute(String symbol, PluginRequest request, SymbolResolverService srs) throws IOException, RecognitionException {
-			Plugin pluglet = srs.resolve(symbol);
 			
 			PluginResponse presponse = new Response(null);
-			if (pluglet == null) {
-				presponse.setResponse(symbol);
-				return presponse;
-			}
-			logger.info("Symbol:"+ symbol + " pluglet:" + pluglet.getClass().getName());
-			PluginRequest pRequest = request == null ? new Request() : request;
 			
-			pluglet.init();			
-			//synchronize plugin request to avoid thread switching after plugin id has been set in the request.
-			synchronized(pRequest) {
-				pRequest.setAttribute(PluginRequest.ID, symbol);
-				pluglet.service(pRequest, presponse);
+			try {
+				Plugin pluglet = srs.resolve(symbol);
+				
+				
+				if (pluglet == null) {
+					presponse.setResponse(symbol);
+					return presponse;
+				}
+				logger.info("Symbol:"+ symbol + " pluglet:" + pluglet.getClass().getName());
+				PluginRequest pRequest = request == null ? new Request() : request;
+				
+				pluglet.init();			
+				//synchronize plugin request to avoid thread switching after plugin id has been set in the request.
+				synchronized(pRequest) {
+					pRequest.setAttribute(PluginRequest.ID, symbol);
+					pluglet.service(pRequest, presponse);
+				}
+				pluglet.destroy();
 			}
-			pluglet.destroy();
+			catch(Exception e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}
 			return presponse;
 		}
 	}
