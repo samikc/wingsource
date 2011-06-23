@@ -109,7 +109,7 @@ public class URLPlugin implements Plugin {
 			if(content == null) {
 			
 				URL url = null;
-				logger.info("PluginId:" +pluginId+ "Url:" + u);
+				logger.finest("PluginId:" +pluginId+ "Url:" + u);
 				//Handle classpath search separately as it is a proprietary implementation
 				if(u.startsWith("cp://")) {
 					String u1 = u.substring("cp://".length());
