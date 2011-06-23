@@ -62,7 +62,7 @@ public class GadgetPlugin implements Plugin {
 		
 		//check if request contains user id
 		String tokenId = (String) request.getAttribute(PluginRequest.TOKEN_ID);
-		logger.info("User Id" + tokenId);
+		logger.finest("User Id" + tokenId);
 		
 		Injector i = Guice.createInjector(new GadgetModule());
 		Gadget g = i.getInstance(Gadget.class);
