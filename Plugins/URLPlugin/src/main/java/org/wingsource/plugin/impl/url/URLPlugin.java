@@ -45,6 +45,9 @@ public class URLPlugin implements Plugin {
 	private static final Logger logger = Logger.getLogger(URLPlugin.class.getName());
 
 	private static Map <String, String> URL_MAP = new HashMap<String, String>();
+	
+	private static Map<String, byte[]> CONTENT_MAP = new HashMap<String, byte[]>();
+	
 	/* (non-Javadoc)
 	 * @see org.wingsource.plugin.Plugin#destroy()
 	 */
@@ -100,37 +103,46 @@ public class URLPlugin implements Plugin {
 		try {
 			String pluginId = (String) request.getAttribute(PluginRequest.ID);
 			String u = URL_MAP.get(pluginId);
-			URL url = null;
-			logger.info("PluginId:" +pluginId+ "Url:" + u);
-			//Handle classpath search separately as it is a proprietary implementation
-			if(u.startsWith("cp://")) {
-				String u1 = u.substring("cp://".length());
-				int lastSlashIndex = u1.lastIndexOf("/");
-				String folderName = null;
-				String wildcard = null;
-				if(lastSlashIndex == -1) {
-					folderName = ".";
-					wildcard = u1;
+			
+			byte[] content = CONTENT_MAP.get(u);
+			
+			if(content == null) {
+			
+				URL url = null;
+				logger.info("PluginId:" +pluginId+ "Url:" + u);
+				//Handle classpath search separately as it is a proprietary implementation
+				if(u.startsWith("cp://")) {
+					String u1 = u.substring("cp://".length());
+					int lastSlashIndex = u1.lastIndexOf("/");
+					String folderName = null;
+					String wildcard = null;
+					if(lastSlashIndex == -1) {
+						folderName = ".";
+						wildcard = u1;
+					}
+					else {
+						folderName = u1.substring(0, lastSlashIndex);
+						wildcard = u1.substring(lastSlashIndex + 1);
+					}
+					URL[] urls = ClasspathSearch.instance().search(URLPlugin.class, folderName, wildcard);
+					if((urls != null) && (urls.length > 0)) {
+						url = urls[0];
+					}
 				}
 				else {
-					folderName = u1.substring(0, lastSlashIndex);
-					wildcard = u1.substring(lastSlashIndex + 1);
+					try {
+						url = new URL(u);
+					} catch (MalformedURLException e) {
+						logger.log(Level.SEVERE, e.getMessage(), e);
+					}
 				}
-				URL[] urls = ClasspathSearch.instance().search(URLPlugin.class, folderName, wildcard);
-				if((urls != null) && (urls.length > 0)) {
-					url = urls[0];
-				}
-			}
-			else {
-				try {
-					url = new URL(u);
-				} catch (MalformedURLException e) {
-					logger.log(Level.SEVERE, e.getMessage(), e);
-				}
+				
+				content = this.getContent(url);
+				CONTENT_MAP.put(u, content);
 			}
 			
 			//Got the URL. Lets set it in the response
-			response.setResponse(this.getContent(url));
+			response.setResponse(content);
 		}
 		catch(Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
