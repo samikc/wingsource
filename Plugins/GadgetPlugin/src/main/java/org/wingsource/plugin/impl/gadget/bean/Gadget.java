@@ -56,6 +56,9 @@ public class Gadget implements Cloneable{
 	
 	private static final Logger logger = Logger.getLogger(Gadget.class.getName());
 	
+	
+	private static final Map<String, Module> GADGET_MODULE_MAP = new HashMap<String, Module>();
+	
 	// Constant for new line
 	private static final String NEWLINE = "\n";
 	private static final Logger log = Logger.getLogger(Gadget.class.getName());
@@ -88,11 +91,16 @@ public class Gadget implements Cloneable{
 		this.id = id;
 		this.userId = tokenId;
 		try {
-			JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
-			Unmarshaller unmarshaller = context.createUnmarshaller();
 			URL url = gadgetService.getGadgetXmlUrl(this.id);
 			this.gadgetUrl = url.toString();
-			Module module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
+
+			Module module = GADGET_MODULE_MAP.get(this.gadgetUrl);
+
+			if(module == null) {
+				JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
+				Unmarshaller unmarshaller = context.createUnmarshaller();
+				module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
+			}
 			ModulePrefs mPrefs = module.getModulePrefs();
 			this.title = mPrefs.getTitle();
 			this.render = mPrefs.getRenderInline();
@@ -121,7 +129,7 @@ public class Gadget implements Cloneable{
 	}
 	
 	private Response getResponse(String tokenId, String href, Map<String, String> requestParameters) {
-		logger.info("Fetching content using HttpClient....user-Id: " + tokenId);
+		logger.finest("Fetching content using HttpClient....user-Id: " + tokenId);
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
@@ -163,7 +171,7 @@ public class Gadget implements Cloneable{
 	}
 
 	private InputStream getContentStream(String href) {
-		logger.info("Fetching content using HttpClient....");
+		logger.finest("Fetching content using HttpClient....");
 		HttpClient hc = new HttpClient();
 		hc.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
 		HttpMethod method = new GetMethod(href);
