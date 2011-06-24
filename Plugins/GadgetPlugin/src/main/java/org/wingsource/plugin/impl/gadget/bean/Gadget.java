@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,9 +98,13 @@ public class Gadget implements Cloneable{
 			Module module = GADGET_MODULE_MAP.get(this.gadgetUrl);
 
 			if(module == null) {
+				long startTime = Calendar.getInstance().getTimeInMillis();
 				JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
+				long endTime = Calendar.getInstance().getTimeInMillis();
+				logger.finest("$GADGET_MODULE_URL : "+this.gadgetUrl+" TIME "+(endTime - startTime));
+				GADGET_MODULE_MAP.put(this.gadgetUrl, module);
 			}
 			ModulePrefs mPrefs = module.getModulePrefs();
 			this.title = mPrefs.getTitle();
@@ -113,7 +118,10 @@ public class Gadget implements Cloneable{
 				String v = c.getView();
 				String href = c.getHref();
 				if((this.render != null) && (this.render.equalsIgnoreCase(RENDER_INLINE))) {
+					 long startTime = Calendar.getInstance().getTimeInMillis();
 					 Response response = this.getResponse(tokenId, href, requestParameters);
+					 long endTime = Calendar.getInstance().getTimeInMillis();
+					 logger.finest("$GADGET_URL : "+this.gadgetUrl+" TIME "+(endTime - startTime));
 					 this.content = response.getContent();
 					 this.headers = response.getHeaders();
 				}
