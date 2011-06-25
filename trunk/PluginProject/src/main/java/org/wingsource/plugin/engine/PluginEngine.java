@@ -181,7 +181,7 @@ public class PluginEngine {
 					presponse.setResponse(symbol);
 					return presponse;
 				}
-				logger.info("Symbol:"+ symbol + " pluglet:" + pluglet.getClass().getName());
+				logger.finest("Symbol:"+ symbol + " pluglet:" + pluglet.getClass().getName());
 				PluginRequest pRequest = request == null ? new Request() : request;
 				
 				pluglet.init();			
