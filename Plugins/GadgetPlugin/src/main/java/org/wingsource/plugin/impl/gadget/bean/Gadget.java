@@ -98,12 +98,12 @@ public class Gadget implements Cloneable{
 			Module module = GADGET_MODULE_MAP.get(this.gadgetUrl);
 
 			if(module == null) {
-				long startTime = Calendar.getInstance().getTimeInMillis();
+//				long startTime = System.currentTimeMillis();
 				JAXBContext context = JAXBContext.newInstance("org.wingsource.plugin.impl.gadget.xml");
 				Unmarshaller unmarshaller = context.createUnmarshaller();
 				module = (Module)unmarshaller.unmarshal(this.getContentStream(this.gadgetUrl));
-				long endTime = Calendar.getInstance().getTimeInMillis();
-				logger.finest("$GADGET_MODULE_URL : "+this.gadgetUrl+" TIME "+(endTime - startTime));
+//				long endTime = System.currentTimeMillis();
+//				logger.finest("$GADGET_MODULE_URL : "+this.gadgetUrl+" TIME "+(endTime - startTime));
 				GADGET_MODULE_MAP.put(this.gadgetUrl, module);
 			}
 			ModulePrefs mPrefs = module.getModulePrefs();
