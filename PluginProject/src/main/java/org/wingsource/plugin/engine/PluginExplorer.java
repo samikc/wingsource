@@ -91,15 +91,15 @@ public class PluginExplorer {
 		URL[] urls = ClasspathSearch.instance().search(PluginExplorer.class, "PLUGIN-INF",PLUGIN_XML_FILE_NAME);
 		
 		if((urls != null) && (urls.length > 0)) {
-			logger.info("Found " + urls.length + " files with name plugin.xml. Loading them now...");
+			logger.finest("Found " + urls.length + " files with name plugin.xml. Loading them now...");
 			
 			for(URL url: urls) {
-				logger.info("loading " + url.toString());
+				logger.finest("loading " + url.toString());
 				loadPlugin(url.openStream());
 			}
 		}
 		else {
-			logger.info("Could not find any file matching plugin.xml");
+			logger.finest("Could not find any file matching plugin.xml");
 		}
 	}
 	
@@ -134,10 +134,10 @@ public class PluginExplorer {
 			public org.wingsource.plugin.Plugin resolve(String symbol) {
 				org.wingsource.plugin.Plugin ret = null;
 				try {
-					logger.info("Symbol: " + symbol); 
+					logger.finest("Symbol: " + symbol); 
 					PluginExplorer mgr = PluginExplorer.instance();
 					String className = mgr.symbol2ClassMapper.get(symbol);
-					logger.info("Symbol: " + symbol + "class:" + className);
+					logger.finest("Symbol: " + symbol + "class:" + className);
 					if(className!=null) {
 						
 						Class<org.wingsource.plugin.Plugin> clazz = (Class<org.wingsource.plugin.Plugin>)Class.forName(className);
@@ -147,7 +147,7 @@ public class PluginExplorer {
 						//the symbol may be an operand so try to get it's type.
 						if(otrs != null) {
 							String type = otrs.resolve(symbol);
-							logger.info("type:" + type);
+							logger.finest("type:" + type);
 							if(type != null) {
 								ret = this.resolve(type);
 							}
