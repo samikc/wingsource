@@ -3,7 +3,7 @@
   <groupId>org.wingsource</groupId>
   <artifactId>gadget-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <name>GadgetPlugin</name>
   <url>http://www.wingsource.org</url>
 
@@ -15,9 +15,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</url>
-    <connection>scm:svn:http://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</connection>
-<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</developerConnection>
+    <url>http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</developerConnection>
   </scm>
   <developers>
     <developer>
