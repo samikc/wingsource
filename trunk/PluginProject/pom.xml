@@ -3,7 +3,7 @@
   <groupId>org.wingsource</groupId>
   <artifactId>plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <url>http://www.wingsource.org</url>
 	<name>Plugin Framework</name>
 	<description>Wings' Plugin Framework</description>
@@ -15,9 +15,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://wingsource.googlecode.com/tags/plugin-1.0</url>
-    <connection>scm:svn:http://wingsource.googlecode.com/tags/plugin-1.0</connection>
-<developerConnection>scm:svn:http://wingsource.googlecode.com/tags/plugin-1.0</developerConnection>
+    <url>http://wingsource.googlecode.com/svn/trunk/PluginProject</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/PluginProject</connection>
+<developerConnection>scm:svn:http://wingsource.googlecode.com/svn/trunk/PluginProject</developerConnection>
   </scm>
   <developers>
     <developer>
