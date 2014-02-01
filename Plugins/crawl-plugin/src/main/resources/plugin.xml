@@ -1,3 +1,0 @@
-<plugins version="1 1 1 1 0" updatesite="http://example.com/wingsource/plugin/updatesite">
-	<plugin id="crawl" class="org.wingsource.plugin.impl.crawler.CrawlerPlugin"/>
-</plugins>
