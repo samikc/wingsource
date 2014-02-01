@@ -4,7 +4,7 @@
   <artifactId>properties</artifactId>
   <name>wingsource-properties</name>
   <description>Wings properties loader</description>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <url>http://www.wingsource.org</url>
 
 <licenses>
@@ -15,9 +15,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://wingsource.googlecode.com/svn/trunk/properties</url>
-    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/properties</connection>
-<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/properties</developerConnection>
+    <url>http://wingsource.googlecode.com/svn/tags/properties-1.0</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/tags/properties-1.0</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/tags/properties-1.0</developerConnection>
   </scm>
   <developers>
     <developer>
