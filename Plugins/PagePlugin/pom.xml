@@ -3,7 +3,7 @@
   <groupId>org.wingsource</groupId>
   <artifactId>page-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>PagePlugin</name>
   <description>Layout Plugin</description>
   <url>http://www.wingsource.org</url>
@@ -16,9 +16,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</url>
-    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</connection>
-<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</developerConnection>
+    <url>http://wingsource.googlecode.com/svn/tags/page-plugin-1.0</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/tags/page-plugin-1.0</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/tags/page-plugin-1.0</developerConnection>
   </scm>
   <developers>
     <developer>
