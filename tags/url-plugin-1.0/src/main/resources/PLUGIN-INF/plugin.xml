@@ -1,0 +1,3 @@
+<plugins version="1 1 1 1 0" updatesite="http://example.com/wingsource/plugin/updatesite">
+	<plugin id="url" class="org.wingsource.plugin.impl.url.URLPlugin"/>
+</plugins>
