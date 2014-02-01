@@ -1,12 +1,44 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.wingsource.plugin.impl.gadget</groupId>
-  <artifactId>GadgetPlugin</artifactId>
+  <groupId>org.wingsource</groupId>
+  <artifactId>gadget-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>GadgetPlugin</name>
-  <url>http://maven.apache.org</url>
+  <url>http://www.wingsource.org</url>
+
+<licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</developerConnection>
+  </scm>
+  <developers>
+    <developer>
+      <id>pillvin</id>
+      <name>Vinod Pillai</name>
+      <email>pillvin@iit.edu</email>
+    </developer>
+    <developer>
+      <id>samikc</id>
+      <name>Samik Chakraborty</name>
+      <email>samikc@gmail.com</email>
+    </developer>
+  </developers> 
+  
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>  
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -22,7 +54,7 @@
     <dependency>
       <groupId>org.wingsource</groupId>
       <artifactId>plugin</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>    
     <dependency>
     	<groupId>com.google.inject</groupId>
@@ -32,11 +64,24 @@
     <dependency>
     	<groupId>org.wingsource</groupId>
     	<artifactId>properties</artifactId>
-    	<version>0.0.1-SNAPSHOT</version>
+    	<version>1.0</version>
     </dependency>    
   </dependencies>
   <build>
 	<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>	
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
@@ -46,5 +91,5 @@
 			</configuration>
 		</plugin>
 	</plugins>
-  </build>
+  </build> 
 </project>
