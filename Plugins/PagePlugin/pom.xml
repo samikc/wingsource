@@ -4,7 +4,7 @@
   <groupId>org.wingsource.plugin.impl.page</groupId>
   <artifactId>PagePlugin</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>PagePlugin</name>
   <description>Layout Plugin</description>
   <url>http://www.wingsource.org</url>
