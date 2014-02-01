@@ -6,7 +6,40 @@
   <packaging>jar</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <name>PagePlugin</name>
-  <url>http://maven.apache.org</url>
+  <description>Layout Plugin</description>
+  <url>http://www.wingsource.org</url>
+
+<licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>http://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/Plugins/PagePlugin</developerConnection>
+  </scm>
+  <developers>
+    <developer>
+      <id>pillvin</id>
+      <name>Vinod Pillai</name>
+      <email>pillvin@iit.edu</email>
+    </developer>
+    <developer>
+      <id>samikc</id>
+      <name>Samik Chakraborty</name>
+      <email>samikc@gmail.com</email>
+    </developer>
+  </developers> 
+  
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>  
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -17,21 +50,34 @@
     <dependency>
       <groupId>org.wingsource</groupId>
       <artifactId>plugin</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>  
     <dependency>
-      <groupId>org.wingsource.plugin.impl.layout</groupId>
-      <artifactId>LayoutPlugin</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <groupId>org.wingsource</groupId>
+      <artifactId>layout-plugin</artifactId>
+      <version>1.0</version>
     </dependency>  
     <dependency>
-      <groupId>org.wingsource.plugin.impl.link</groupId>
-      <artifactId>LinkPlugin</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <groupId>org.wingsource</groupId>
+      <artifactId>link-plugin</artifactId>
+      <version>1.0</version>
     </dependency>  
   </dependencies>
-    <build>
+  <build>
 	<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>	
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
@@ -41,5 +87,5 @@
 			</configuration>
 		</plugin>
 	</plugins>
-  </build>
+  </build> 
 </project>
