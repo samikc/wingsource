@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.wingsource</groupId>
   <artifactId>gadget-plugin</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>GadgetPlugin</name>
   <url>http://www.wingsource.org</url>
 
@@ -16,9 +15,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</url>
-    <connection>scm:svn:http://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</connection>
-<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/trunk/Plugins/GadgetPlugin</developerConnection>
+    <url>http://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</url>
+    <connection>scm:svn:http://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</connection>
+<developerConnection>scm:svn:https://wingsource.googlecode.com/svn/tags/gadget-plugin-1.0</developerConnection>
   </scm>
   <developers>
     <developer>
